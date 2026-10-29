@@ -1,0 +1,20 @@
+server:
+  port: 8080
+  tomcat.mbeanregistry.enabled: true
+
+spring:
+  application.name: gateway
+  threads.virtual.enabled: false
+  http.clients.read-timeout: 30s
+
+management:
+  endpoints.web.exposure.include: health,prometheus
+  metrics.distribution.percentiles-histogram.http.server.requests: true
+
+gateway:
+  user-uri: ${USER_SERVICE_URL:http://localhost:8081}
+  product-uri: ${PRODUCT_SERVICE_URL:http://localhost:8082}
+  order-uri: ${ORDER_SERVICE_URL:http://localhost:8084}
+
+jwt:
+  secret: ${JWT_SECRET:local-dev-secret-change-me-0123456789abcdef}
