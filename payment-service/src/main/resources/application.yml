@@ -1,0 +1,24 @@
+server:
+  port: 8085
+  tomcat.mbeanregistry.enabled: true
+
+spring:
+  application.name: payment-service
+  threads.virtual.enabled: false
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/payment_db}
+    username: ${DB_USERNAME:payment_svc}
+    password: ${DB_PASSWORD:payment_pw}
+  jpa:
+    open-in-view: false
+    hibernate.ddl-auto: validate
+    properties.hibernate.jdbc.time_zone: UTC
+
+management:
+  endpoints.web.exposure.include: health,prometheus
+  metrics.distribution.percentiles-histogram.http.server.requests: true
+
+payment:
+  delay-ms: 200
+  jitter-ms: 50
+  failure-rate: 0.0
