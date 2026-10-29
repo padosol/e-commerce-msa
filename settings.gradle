@@ -1,3 +1,4 @@
 rootProject.name = 'e-commerce'
 include 'inventory-service'
 include 'payment-service'
+include 'product-service'
