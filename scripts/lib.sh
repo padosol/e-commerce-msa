@@ -31,7 +31,7 @@ reset_data() {
 create_event() {
   local qty="$1" open_at epoch
   epoch=$(date +%s)
-  open_at=$(date -u -r $(( epoch - 1 )) +%Y-%m-%dT%H:%M:%SZ)
+  open_at=$(date -u -r $(( epoch - 60 )) +%Y-%m-%dT%H:%M:%SZ)
   curl -fsS -X POST "$PRODUCT_URL/internal/events" \
     -H 'Content-Type: application/json' \
     -d "{\"productName\":\"flash-${epoch}\",\"price\":10000,\"openAt\":\"${open_at}\",\"saleQuantity\":${qty}}" \
@@ -60,4 +60,17 @@ payment_config() {
 
 order_stats() {
   curl -fsS "$ORDER_URL/internal/orders/stats?eventId=$1"
+}
+
+# pending 주문이 0 이 될 때까지 대기(기본 60초). 시간 초과 시 그대로 진행한다(verdict 가 INCONCLUSIVE 가 된다).
+wait_orders_settled() {
+  local event_id="$1" timeout="${2:-60}" deadline
+  deadline=$(( $(date +%s) + timeout ))
+  until [ "$(order_stats "$event_id" | jq -r '.pending')" = "0" ]; do
+    if [ "$(date +%s)" -ge "$deadline" ]; then
+      echo "WARN: pending 주문이 남은 채 대기 시간 초과" >&2
+      return 0
+    fi
+    sleep 1
+  done
 }

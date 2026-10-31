@@ -5,7 +5,9 @@ server:
 spring:
   application.name: gateway
   threads.virtual.enabled: false
-  http.clients.read-timeout: 30s
+  http.clients:
+    imperative.factory: jdk
+    read-timeout: 30s
 
 management:
   endpoints.web.exposure.include: health,prometheus

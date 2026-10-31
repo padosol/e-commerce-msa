@@ -31,8 +31,11 @@ scripts/run-test.sh               # 초기화 -> 준비 -> k6 -> 검증 -> 결�
 ## 재고 전략 교체
 
 ```bash
-INVENTORY_STRATEGY=<name> docker compose up -d inventory-service
+./gradlew :inventory-service:bootJar && INVENTORY_STRATEGY=<name> docker compose up -d --build inventory-service
 ```
+
+전략을 바꾸려면 이미지를 다시 빌드해야 한다. 유효한 이름은 현재 `naive` 하나뿐이다.
+`up` 직후 첫 실행은 콜드 스타트라 느리다(기준선 1회차 p95 12.8s, 이후 8.8s / 7.6s).
 
 현재 전략 이름은 결과의 RUN_ID 와 표의 strategy 열에 기록된다.
 

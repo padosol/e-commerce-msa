@@ -44,6 +44,7 @@ t0=$(date +%s)
 k6 "${k6_args[@]}" "$ROOT/load-test/k6/flash-sale.js" 2>&1 | tee "$RUN_DIR/k6-stdout.txt"
 duration=$(( $(date +%s) - t0 ))
 
+wait_orders_settled "$EVENT_ID" 60
 "$ROOT/scripts/verify.sh" "$EVENT_ID" "$PRODUCT_ID" "$SALE_QUANTITY" > "$RUN_DIR/verify.json"
 order_stats "$EVENT_ID" > "$RUN_DIR/order-stats.json"
 
@@ -52,6 +53,8 @@ commit=$(git rev-parse --short HEAD)
 pay=$(payment_config)
 
 S="$RUN_DIR/k6-summary.json"
+order_cfg() { grep -E "^  $1:" order-service/src/main/resources/application.yml | awk '{print $2}'; }
+gw_cfg() { grep -E '^    read-timeout:' gateway/src/main/resources/application.yml | awk '{print $2}'; }
 {
   echo "# 실행 결과 $RUN_ID"
   echo
@@ -66,12 +69,27 @@ S="$RUN_DIR/k6-summary.json"
   echo "## 검증"
   jq -r '"- saleQuantity: \(.saleQuantity)\n- paid: \(.paid)\n- failed: \(.failed)\n- pending: \(.pending)\n- finalStock: \(.finalStock)\n- oversold: \(.oversold)\n- stockMismatch: \(.stockMismatch)\n- verdict: \(.verdict)"' "$RUN_DIR/verify.json"
   echo
+  k6paid=$(jq -r '.metrics.orders_paid.count // 0' "$S")
+  dbpaid=$(jq -r '.paid' "$RUN_DIR/verify.json")
+  if [ "$k6paid" = "$dbpaid" ]; then
+    echo "- k6 orders_paid vs DB paid: $k6paid / $dbpaid (일치)"
+  else
+    echo "- k6 orders_paid vs DB paid: $k6paid / $dbpaid (불일치: 결과를 신뢰하지 말 것)"
+  fi
+  echo
+  echo "## 고정 설정"
+  echo "- order-service -> inventory/payment 클라이언트 connect/read timeout: $(order_cfg connect-timeout) / $(order_cfg read-timeout) (order-service application.yml)"
+  echo "- gateway 하위 호출 read timeout: $(gw_cfg) (gateway application.yml)"
+  echo "- k6 요청 timeout: $(grep -o "timeout: '[0-9a-z]*'" load-test/k6/flash-sale.js | head -1 | cut -d"'" -f2), executor: $(grep -o "executor: '[a-z-]*'" load-test/k6/flash-sale.js | cut -d"'" -f2), VU당 iterations: $(grep -o 'iterations: [0-9]*' load-test/k6/flash-sale.js | cut -d' ' -f2)"
+  echo "- 컨테이너 제한: 앱 cpus 2 / 640m, MySQL cpus 4 / 1536m (compose.yaml)"
+  echo "- Tomcat/Hikari 기본값, virtual threads off"
+  echo
   echo "## 실패 사유별 건수"
   jq -r 'if (.failedByReason | length) == 0 then "- 없음" else (.failedByReason | to_entries[] | "- \(.key): \(.value)") end' "$RUN_DIR/order-stats.json"
   echo
   echo "## k6"
   jq -r --arg d "$duration" '.metrics as $m |
-    "- 총 요청 수: \($m.http_reqs.count)\n- RPS: \($m.http_reqs.rate * 100 | round / 100)\n- http_req_duration avg(ms): \($m.http_req_duration.avg * 100 | round / 100)\n- http_req_duration p95(ms): \($m.http_req_duration["p(95)"] * 100 | round / 100)\n- http_req_duration p99(ms): \($m.http_req_duration["p(99)"] * 100 | round / 100)\n- http_req_duration max(ms): \($m.http_req_duration.max * 100 | round / 100)\n- http_req_failed 비율: \($m.http_req_failed.value)\n- orders_paid: \($m.orders_paid.count)\n- orders_sold_out: \($m.orders_sold_out.count // 0)\n- orders_other: \($m.orders_other.count // 0)\n- 테스트 소요 시간(초): \($d)"' "$S"
+    "- 총 요청 수: \($m.http_reqs.count)\n- RPS: \($m.http_reqs.rate * 100 | round / 100)\n- http_req_duration avg(ms): \($m.http_req_duration.avg * 100 | round / 100)\n- http_req_duration p95(ms): \($m.http_req_duration["p(95)"] * 100 | round / 100)\n- http_req_duration p99(ms): \($m.http_req_duration["p(99)"] * 100 | round / 100)\n- http_req_duration max(ms): \($m.http_req_duration.max * 100 | round / 100)\n- http_req_failed 비율: \($m.http_req_failed.value)\n- orders_paid: \($m.orders_paid.count // 0)\n- orders_sold_out: \($m.orders_sold_out.count // 0)\n- orders_other: \($m.orders_other.count // 0)\n- 테스트 소요 시간(초): \($d)"' "$S"
 } > "$RUN_DIR/report.md"
 
 row=$(jq -r --arg run "$RUN_ID" --arg st "$strategy" --argjson u "$USERS" --argjson q "$SALE_QUANTITY" \
