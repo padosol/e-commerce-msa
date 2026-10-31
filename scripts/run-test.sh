@@ -48,7 +48,7 @@ duration=$(( $(date +%s) - t0 ))
 order_stats "$EVENT_ID" > "$RUN_DIR/order-stats.json"
 
 commit=$(git rev-parse --short HEAD)
-[ -n "$(git status --porcelain)" ] && commit="${commit}-dirty"
+[ -n "$(git status --porcelain -- . ':!docs/results')" ] && commit="${commit}-dirty"
 pay=$(payment_config)
 
 S="$RUN_DIR/k6-summary.json"
