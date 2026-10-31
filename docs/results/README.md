@@ -9,6 +9,7 @@
 
 ## 고정 설정
 아래 기준선 3회(커밋 6ade07d)와 이후 모든 실행에 공통이며, 이후 실행은 각 report.md 에 같은 블록이 기록된다.
+기준선 report.md 의 `git 커밋: 6ade07d` 는 작성자 정보 재작성 전 해시이며, 현재 히스토리의 같은 커밋은 `b3cf43c` 다.
 - order-service 클라이언트 connect/read timeout: 2s / 10s
 - gateway 하위 호출 read timeout: 30s
 - k6 요청 timeout: 60s, executor: per-vu-iterations, VU당 1 iteration
