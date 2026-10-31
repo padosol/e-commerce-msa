@@ -1,0 +1,170 @@
+x-jwt-secret: &jwt-secret ${JWT_SECRET:-local-dev-secret-change-me-0123456789abcdef}
+
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./infra/mysql/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-proot"]
+      interval: 5s
+      retries: 30
+    deploy:
+      resources:
+        limits:
+          cpus: "4"
+          memory: 1536m
+
+  user-service:
+    build:
+      context: .
+      dockerfile: infra/service.Dockerfile
+      args:
+        MODULE: user-service
+    ports:
+      - "8081:8081"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/user_db
+      JWT_SECRET: *jwt-secret
+    depends_on:
+      mysql:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 640m
+
+  product-service:
+    build:
+      context: .
+      dockerfile: infra/service.Dockerfile
+      args:
+        MODULE: product-service
+    ports:
+      - "8082:8082"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/product_db
+    depends_on:
+      mysql:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 640m
+
+  inventory-service:
+    build:
+      context: .
+      dockerfile: infra/service.Dockerfile
+      args:
+        MODULE: inventory-service
+    ports:
+      - "8083:8083"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/inventory_db
+      INVENTORY_STRATEGY: ${INVENTORY_STRATEGY:-naive}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 640m
+
+  order-service:
+    build:
+      context: .
+      dockerfile: infra/service.Dockerfile
+      args:
+        MODULE: order-service
+    ports:
+      - "8084:8084"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/order_db
+      PRODUCT_SERVICE_URL: http://product-service:8082
+      INVENTORY_SERVICE_URL: http://inventory-service:8083
+      PAYMENT_SERVICE_URL: http://payment-service:8085
+    depends_on:
+      mysql:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 640m
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: infra/service.Dockerfile
+      args:
+        MODULE: payment-service
+    ports:
+      - "8085:8085"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/payment_db
+    depends_on:
+      mysql:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 640m
+
+  gateway:
+    build:
+      context: .
+      dockerfile: infra/service.Dockerfile
+      args:
+        MODULE: gateway
+    ports:
+      - "8080:8080"
+    environment:
+      USER_SERVICE_URL: http://user-service:8081
+      PRODUCT_SERVICE_URL: http://product-service:8082
+      ORDER_SERVICE_URL: http://order-service:8084
+      JWT_SECRET: *jwt-secret
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 640m
+
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --web.enable-remote-write-receiver
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./infra/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  grafana:
+    image: grafana/grafana:12.1.0
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./infra/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    depends_on:
+      - prometheus
+    deploy:
+      resources:
+        limits:
+          memory: 256m
