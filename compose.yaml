@@ -1,3 +1,5 @@
+x-jwt-secret: &jwt-secret ${JWT_SECRET:-local-dev-secret-change-me-0123456789abcdef}
+
 services:
   mysql:
     image: mysql:8.4
@@ -16,3 +18,122 @@ services:
         limits:
           cpus: "4"
           memory: 1536m
+
+  user-service:
+    build:
+      context: .
+      dockerfile: infra/service.Dockerfile
+      args:
+        MODULE: user-service
+    ports:
+      - "8081:8081"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/user_db
+      JWT_SECRET: *jwt-secret
+    depends_on:
+      mysql:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 640m
+
+  product-service:
+    build:
+      context: .
+      dockerfile: infra/service.Dockerfile
+      args:
+        MODULE: product-service
+    ports:
+      - "8082:8082"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/product_db
+    depends_on:
+      mysql:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 640m
+
+  inventory-service:
+    build:
+      context: .
+      dockerfile: infra/service.Dockerfile
+      args:
+        MODULE: inventory-service
+    ports:
+      - "8083:8083"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/inventory_db
+      INVENTORY_STRATEGY: ${INVENTORY_STRATEGY:-naive}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 640m
+
+  order-service:
+    build:
+      context: .
+      dockerfile: infra/service.Dockerfile
+      args:
+        MODULE: order-service
+    ports:
+      - "8084:8084"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/order_db
+      PRODUCT_SERVICE_URL: http://product-service:8082
+      INVENTORY_SERVICE_URL: http://inventory-service:8083
+      PAYMENT_SERVICE_URL: http://payment-service:8085
+    depends_on:
+      mysql:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 640m
+
+  payment-service:
+    build:
+      context: .
+      dockerfile: infra/service.Dockerfile
+      args:
+        MODULE: payment-service
+    ports:
+      - "8085:8085"
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/payment_db
+    depends_on:
+      mysql:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 640m
+
+  gateway:
+    build:
+      context: .
+      dockerfile: infra/service.Dockerfile
+      args:
+        MODULE: gateway
+    ports:
+      - "8080:8080"
+    environment:
+      USER_SERVICE_URL: http://user-service:8081
+      PRODUCT_SERVICE_URL: http://product-service:8082
+      ORDER_SERVICE_URL: http://order-service:8084
+      JWT_SECRET: *jwt-secret
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 640m
