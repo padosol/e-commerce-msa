@@ -1,0 +1,10 @@
+{
+  "saleQuantity": 100,
+  "paid": 720,
+  "failed": 4280,
+  "pending": 0,
+  "finalStock": 0,
+  "oversold": 620,
+  "stockMismatch": -620,
+  "verdict": "OVERSOLD"
+}
