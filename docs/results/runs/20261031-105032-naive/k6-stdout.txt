@@ -7,7 +7,7 @@
 
 
      execution: local
-        script: /Users/sanhgoon/Desktop/opensource/e-commerce/load-test/k6/flash-sale.js
+        script: load-test/k6/flash-sale.js
         output: Prometheus remote write (http://localhost:9090/api/v1/write)
 
      scenarios: (100.00%) 1 scenario, 5000 max VUs, 5m30s max duration (incl. graceful stop):
