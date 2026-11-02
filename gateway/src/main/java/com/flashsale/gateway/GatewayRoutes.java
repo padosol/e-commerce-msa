@@ -6,6 +6,8 @@ import static org.springframework.cloud.gateway.server.mvc.handler.GatewayRouter
 import static org.springframework.cloud.gateway.server.mvc.handler.HandlerFunctions.http;
 import static org.springframework.web.servlet.function.RequestPredicates.path;
 
+import java.net.SocketTimeoutException;
+import java.net.http.HttpTimeoutException;
 import java.util.Map;
 import java.util.Optional;
 import org.springframework.context.annotation.Bean;
@@ -46,6 +48,7 @@ public class GatewayRoutes {
         return route("order-service")
             .route(path("/api/orders/**"), http())
             .filter(authenticate(verifier))
+            .filter(downstreamTimeout())
             .before(uri(props.orderUri()))
             .build();
     }
@@ -65,6 +68,34 @@ public class GatewayRoutes {
                 .headers(headers -> headers.set(USER_ID_HEADER, userId.get()))
                 .build());
         };
+    }
+
+    /** Answers 504 GATEWAY_TIMEOUT when the downstream read timeout fires; other failures propagate unchanged. */
+    static HandlerFilterFunction<ServerResponse, ServerResponse> downstreamTimeout() {
+        return (request, next) -> {
+            try {
+                return next.handle(request);
+            } catch (Exception e) {
+                if (!isTimeout(e)) {
+                    throw e;
+                }
+                return ServerResponse.status(HttpStatus.GATEWAY_TIMEOUT)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("code", "GATEWAY_TIMEOUT", "message", "Downstream service timed out"));
+            }
+        };
+    }
+
+    private static boolean isTimeout(Throwable e) {
+        for (Throwable t = e; t != null; t = t.getCause()) {
+            if (t instanceof HttpTimeoutException || t instanceof SocketTimeoutException) {
+                return true;
+            }
+            if (t.getCause() == t) {
+                break;
+            }
+        }
+        return false;
     }
 
     private static ServerResponse unauthorized(String message) {

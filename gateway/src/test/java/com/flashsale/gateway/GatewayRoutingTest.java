@@ -1,17 +1,11 @@
 package com.flashsale.gateway;
 
+import static com.flashsale.gateway.GatewayTestSupport.key;
+import static com.flashsale.gateway.GatewayTestSupport.token;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
-import java.util.Date;
-import javax.crypto.SecretKey;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,8 +45,6 @@ class GatewayRoutingTest {
     @Value("${jwt.secret}")
     String secret;
 
-    private final HttpClient client = HttpClient.newHttpClient();
-
     @BeforeEach
     void resetStubs() {
         USER.reset();
@@ -60,28 +52,8 @@ class GatewayRoutingTest {
         ORDER.reset();
     }
 
-    private SecretKey key(String s) {
-        return Keys.hmacShaKeyFor(s.getBytes(StandardCharsets.UTF_8));
-    }
-
-    private String token(String sub, SecretKey key, Instant expiresAt) {
-        return Jwts.builder().subject(sub)
-            .issuedAt(Date.from(Instant.now().minusSeconds(60)))
-            .expiration(Date.from(expiresAt))
-            .signWith(key).compact();
-    }
-
     private HttpResponse<String> send(String method, String path, String... headers) throws Exception {
-        HttpRequest.Builder b = HttpRequest.newBuilder(URI.create("http://localhost:" + port + path))
-            .method(method, method.equals("POST")
-                ? HttpRequest.BodyPublishers.ofString("{}") : HttpRequest.BodyPublishers.noBody());
-        if (method.equals("POST")) {
-            b.header("Content-Type", "application/json");
-        }
-        for (int i = 0; i < headers.length; i += 2) {
-            b.header(headers[i], headers[i + 1]);
-        }
-        return client.send(b.build(), HttpResponse.BodyHandlers.ofString());
+        return GatewayTestSupport.send(port, method, path, headers);
     }
 
     @Test
