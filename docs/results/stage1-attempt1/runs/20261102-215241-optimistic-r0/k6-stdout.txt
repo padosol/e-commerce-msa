@@ -1,0 +1,262 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: load-test/k6/flash-sale.js
+        output: Prometheus remote write (http://localhost:19090/api/v1/write)
+
+     scenarios: (100.00%) 1 scenario, 5000 max VUs, 5m30s max duration (incl. graceful stop):
+              * flash_sale: 1 iterations for each of 5000 VUs (maxDuration: 5m0s, gracefulStop: 30s)
+
+
+running (0m00.8s), 4624/5000 VUs, 376 complete and 0 interrupted iterations
+flash_sale   [   8% ] 5000 VUs  0m00.8s/5m0s  0376/5000 iters, 1 per VU
+
+running (0m01.8s), 3608/5000 VUs, 1392 complete and 0 interrupted iterations
+flash_sale   [  28% ] 5000 VUs  0m01.8s/5m0s  1392/5000 iters, 1 per VU
+
+running (0m02.8s), 2492/5000 VUs, 2508 complete and 0 interrupted iterations
+flash_sale   [  50% ] 5000 VUs  0m02.8s/5m0s  2508/5000 iters, 1 per VU
+
+running (0m03.8s), 1280/5000 VUs, 3720 complete and 0 interrupted iterations
+flash_sale   [  74% ] 5000 VUs  0m03.8s/5m0s  3720/5000 iters, 1 per VU
+
+running (0m04.8s), 0344/5000 VUs, 4656 complete and 0 interrupted iterations
+flash_sale   [  93% ] 5000 VUs  0m04.8s/5m0s  4656/5000 iters, 1 per VU
+
+running (0m05.8s), 0320/5000 VUs, 4680 complete and 0 interrupted iterations
+flash_sale   [  94% ] 5000 VUs  0m05.8s/5m0s  4680/5000 iters, 1 per VU
+
+running (0m06.8s), 0192/5000 VUs, 4808 complete and 0 interrupted iterations
+flash_sale   [  96% ] 5000 VUs  0m06.8s/5m0s  4808/5000 iters, 1 per VU
+
+running (0m07.8s), 0192/5000 VUs, 4808 complete and 0 interrupted iterations
+flash_sale   [  96% ] 5000 VUs  0m07.8s/5m0s  4808/5000 iters, 1 per VU
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:52:51+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+
+
+  █ TOTAL RESULTS 
+
+    CUSTOM
+    orders_conflict................: 534    67.741636/s
+    orders_other...................: 192    24.356543/s
+    orders_paid....................: 100    12.6857/s
+    orders_sold_out................: 4174   529.501102/s
+
+    HTTP
+    http_req_duration..............: avg=2.1s  med=2.29s p(95)=3.84s p(99)=4.03s max=4.38s
+      { expected_response:true }...: avg=2.18s med=2.34s p(95)=3.84s p(99)=4.03s max=4.38s
+    http_req_failed................: 3.84%  192 out of 5000
+    http_reqs......................: 5000   634.284981/s
+
+    EXECUTION
+    iteration_duration.............: avg=2.87s med=2.71s p(95)=6.02s p(99)=7.87s max=7.88s
+    iterations.....................: 5000   634.284981/s
+    vus............................: 192    min=192         max=4624
+    vus_max........................: 5000   min=5000        max=5000
+
+    NETWORK
+    data_received..................: 868 kB 110 kB/s
+    data_sent......................: 1.4 MB 183 kB/s
+
+
+
+
+running (0m07.9s), 0000/5000 VUs, 5000 complete and 0 interrupted iterations
+flash_sale ✓ [ 100% ] 5000 VUs  0m07.9s/5m0s  5000/5000 iters, 1 per VU

@@ -1,0 +1,38 @@
+{
+  "mysql": {
+    "lockWaits": 1847,
+    "lockTimeMs": 2353,
+    "avgLockWaitMs": 1.27,
+    "maxCurrentWaits": 0
+  },
+  "hikariPendingMax": {
+    "inventory": 0,
+    "order": 187,
+    "payment": 0,
+    "product": 0
+  },
+  "tomcatBusyMax": {
+    "gateway": 197,
+    "inventory": 2,
+    "order": 200,
+    "payment": 1,
+    "product": 7
+  },
+  "optimistic": {
+    "conflicts": 0,
+    "retries": 0,
+    "exhausted": 0
+  },
+  "timeouts": {
+    "inventory": 0,
+    "payment": 0,
+    "product": 0,
+    "orderDb": 0,
+    "gateway": 0,
+    "client": 0,
+    "total": 0
+  },
+  "inventoryDecreaseP95Ms": 2.22,
+  "decreaseCalls": 4983,
+  "paymentCalls": 100
+}

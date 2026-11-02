@@ -26,6 +26,7 @@
 - MySQL 격리 수준 REPEATABLE-READ, `innodb_lock_wait_timeout` 50s (실행마다 report.md 에 실측값 기록)
 - Hikari connectionTimeout 30s (기본값)
 - Prometheus 스크레이프 간격: 0단계 5s / 1단계부터 1s
+- 1단계 측정 중 같은 Docker VM 에 다른 프로젝트 컨테이너가 유휴 상태로 함께 실행됨 (자세한 내용: stage1-attempt1/stage1-environment.md, 재측정 시 새로 기록)
 
 ## 실행 목록
 

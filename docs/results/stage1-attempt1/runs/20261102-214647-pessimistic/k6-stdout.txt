@@ -1,0 +1,89 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: load-test/k6/flash-sale.js
+        output: Prometheus remote write (http://localhost:19090/api/v1/write)
+
+     scenarios: (100.00%) 1 scenario, 5000 max VUs, 5m30s max duration (incl. graceful stop):
+              * flash_sale: 1 iterations for each of 5000 VUs (maxDuration: 5m0s, gracefulStop: 30s)
+
+
+running (0m00.8s), 4483/5000 VUs, 517 complete and 0 interrupted iterations
+flash_sale   [  10% ] 5000 VUs  0m00.8s/5m0s  0517/5000 iters, 1 per VU
+
+running (0m01.8s), 4372/5000 VUs, 628 complete and 0 interrupted iterations
+flash_sale   [  13% ] 5000 VUs  0m01.8s/5m0s  0628/5000 iters, 1 per VU
+
+running (0m02.8s), 3450/5000 VUs, 1550 complete and 0 interrupted iterations
+flash_sale   [  31% ] 5000 VUs  0m02.8s/5m0s  1550/5000 iters, 1 per VU
+
+running (0m03.8s), 2345/5000 VUs, 2655 complete and 0 interrupted iterations
+flash_sale   [  53% ] 5000 VUs  0m03.8s/5m0s  2655/5000 iters, 1 per VU
+
+running (0m04.8s), 1144/5000 VUs, 3856 complete and 0 interrupted iterations
+flash_sale   [  77% ] 5000 VUs  0m04.8s/5m0s  3856/5000 iters, 1 per VU
+
+running (0m05.8s), 0284/5000 VUs, 4716 complete and 0 interrupted iterations
+flash_sale   [  94% ] 5000 VUs  0m05.8s/5m0s  4716/5000 iters, 1 per VU
+
+running (0m06.8s), 0156/5000 VUs, 4844 complete and 0 interrupted iterations
+flash_sale   [  97% ] 5000 VUs  0m06.8s/5m0s  4844/5000 iters, 1 per VU
+
+running (0m07.8s), 0074/5000 VUs, 4926 complete and 0 interrupted iterations
+flash_sale   [  99% ] 5000 VUs  0m07.8s/5m0s  4926/5000 iters, 1 per VU
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+time="2026-11-02T21:46:57+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": dial: i/o timeout"
+
+running (0m08.8s), 0057/5000 VUs, 4943 complete and 0 interrupted iterations
+flash_sale   [  99% ] 5000 VUs  0m08.8s/5m0s  4943/5000 iters, 1 per VU
+
+
+  █ TOTAL RESULTS 
+
+    CUSTOM
+    orders_other...................: 17     1.769554/s
+    orders_paid....................: 100    10.409138/s
+    orders_sold_out................: 4883   508.278232/s
+
+    HTTP
+    http_req_duration..............: avg=3.09s med=3.03s p(95)=5.03s p(99)=9.22s max=9.33s
+      { expected_response:true }...: avg=3.1s  med=3.04s p(95)=5.03s p(99)=9.22s max=9.33s
+    http_req_failed................: 0.34%  17 out of 5000
+    http_reqs......................: 5000   520.456924/s
+
+    EXECUTION
+    iteration_duration.............: avg=3.56s med=3.69s p(95)=5.99s p(99)=9.32s max=9.6s 
+    iterations.....................: 5000   520.456924/s
+    vus............................: 57     min=57         max=4483
+    vus_max........................: 5000   min=5000       max=5000
+
+    NETWORK
+    data_received..................: 896 kB 93 kB/s
+    data_sent......................: 1.5 MB 156 kB/s
+
+
+
+
+running (0m09.6s), 0000/5000 VUs, 5000 complete and 0 interrupted iterations
+flash_sale ✓ [ 100% ] 5000 VUs  0m09.6s/5m0s  5000/5000 iters, 1 per VU

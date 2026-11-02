@@ -1,0 +1,8 @@
+{
+  "runId": "20261102-214401-pessimistic-warmup",
+  "strategy": "pessimistic",
+  "kind": "warmup",
+  "users": 5000,
+  "saleQuantity": 100,
+  "commit": "2b23ce0"
+}

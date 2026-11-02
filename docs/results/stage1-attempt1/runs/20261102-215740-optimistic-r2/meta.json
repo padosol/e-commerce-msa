@@ -1,0 +1,8 @@
+{
+  "runId": "20261102-215740-optimistic-r2",
+  "strategy": "optimistic-r2",
+  "kind": "measure",
+  "users": 5000,
+  "saleQuantity": 100,
+  "commit": "2b23ce0"
+}
