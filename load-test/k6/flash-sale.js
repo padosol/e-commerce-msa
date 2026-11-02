@@ -1,6 +1,7 @@
 import http from 'k6/http';
 import { SharedArray } from 'k6/data';
 import { Counter } from 'k6/metrics';
+import { classify } from './classify.js';
 
 const BASE_URL = __ENV.BASE_URL || 'http://localhost:8080';
 const EVENT_ID = __ENV.EVENT_ID;
@@ -15,9 +16,15 @@ if (tokens.length < USERS) {
   throw new Error(`tokens (${tokens.length}) < USERS (${USERS})`);
 }
 
-const ordersPaid = new Counter('orders_paid');
-const ordersSoldOut = new Counter('orders_sold_out');
-const ordersOther = new Counter('orders_other');
+const counters = {
+  paid: new Counter('orders_paid'),
+  sold_out: new Counter('orders_sold_out'),
+  conflict: new Counter('orders_conflict'),
+  order_timeout: new Counter('orders_order_timeout'),
+  gateway_timeout: new Counter('orders_gateway_timeout'),
+  client_timeout: new Counter('orders_client_timeout'),
+  other: new Counter('orders_other'),
+};
 
 http.setResponseCallback(http.expectedStatuses(201, 409));
 
@@ -43,7 +50,5 @@ export default function () {
       timeout: '60s',
     },
   );
-  if (res.status === 201) ordersPaid.add(1);
-  else if (res.status === 409) ordersSoldOut.add(1);
-  else ordersOther.add(1);
+  counters[classify(res)].add(1);
 }
