@@ -88,9 +88,11 @@ jq -n --argjson b "$lock_before" --argjson a "$lock_after" --argjson mw "$(num_o
   --argjson hk "$hikari" --argjson tc "$tomcat" --argjson inv "$inv_stats" --argjson p95 "$(num_or_na "$p95")" \
   --slurpfile v "$RUN_DIR/verify.json" '
   $v[0] as $v
-  | ($a.waits - $b.waits) as $w | ($a.timeMs - $b.timeMs) as $t
+  | (if ($a.waits | type) == "number" and ($b.waits | type) == "number" then $a.waits - $b.waits else "n/a" end) as $w
+  | (if ($a.timeMs | type) == "number" and ($b.timeMs | type) == "number" then $a.timeMs - $b.timeMs else "n/a" end) as $t
   | {mysql: {lockWaits: $w, lockTimeMs: $t,
-             avgLockWaitMs: (if $w > 0 then ($t / $w * 100 | round / 100) else 0 end),
+             avgLockWaitMs: (if ($w | type) != "number" or ($t | type) != "number" then "n/a"
+                             elif $w > 0 then ($t / $w * 100 | round / 100) else 0 end),
              maxCurrentWaits: $mw},
      hikariPendingMax: $hk,
      tomcatBusyMax: $tc,

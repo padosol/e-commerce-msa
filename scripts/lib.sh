@@ -69,11 +69,14 @@ inventory_stats() {
   curl -fsS "$INVENTORY_URL/internal/inventory/stats"
 }
 
-# {"waits":n,"timeMs":n} (누적값; 실행 전후 차이를 쓴다)
+# {"waits":n,"timeMs":n} (누적값; 실행 전후 차이를 쓴다). 조회 실패나 빈 결과면 두 값 모두 "n/a" (0 으로 기록하지 않는다).
 mysql_lock_status() {
-  docker compose exec -T mysql mysql -uroot -proot -N -e \
-    "SHOW GLOBAL STATUS WHERE Variable_name IN ('Innodb_row_lock_waits','Innodb_row_lock_time')" 2>/dev/null \
-    | awk '$1=="Innodb_row_lock_waits"{w=$2} $1=="Innodb_row_lock_time"{t=$2} END{printf "{\"waits\":%d,\"timeMs\":%d}\n", w, t}'
+  local out
+  out=$(docker compose exec -T mysql mysql -uroot -proot -N -e \
+    "SHOW GLOBAL STATUS WHERE Variable_name IN ('Innodb_row_lock_waits','Innodb_row_lock_time')" 2>/dev/null) || out=""
+  printf '%s\n' "$out" | awk '$1=="Innodb_row_lock_waits"{w=$2} $1=="Innodb_row_lock_time"{t=$2}
+    END{ if (w ~ /^[0-9]+$/ && t ~ /^[0-9]+$/) printf "{\"waits\":%d,\"timeMs\":%d}\n", w, t;
+         else print "{\"waits\":\"n/a\",\"timeMs\":\"n/a\"}" }'
 }
 
 # {"isolation":"...","lockWaitTimeout":n}

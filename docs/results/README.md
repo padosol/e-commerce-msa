@@ -32,7 +32,7 @@
 
 0단계 기준선(커밋 b3cf43c) 행은 1단계 이전 환경이다.
 
-- 1단계: INCONCLUSIVE 로 판정된 측정 행은 표에 그대로 두되 비교에서 빼고, 같은 구성으로 다시 잰 행으로 대신한다. 원인은 k6 → Docker Desktop 포트 포워딩 → 게이트웨이 연결 단계의 오류(connection reset by peer, i/o timeout)로 요청이 시스템에 닿지 않았고, 재고 전략과 무관하다(naive 워밍업에서도 발생).
+- 1단계: INCONCLUSIVE 로 판정된 측정 행은 표에 그대로 두되 비교에서 빼고, 같은 구성으로 다시 잰 행으로 대신한다. 원인은 k6 → Docker Desktop 포트 포워딩 → 게이트웨이 연결 단계의 오류(connection reset by peer, i/o timeout)로 요청이 order-service 에 닿지 않았다(주문 행도 주문 전 실패 기록도 없음). 재고 전략과 무관하다(naive 워밍업에서도 발생). `20261102-224227-pessimistic` 은 연결이 맺어진 지 약 15초 뒤에 reset 됐다(오류 22:43:11, 실행 시작 22:42:55, p95 ≈ 15000 ms). Docker Desktop 포트 포워더가 gateway 컨테이너를 포기한 것과 맞지만 gateway 의 accept 경로가 원인일 가능성은 배제하지 못했다. 표의 INCONCLUSIVE 워밍업 4행도 같은 원인이다(워밍업은 비교하지 않는다).
 
 | run | kind | strategy | users | stock | paid | oversold | undersold | finalStock | conflicts | timeouts | retries | verdict | p95(ms) | p99(ms) | rps |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|

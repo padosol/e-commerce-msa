@@ -23,10 +23,13 @@ scripts/run-test.sh               # 초기화 -> 준비 -> k6 -> 검증 -> 결�
 |---|---|---|
 | `USERS` | 5000 | 동시에 주문하는 사용자 수 |
 | `SALE_QUANTITY` | 100 | 판매 재고 |
+| `WARMUP` | 0 | `1` 이면 워밍업 실행으로 기록한다(RUN_ID 끝에 `-warmup`, `meta.json` 의 kind 가 `warmup`, 요약 표에서 제외) |
 
 예: `USERS=200 SALE_QUANTITY=20 scripts/run-test.sh`. 마지막 줄에 verdict(`OK` / `OVERSOLD` 등)가 출력된다.
 
 `run-test.sh` 는 k6 를 시작하기 전에 호스트의 TIME_WAIT 소켓이 500개 미만으로 줄 때까지(최대 120초) 기다린다. 5000 연결짜리 실행을 연달아 돌리면 앞 실행의 소켓이 남아 연결 단계에서 실패하기 때문이다.
+
+0단계 스택이 이미 떠 있는 상태에서 1단계로 올라왔다면 먼저 `docker compose down` 으로 내린 뒤 다시 `up` 해야 한다. MySQL exporter 용 사용자는 MySQL 컨테이너를 새로 만들 때만 생성되므로, 그렇지 않으면 exporter 가 실패해 Grafana 패널 11~13 이 비고 `maxCurrentWaits` 가 `n/a` 가 된다.
 
 종료는 `docker compose down`.
 
@@ -39,6 +42,7 @@ INVENTORY_STRATEGY=<name> INVENTORY_OPTIMISTIC_MAX_RETRIES=<0~3> docker compose 
 ```
 
 - `INVENTORY_STRATEGY` 유효한 이름: `naive`(기본), `pessimistic`, `conditional`, `optimistic`
+- 주의: `INVENTORY_STRATEGY` 없이 `docker compose up -d` 만 실행하면 inventory-service 가 기본값 `naive` 로 다시 만들어진다.
 - `INVENTORY_OPTIMISTIC_MAX_RETRIES` (0~3, 기본 0): `optimistic` 일 때만 쓰는 재시도 횟수
 - 현재 전략: `curl -s localhost:8083/internal/strategy`. 결과의 RUN_ID 와 표의 strategy 열에는 `naive`, `pessimistic`, `conditional`, `optimistic-r0`~`optimistic-r3` 로 기록된다.
 - `up` 직후 첫 실행은 콜드 스타트라 느리다(기준선 1회차 p95 12.8s, 이후 8.8s / 7.6s). 그래서 매트릭스는 구성마다 워밍업 1회를 먼저 돌린다(README 표의 kind 열이 `warmup`).
@@ -57,6 +61,8 @@ RUNS=1 USERS=200 SALE_QUANTITY=20 scripts/run-matrix.sh conditional optimistic-r
 ### 판정과 결과 파일
 
 판정은 `OVERSOLD` / `INCONCLUSIVE` / `UNDERSOLD` / `OK` 중 하나이고 정의는 `docs/results/README.md` 에 있다. 실행마다 `runs/<RUN_ID>/` 에 `meta.json`(전략·kind·커밋 등)과 `causes.json`(락 대기, 풀·스레드 포화, 낙관적 충돌, 타임아웃 같은 원인 지표)도 남는다.
+
+결과를 구성별 3회 중앙값 표로 모으려면 `scripts/summarize.sh` 를 쓴다. 1단계 결과 해석은 `docs/results/stage1-summary.md` 에 있다.
 
 ### 검증·분류 도구
 

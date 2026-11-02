@@ -1,4 +1,5 @@
 # 입력: verify.sh 가 만든 객체(verdict/inconclusive 제외) -> {verdict, inconclusive}
+# inconclusive(실패한 검사 이름)는 판정과 무관하게 항상 계산해 돌려준다. OVERSOLD 여도 비지 않을 수 있다.
 # 순서: OVERSOLD(최우선) -> INCONCLUSIVE(실행 자체를 못 믿음) -> UNDERSOLD -> OK
 ["SOLD_OUT","STOCK_CONFLICT","INVENTORY_TIMEOUT","PAYMENT_TIMEOUT","PRODUCT_TIMEOUT","ORDER_DB_TIMEOUT"] as $characteristic
 | ([(.failedByReason // {} | keys[]), (.preOrderFailedByReason // {} | keys[])]
@@ -10,7 +11,7 @@
     (if .k6.total != .users then "k6-total" else empty end),
     (if (.k6.paid <= .paid and .paid <= (.k6.paid + .k6.gatewayTimeout + .k6.clientTimeout)) then empty else "k6-db-paid" end)
   ] as $inc
-| if .paid > .saleQuantity then {verdict: "OVERSOLD", inconclusive: []}
+| if .paid > .saleQuantity then {verdict: "OVERSOLD", inconclusive: $inc}
   elif ($inc | length) > 0 then {verdict: "INCONCLUSIVE", inconclusive: $inc}
   elif .paid < .saleQuantity then {verdict: "UNDERSOLD", inconclusive: []}
   else {verdict: "OK", inconclusive: []} end

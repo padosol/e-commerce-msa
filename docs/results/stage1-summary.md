@@ -161,7 +161,8 @@ MySQL 락 대기는 `Innodb_row_lock_waits` 의 구간 증가량이다. MySQL �
 - **2차 측정에서 빠진 측정 4회:** 표 아래 목록의 4회는 `INCONCLUSIVE` 라 비교에서 뺐다.
   - k6 응답 중 분류되지 않은 연결 오류가 있었다(`k6-stdout.txt`).
     `20261102-224227-pessimistic` 314건과 `20261102-224622-conditional` 61건은 `connection reset by peer`, `20261102-225523-optimistic-r2` 548건과 `20261102-230324-conditional` 558건은 `i/o timeout` 이었다.
-  - k6 → Docker Desktop 포트 포워딩 → gateway 연결 단계의 오류로, 요청이 시스템에 닿지 않았다. 재고 전략과는 무관하다. naive 워밍업(`20261102-221512-naive-warmup`)에서도 30건 났다.
+  - k6 → Docker Desktop 포트 포워딩 → gateway 연결 단계의 오류로, 요청이 order-service 에 닿지 않았다(주문 행도 주문 전 실패 기록도 없음). 재고 전략과는 무관하다. naive 워밍업(`20261102-221512-naive-warmup`)에서도 30건 났다.
+  - `20261102-224227-pessimistic` 은 연결이 맺어진 지 약 15초 뒤에 reset 됐다(오류 22:43:11, 실행 시작 22:42:55, p95 ≈ 15000 ms). Docker Desktop 포트 포워더가 gateway 컨테이너를 포기한 것과 맞지만, gateway 의 accept 경로가 원인일 가능성은 배제하지 못했다.
   - 네 실행 모두 시작 시 TIME_WAIT 가 29~58개로 기준 아래였다. 그래서 TIME_WAIT 대기만으로는 사라지지 않았고, 더 깊은 원인은 좁히지 못했다. 네 실행 모두 판매는 100이었다.
   - 해당 구성은 워밍업 1회와 함께 다시 재서 대신했다. conditional 은 다시 잰 `20261102-230324-conditional` 도 `INCONCLUSIVE` 라 한 번 더 쟀다(`20261102-230645-conditional`).
 - **환경:** 측정 중 같은 Docker VM(7.7 GiB)에 다른 프로젝트 컨테이너 7개가 유휴 상태로 함께 떠 있었다. 메모리 합은 약 1175 MiB 다(`stage1-environment.md`).

@@ -6,7 +6,7 @@
 #   meta.json 이 없는 0단계 기준선과 워밍업(kind == "warmup")은 빠진다.
 #   대상 실행에는 verify.json, causes.json, k6-summary.json 이 모두 있어야 한다(없으면 실패).
 # 선택: 구성마다 RUN_ID 순(= 시간 순)으로 verdict 가 INCONCLUSIVE 가 아닌 실행을 앞에서부터 3개 쓴다.
-#   쓴 실행의 RUN_ID 와, 빼놓은 INCONCLUSIVE 측정 실행(RUN_ID, strategy, k6.other)을 표 아래에 적는다.
+#   쓴 실행의 RUN_ID(verify.json 의 inconclusive 가 비어 있지 않으면 `†`)와, 쓰지 않은 뒤 실행의 RUN_ID·verdict, 빼놓은 INCONCLUSIVE 측정 실행(RUN_ID, strategy, k6.other)을 표 아래에 적는다.
 # 중앙값: 실행별 값의 가운데 값. Prometheus 에서 온 값(1s 표본 최댓값, p95)이 "n/a" 인 실행이 섞이면
 #   숫자인 실행만으로 중앙값을 내고(짝수 개면 가운데 두 값의 평균) 값 뒤에 `*` 를 붙인다.
 #   숫자가 하나도 없으면 `n/a` 를 쓴다. 소수는 둘째 자리까지 반올림한다.
@@ -99,9 +99,14 @@ jq -r -s --argjson configs "$CONFIGS" --argjson want "$PER_CONFIG" '
   "",
   ( $groups[]
     | "- \(.config): "
-      + (if (.used | length) == 0 then "없음" else [.used[].meta.runId] | join(", ") end)
+      + (if (.used | length) == 0 then "없음" else [.used[] | .meta.runId + (if (.verify.inconclusive // [] | length) > 0 then "†" else "" end)] | join(", ") end)
       + (if (.used | length) < $want then " (판정 가능한 실행이 \(.used | length)회뿐)" else "" end)
-      + (if (.spare | length) > 0 then " (쓰지 않은 뒤 실행: \([.spare[].meta.runId] | join(", ")))" else "" end) ),
+      + (if (.spare | length) > 0 then " (쓰지 않은 뒤 실행: \([.spare[] | "\(.meta.runId) \(.verify.verdict)"] | join(", ")))" else "" end) ),
+  ( if ([$groups[].used[] | select((.verify.inconclusive // [] | length) > 0)] | length) > 0
+    then "", "`†`: 판정은 위와 같지만 `verify.json` 의 `inconclusive` 에 실패한 검사가 남아 있는 실행(예: OVERSOLD 와 함께 기록된 검사). 중앙값에 섞이기 전에 확인할 것."
+    else empty end ),
+  ( [$all[] | select(.meta.strategy != "naive" and .verify.verdict == "OVERSOLD")] as $bad
+    | if ($bad | length) > 0 then "", "!!! 경고: naive 가 아닌 측정 실행에서 OVERSOLD 발생: \([$bad[].meta.runId] | join(", "))" else empty end ),
   "",
   "제외한 INCONCLUSIVE 측정 실행:",
   "",

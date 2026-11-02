@@ -24,7 +24,7 @@ t() { # name input expectedVerdict expectedInconclusiveJson
 
 t ok "$(mk '{"paid":5,"failed":5,"failedByReason":{"SOLD_OUT":5},"k6":{"paid":5,"soldOut":5}}')" OK '[]'
 t oversold "$(mk '{"paid":7,"failed":3,"failedByReason":{"SOLD_OUT":3},"k6":{"paid":7,"soldOut":3}}')" OVERSOLD '[]'
-t oversoldWinsOverPending "$(mk '{"paid":7,"pending":2,"failed":1,"failedByReason":{"SOLD_OUT":1},"k6":{"paid":7,"soldOut":1}}')" OVERSOLD '[]'
+t oversoldWinsOverPending "$(mk '{"paid":7,"pending":2,"failed":1,"failedByReason":{"SOLD_OUT":1},"k6":{"paid":7,"soldOut":1}}')" OVERSOLD '["pending"]'
 t undersoldByConflict "$(mk '{"paid":3,"failed":7,"failedByReason":{"SOLD_OUT":4,"STOCK_CONFLICT":3},"k6":{"paid":3,"soldOut":4,"conflict":3}}')" UNDERSOLD '[]'
 t undersoldByTimeouts "$(mk '{"paid":4,"failed":5,"failedByReason":{"SOLD_OUT":3,"INVENTORY_TIMEOUT":2},"preOrderFailed":1,"preOrderFailedByReason":{"PRODUCT_TIMEOUT":1},"k6":{"paid":4,"soldOut":3,"orderTimeout":3}}')" UNDERSOLD '[]'
 t gatewayTimeoutExplainsPaidGap "$(mk '{"paid":5,"failed":5,"failedByReason":{"SOLD_OUT":5},"k6":{"paid":4,"soldOut":5,"gatewayTimeout":1}}')" OK '[]'
@@ -32,6 +32,7 @@ t pendingIsInconclusive "$(mk '{"paid":4,"pending":1,"failed":5,"failedByReason"
 t nonCharacteristicReason "$(mk '{"paid":5,"failed":5,"failedByReason":{"SOLD_OUT":4,"INVENTORY_ERROR":1},"k6":{"paid":5,"soldOut":4,"other":1}}')" INCONCLUSIVE '["non-characteristic-reason","k6-unclassified"]'
 t orderTotalMismatch "$(mk '{"paid":5,"failed":4,"failedByReason":{"SOLD_OUT":4},"k6":{"paid":5,"soldOut":5,"total":10}}')" INCONCLUSIVE '["order-total"]'
 t k6PaidExceedsDb "$(mk '{"paid":5,"failed":5,"failedByReason":{"SOLD_OUT":5},"k6":{"paid":6,"soldOut":4}}')" INCONCLUSIVE '["k6-db-paid"]'
+t oversoldWithK6Other "$(mk '{"paid":7,"failed":3,"failedByReason":{"SOLD_OUT":3},"k6":{"paid":7,"soldOut":2,"other":1}}')" OVERSOLD '["k6-unclassified"]'
 
 if [ "$fail" -ne 0 ]; then echo "verdict tests: $fail failed, $pass passed"; exit 1; fi
 echo "verdict tests: $pass passed"
