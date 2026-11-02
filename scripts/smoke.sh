@@ -16,12 +16,13 @@ body=$(mktemp)
 status=$(curl -sS -o "$body" -w '%{http_code}' -X POST "$GATEWAY_URL/api/orders" \
   -H "Authorization: Bearer $token" -H 'Content-Type: application/json' \
   -d "{\"eventId\":$event_id}")
-order_status=$(jq -r '.status' "$body")
-rm -f "$body"
+order_status=$(jq -r '.status' "$body" 2>/dev/null || echo "unparsable")
 if [ "$status" != "201" ] || [ "$order_status" != "PAID" ]; then
-  echo "SMOKE FAIL: http=$status status=$order_status" >&2
+  echo "SMOKE FAIL: http=$status status=$order_status body=$(head -c 300 "$body" | tr '\n' ' ')" >&2
+  rm -f "$body"
   exit 1
 fi
+rm -f "$body"
 
 paid=$(order_stats "$event_id" | jq -r '.paid')
 if [ "$paid" != "1" ]; then

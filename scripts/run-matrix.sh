@@ -24,6 +24,20 @@ switch_to() {
     docker compose up -d inventory-service
 }
 
+# 전환 직후의 일시적 실패를 견디기 위해 스모크를 최대 3회 시도한다(측정 데이터가 아닌 준비 확인용).
+# env: SMOKE_CMD(기본 scripts/smoke.sh) SMOKE_INTERVAL(기본 5초, 시도 사이 대기)
+smoke_with_retry() {
+  local smoke_cmd="${SMOKE_CMD:-$ROOT/scripts/smoke.sh}" n err
+  for n in 1 2 3; do
+    if err=$("$smoke_cmd" 2>&1 >/dev/null); then
+      return 0
+    fi
+    echo "smoke attempt $n/3 failed: $err" >&2
+    [ "$n" -lt 3 ] && sleep "${SMOKE_INTERVAL:-5}"
+  done
+  return 1
+}
+
 restore_naive() {
   echo "== inventory-service 를 naive 로 되돌린다"
   switch_to naive && wait_healthy
@@ -40,7 +54,7 @@ for config in "$@"; do
     echo "전략 불일치: 기대 $config, 실제 $actual" >&2
     exit 1
   fi
-  "$ROOT/scripts/smoke.sh"   # order-service 의 예전 연결 정리
+  smoke_with_retry   # order-service 의 예전 연결 정리
 
   echo "== [$config] 워밍업"
   WARMUP=1 "$ROOT/scripts/run-test.sh" | tail -1 >/dev/null
