@@ -20,3 +20,4 @@ management:
 
 inventory:
   strategy: ${INVENTORY_STRATEGY:naive}
+  optimistic.max-retries: ${INVENTORY_OPTIMISTIC_MAX_RETRIES:0}

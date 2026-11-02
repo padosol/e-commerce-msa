@@ -6,7 +6,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.flashsale.inventory.domain.Inventory;
 import com.flashsale.inventory.domain.InventoryRepository;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -80,23 +82,8 @@ abstract class StockStrategyContract {
     @Test
     void concurrentDecreasesNeverOversell() throws Exception {
         repository.save(new Inventory(1L, 50));
-        ExecutorService pool = Executors.newFixedThreadPool(32);
-        CountDownLatch start = new CountDownLatch(1);
-        List<Future<DecreaseResult>> futures = new ArrayList<>();
-        for (int i = 0; i < 200; i++) {
-            futures.add(pool.submit(() -> {
-                start.await();
-                return strategy.decrease(1L, 1);
-            }));
-        }
-        start.countDown();
-        long successes = 0;
-        for (Future<DecreaseResult> f : futures) {
-            if (f.get() == DecreaseResult.SUCCESS) {
-                successes++;
-            }
-        }
-        pool.shutdown();
+
+        long successes = decreaseConcurrently(200, 32).getOrDefault(DecreaseResult.SUCCESS, 0L);
         int remaining = quantity(1L);
 
         assertThat(successes).isLessThanOrEqualTo(50);
@@ -107,7 +94,30 @@ abstract class StockStrategyContract {
         }
     }
 
-    private int quantity(long productId) {
+    /** 스레드 {@code threads} 개를 동시에 출발시켜 상품 1을 1개씩 {@code requests} 번 차감하고, 결과별 개수를 돌려준다. */
+    protected Map<DecreaseResult, Long> decreaseConcurrently(int requests, int threads) throws Exception {
+        ExecutorService pool = Executors.newFixedThreadPool(threads);
+        try {
+            CountDownLatch start = new CountDownLatch(1);
+            List<Future<DecreaseResult>> futures = new ArrayList<>();
+            for (int i = 0; i < requests; i++) {
+                futures.add(pool.submit(() -> {
+                    start.await();
+                    return strategy.decrease(1L, 1);
+                }));
+            }
+            start.countDown();
+            Map<DecreaseResult, Long> counts = new EnumMap<>(DecreaseResult.class);
+            for (Future<DecreaseResult> f : futures) {
+                counts.merge(f.get(), 1L, Long::sum);
+            }
+            return counts;
+        } finally {
+            pool.shutdown();
+        }
+    }
+
+    protected int quantity(long productId) {
         return repository.findById(productId).orElseThrow().getQuantity();
     }
 }

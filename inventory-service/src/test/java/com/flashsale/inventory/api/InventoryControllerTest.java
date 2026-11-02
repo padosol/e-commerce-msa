@@ -1,5 +1,6 @@
 package com.flashsale.inventory.api;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -8,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.flashsale.inventory.TestcontainersConfiguration;
 import com.flashsale.inventory.domain.InventoryRepository;
+import com.flashsale.inventory.stock.StockStats;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +30,13 @@ class InventoryControllerTest {
     @Autowired
     InventoryRepository repository;
 
+    @Autowired
+    StockStats stats;
+
     @BeforeEach
     void clean() {
         repository.deleteAll();
+        stats.reset();
     }
 
     private void putQuantity(long productId, int quantity) throws Exception {
@@ -97,5 +103,21 @@ class InventoryControllerTest {
         mvc.perform(get("/internal/strategy"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.strategy").value("naive"));
+    }
+
+    @Test
+    void statsEndpointReportsAndResets() throws Exception {
+        stats.conflict();
+        stats.conflict();
+        stats.retry();
+
+        mvc.perform(get("/internal/inventory/stats"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.conflicts").value(2))
+            .andExpect(jsonPath("$.retries").value(1))
+            .andExpect(jsonPath("$.exhausted").value(0));
+        mvc.perform(delete("/internal/inventory/stats")).andExpect(status().isNoContent());
+        mvc.perform(get("/internal/inventory/stats"))
+            .andExpect(jsonPath("$.conflicts").value(0));
     }
 }

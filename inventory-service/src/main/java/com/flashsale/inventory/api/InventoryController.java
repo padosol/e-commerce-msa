@@ -3,9 +3,11 @@ package com.flashsale.inventory.api;
 import com.flashsale.inventory.domain.Inventory;
 import com.flashsale.inventory.domain.InventoryRepository;
 import com.flashsale.inventory.stock.InventoryNotFoundException;
+import com.flashsale.inventory.stock.StockStats;
 import com.flashsale.inventory.stock.StockStrategy;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,10 +22,12 @@ public class InventoryController {
 
     private final StockStrategy strategy;
     private final InventoryRepository repository;
+    private final StockStats stats;
 
-    public InventoryController(StockStrategy strategy, InventoryRepository repository) {
+    public InventoryController(StockStrategy strategy, InventoryRepository repository, StockStats stats) {
         this.strategy = strategy;
         this.repository = repository;
+        this.stats = stats;
     }
 
     @PutMapping("/inventory/{productId}")
@@ -49,6 +53,18 @@ public class InventoryController {
     @PostMapping("/inventory/{productId}/increase")
     public ResponseEntity<Void> increase(@PathVariable long productId, @Valid @RequestBody QuantityRequest request) {
         strategy.increase(productId, request.quantity());
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/inventory/stats")
+    public StockStatsResponse stats() {
+        StockStats.Snapshot snapshot = stats.snapshot();
+        return new StockStatsResponse(snapshot.conflicts(), snapshot.retries(), snapshot.exhausted());
+    }
+
+    @DeleteMapping("/inventory/stats")
+    public ResponseEntity<Void> resetStats() {
+        stats.reset();
         return ResponseEntity.noContent().build();
     }
 
