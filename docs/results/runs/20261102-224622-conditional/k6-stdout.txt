@@ -1,0 +1,169 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: load-test/k6/flash-sale.js
+        output: Prometheus remote write (http://localhost:19090/api/v1/write)
+
+     scenarios: (100.00%) 1 scenario, 5000 max VUs, 5m30s max duration (incl. graceful stop):
+              * flash_sale: 1 iterations for each of 5000 VUs (maxDuration: 5m0s, gracefulStop: 30s)
+
+
+running (0m00.8s), 4542/5000 VUs, 458 complete and 0 interrupted iterations
+flash_sale   [   9% ] 5000 VUs  0m00.8s/5m0s  0458/5000 iters, 1 per VU
+
+running (0m01.8s), 3790/5000 VUs, 1210 complete and 0 interrupted iterations
+flash_sale   [  24% ] 5000 VUs  0m01.8s/5m0s  1210/5000 iters, 1 per VU
+
+running (0m02.8s), 3222/5000 VUs, 1778 complete and 0 interrupted iterations
+flash_sale   [  36% ] 5000 VUs  0m02.8s/5m0s  1778/5000 iters, 1 per VU
+
+running (0m03.8s), 2441/5000 VUs, 2559 complete and 0 interrupted iterations
+flash_sale   [  51% ] 5000 VUs  0m03.8s/5m0s  2559/5000 iters, 1 per VU
+
+running (0m04.8s), 1157/5000 VUs, 3843 complete and 0 interrupted iterations
+flash_sale   [  77% ] 5000 VUs  0m04.8s/5m0s  3843/5000 iters, 1 per VU
+
+running (0m05.8s), 0496/5000 VUs, 4504 complete and 0 interrupted iterations
+flash_sale   [  90% ] 5000 VUs  0m05.8s/5m0s  4504/5000 iters, 1 per VU
+
+running (0m06.8s), 0496/5000 VUs, 4504 complete and 0 interrupted iterations
+flash_sale   [  90% ] 5000 VUs  0m06.8s/5m0s  4504/5000 iters, 1 per VU
+
+running (0m07.8s), 0118/5000 VUs, 4882 complete and 0 interrupted iterations
+flash_sale   [  98% ] 5000 VUs  0m07.8s/5m0s  4882/5000 iters, 1 per VU
+
+running (0m08.8s), 0118/5000 VUs, 4882 complete and 0 interrupted iterations
+flash_sale   [  98% ] 5000 VUs  0m08.8s/5m0s  4882/5000 iters, 1 per VU
+
+running (0m09.8s), 0089/5000 VUs, 4911 complete and 0 interrupted iterations
+flash_sale   [  98% ] 5000 VUs  0m09.8s/5m0s  4911/5000 iters, 1 per VU
+
+running (0m10.8s), 0089/5000 VUs, 4911 complete and 0 interrupted iterations
+flash_sale   [  98% ] 5000 VUs  0m10.8s/5m0s  4911/5000 iters, 1 per VU
+
+running (0m11.8s), 0089/5000 VUs, 4911 complete and 0 interrupted iterations
+flash_sale   [  98% ] 5000 VUs  0m11.8s/5m0s  4911/5000 iters, 1 per VU
+
+running (0m12.8s), 0089/5000 VUs, 4911 complete and 0 interrupted iterations
+flash_sale   [  98% ] 5000 VUs  0m12.8s/5m0s  4911/5000 iters, 1 per VU
+
+running (0m13.8s), 0089/5000 VUs, 4911 complete and 0 interrupted iterations
+flash_sale   [  98% ] 5000 VUs  0m13.8s/5m0s  4911/5000 iters, 1 per VU
+
+running (0m14.8s), 0089/5000 VUs, 4911 complete and 0 interrupted iterations
+flash_sale   [  98% ] 5000 VUs  0m14.8s/5m0s  4911/5000 iters, 1 per VU
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58823->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:57444->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59285->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59284->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59271->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58311->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58361->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58362->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58315->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58371->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59279->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58359->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58367->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58385->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59281->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58363->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58406->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58349->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58372->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59359->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58369->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59312->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58316->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58443->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59274->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59313->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58364->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59360->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59311->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58370->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58286->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58440->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59289->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59283->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58358->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59307->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59354->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58438->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58396->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58444->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:58360->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59309->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:59308->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:60705->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:60754->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:60729->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:60749->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:60773->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:62193->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:61475->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:61468->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:62192->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:61555->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:61525->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:61564->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:61553->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:61563->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:62198->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:61517->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:62197->127.0.0.1:8080: read: connection reset by peer"
+time="2026-11-02T22:47:05+09:00" level=warning msg="Request Failed" error="Post \"http://localhost:8080/api/orders\": read tcp 127.0.0.1:61533->127.0.0.1:8080: read: connection reset by peer"
+
+running (0m15.8s), 0028/5000 VUs, 4972 complete and 0 interrupted iterations
+flash_sale   [  99% ] 5000 VUs  0m15.8s/5m0s  4972/5000 iters, 1 per VU
+
+running (0m16.8s), 0028/5000 VUs, 4972 complete and 0 interrupted iterations
+flash_sale   [  99% ] 5000 VUs  0m16.8s/5m0s  4972/5000 iters, 1 per VU
+
+running (0m17.8s), 0028/5000 VUs, 4972 complete and 0 interrupted iterations
+flash_sale   [  99% ] 5000 VUs  0m17.8s/5m0s  4972/5000 iters, 1 per VU
+
+running (0m18.8s), 0028/5000 VUs, 4972 complete and 0 interrupted iterations
+flash_sale   [  99% ] 5000 VUs  0m18.8s/5m0s  4972/5000 iters, 1 per VU
+
+running (0m19.8s), 0028/5000 VUs, 4972 complete and 0 interrupted iterations
+flash_sale   [  99% ] 5000 VUs  0m19.8s/5m0s  4972/5000 iters, 1 per VU
+
+running (0m20.8s), 0028/5000 VUs, 4972 complete and 0 interrupted iterations
+flash_sale   [  99% ] 5000 VUs  0m20.8s/5m0s  4972/5000 iters, 1 per VU
+
+
+  █ TOTAL RESULTS 
+
+    CUSTOM
+    orders_other...................: 61     2.855042/s
+    orders_paid....................: 100    4.680397/s
+    orders_sold_out................: 4839   226.484421/s
+
+    HTTP
+    http_req_duration..............: avg=3.63s med=3.64s p(95)=7.24s p(99)=14.93s max=21.23s
+      { expected_response:true }...: avg=3.49s med=3.63s p(95)=7.21s p(99)=9.26s  max=21.23s
+    http_req_failed................: 1.22%  61 out of 5000
+    http_reqs......................: 5000   234.01986/s
+
+    EXECUTION
+    iteration_duration.............: avg=3.71s med=3.71s p(95)=7.32s p(99)=15.03s max=21.33s
+    iterations.....................: 5000   234.01986/s
+    vus............................: 28     min=28         max=4541
+    vus_max........................: 5000   min=5000       max=5000
+
+    NETWORK
+    data_received..................: 893 kB 42 kB/s
+    data_sent......................: 1.5 MB 70 kB/s
+
+
+
+
+running (0m21.4s), 0000/5000 VUs, 5000 complete and 0 interrupted iterations
+flash_sale ✓ [ 100% ] 5000 VUs  0m21.4s/5m0s  5000/5000 iters, 1 per VU

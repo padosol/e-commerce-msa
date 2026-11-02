@@ -1,0 +1,10 @@
+{
+  "runId": "20261102-221512-naive-warmup",
+  "strategy": "naive",
+  "kind": "warmup",
+  "users": 5000,
+  "saleQuantity": 100,
+  "commit": "f3a8029",
+  "tcpDrainWaitSec": 0,
+  "tcpTimeWaitBefore": 51
+}

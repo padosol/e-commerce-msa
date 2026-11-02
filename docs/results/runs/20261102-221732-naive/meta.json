@@ -1,0 +1,10 @@
+{
+  "runId": "20261102-221732-naive",
+  "strategy": "naive",
+  "kind": "measure",
+  "users": 5000,
+  "saleQuantity": 100,
+  "commit": "f3a8029",
+  "tcpDrainWaitSec": 105,
+  "tcpTimeWaitBefore": 125
+}
