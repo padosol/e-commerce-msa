@@ -79,12 +79,42 @@ class ClientsTest {
     }
 
     @Test
-    void readTimeoutMapsToDownstreamException() {
+    void readTimeoutIsMarkedTimeout() {
+        Duration read = Duration.ofMillis(300);
         try (StubHttpServer stub = new StubHttpServer()
-                .respond("/internal/payments", 200, "{\"paymentId\":1,\"status\":\"APPROVED\"}", 1000)) {
-            PaymentClient client = new PaymentClient(restClient(stub.baseUrl(), Duration.ofMillis(300)));
+                .respond("/internal/payments", 200, "{\"paymentId\":1,\"status\":\"APPROVED\"}", 1000)
+                .respond("/internal/inventory/7/decrease", 200, "{\"result\":\"SUCCESS\"}", 1000)
+                .respond("/api/products/events/1", 200, "{}", 1000)) {
+            PaymentClient payment = new PaymentClient(restClient(stub.baseUrl(), read));
+            InventoryClient inventory = new InventoryClient(restClient(stub.baseUrl(), read));
+            ProductClient product = new ProductClient(restClient(stub.baseUrl(), read));
 
-            assertThatThrownBy(() -> client.pay(1, 2, 3)).isInstanceOf(DownstreamException.class);
+            assertThatThrownBy(() -> payment.pay(1, 2, 3)).isInstanceOfSatisfying(DownstreamException.class,
+                    e -> assertThat(e.isTimeout()).isTrue());
+            assertThatThrownBy(() -> inventory.decrease(7, 1)).isInstanceOfSatisfying(DownstreamException.class,
+                    e -> assertThat(e.isTimeout()).isTrue());
+            assertThatThrownBy(() -> product.getEvent(1)).isInstanceOfSatisfying(DownstreamException.class,
+                    e -> assertThat(e.isTimeout()).isTrue());
+        }
+    }
+
+    @Test
+    void serverErrorIsNotTimeout() {
+        try (StubHttpServer stub = new StubHttpServer().respond("/internal/payments", 500, "{}")) {
+            PaymentClient client = new PaymentClient(restClient(stub.baseUrl(), READ));
+
+            assertThatThrownBy(() -> client.pay(1, 2, 3)).isInstanceOfSatisfying(DownstreamException.class,
+                    e -> assertThat(e.isTimeout()).isFalse());
+        }
+    }
+
+    @Test
+    void decreaseParsesConflict() {
+        try (StubHttpServer stub = new StubHttpServer()
+                .respond("/internal/inventory/7/decrease", 200, "{\"result\":\"CONFLICT\"}")) {
+            InventoryClient client = new InventoryClient(restClient(stub.baseUrl(), READ));
+
+            assertThat(client.decrease(7, 1)).isEqualTo(StockDecreaseResult.CONFLICT);
         }
     }
 
@@ -108,7 +138,8 @@ class ClientsTest {
 
             PaymentClient client = new PaymentClient(restClient("http://127.0.0.1:" + server.getLocalPort(), READ));
 
-            assertThatThrownBy(() -> client.pay(1, 2, 3)).isInstanceOf(DownstreamException.class);
+            assertThatThrownBy(() -> client.pay(1, 2, 3)).isInstanceOfSatisfying(DownstreamException.class,
+                    e -> assertThat(e.isTimeout()).isFalse());
 
             Thread.sleep(500); // give any hidden retry time to show up
             assertThat(accepted.get()).isEqualTo(1);
