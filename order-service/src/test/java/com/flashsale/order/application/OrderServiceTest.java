@@ -27,6 +27,9 @@ import com.flashsale.order.domain.OrderStatus;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.Map;
+import java.sql.SQLTransientConnectionException;
+import org.springframework.transaction.CannotCreateTransactionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -42,8 +45,9 @@ class OrderServiceTest {
     PaymentClient paymentClient = mock(PaymentClient.class);
     OrderWriter orderWriter = mock(OrderWriter.class);
     OrderRepository orderRepository = mock(OrderRepository.class);
+    PreOrderFailures preOrderFailures = new PreOrderFailures();
     OrderService service = new OrderService(productClient, inventoryClient, paymentClient, orderWriter,
-            orderRepository, Clock.fixed(NOW, ZoneOffset.UTC));
+            orderRepository, preOrderFailures, Clock.fixed(NOW, ZoneOffset.UTC));
 
     EventInfo event = new EventInfo(EVENT, 7, 10000, Instant.parse("2026-11-01T09:59:00Z"), 100);
 
@@ -116,7 +120,7 @@ class OrderServiceTest {
     @Test
     void paymentErrorDoesNotRestoreStock() {
         when(inventoryClient.decrease(7, 1)).thenReturn(StockDecreaseResult.SUCCESS);
-        when(paymentClient.pay(99, USER, 10000)).thenThrow(new DownstreamException("timeout"));
+        when(paymentClient.pay(99, USER, 10000)).thenThrow(new DownstreamException("down"));
 
         OrderResult r = service.placeOrder(USER, EVENT);
 
@@ -142,5 +146,86 @@ class OrderServiceTest {
         assertThatThrownBy(() -> service.placeOrder(USER, EVENT)).isInstanceOf(EventNotFoundException.class);
 
         org.mockito.Mockito.verifyNoInteractions(orderWriter);
+    }
+
+    private static DownstreamException timeout() {
+        return new DownstreamException("t", new java.net.http.HttpTimeoutException("t"));
+    }
+
+    @Test
+    void conflictMarksStockConflict() {
+        when(inventoryClient.decrease(7, 1)).thenReturn(StockDecreaseResult.CONFLICT);
+
+        OrderResult r = service.placeOrder(USER, EVENT);
+
+        assertThat(r).isEqualTo(new OrderResult(99, OrderStatus.FAILED, FailReason.STOCK_CONFLICT));
+        verifyNoInteractions(paymentClient);
+    }
+
+    @Test
+    void inventoryTimeoutMarksInventoryTimeout() {
+        when(inventoryClient.decrease(7, 1)).thenThrow(timeout());
+
+        OrderResult r = service.placeOrder(USER, EVENT);
+
+        assertThat(r).isEqualTo(new OrderResult(99, OrderStatus.FAILED, FailReason.INVENTORY_TIMEOUT));
+        verify(inventoryClient, never()).increase(anyLong(), org.mockito.ArgumentMatchers.anyInt());
+        verifyNoInteractions(paymentClient);
+    }
+
+    @Test
+    void paymentTimeoutMarksPaymentTimeout() {
+        when(inventoryClient.decrease(7, 1)).thenReturn(StockDecreaseResult.SUCCESS);
+        when(paymentClient.pay(99, USER, 10000)).thenThrow(timeout());
+
+        OrderResult r = service.placeOrder(USER, EVENT);
+
+        assertThat(r).isEqualTo(new OrderResult(99, OrderStatus.FAILED, FailReason.PAYMENT_TIMEOUT));
+        verify(inventoryClient, never()).increase(anyLong(), org.mockito.ArgumentMatchers.anyInt());
+    }
+
+    @Test
+    void productTimeoutCountsPreOrderFailureWithoutOrder() {
+        when(productClient.getEvent(EVENT)).thenThrow(timeout());
+
+        assertThatThrownBy(() -> service.placeOrder(USER, EVENT))
+                .isInstanceOfSatisfying(PreOrderFailedException.class,
+                        e -> assertThat(e.reason()).isEqualTo(FailReason.PRODUCT_TIMEOUT));
+
+        verifyNoInteractions(orderWriter, inventoryClient);
+        assertThat(preOrderFailures.snapshot(EVENT)).isEqualTo(Map.of(FailReason.PRODUCT_TIMEOUT, 1L));
+    }
+
+    @Test
+    void productErrorCountsAsProductError() {
+        when(productClient.getEvent(EVENT)).thenThrow(new DownstreamException("500"));
+
+        assertThatThrownBy(() -> service.placeOrder(USER, EVENT))
+                .isInstanceOfSatisfying(PreOrderFailedException.class,
+                        e -> assertThat(e.reason()).isEqualTo(FailReason.PRODUCT_ERROR));
+
+        assertThat(preOrderFailures.snapshot(EVENT)).isEqualTo(Map.of(FailReason.PRODUCT_ERROR, 1L));
+    }
+
+    @Test
+    void orderDbTimeoutCountsPreOrderFailure() {
+        when(orderWriter.createPending(USER, event)).thenThrow(new CannotCreateTransactionException("x",
+                new SQLTransientConnectionException("Connection is not available")));
+
+        assertThatThrownBy(() -> service.placeOrder(USER, EVENT))
+                .isInstanceOfSatisfying(PreOrderFailedException.class,
+                        e -> assertThat(e.reason()).isEqualTo(FailReason.ORDER_DB_TIMEOUT));
+
+        verifyNoInteractions(inventoryClient);
+        assertThat(preOrderFailures.snapshot(EVENT)).isEqualTo(Map.of(FailReason.ORDER_DB_TIMEOUT, 1L));
+    }
+
+    @Test
+    void otherCreatePendingFailurePropagates() {
+        when(orderWriter.createPending(USER, event)).thenThrow(new IllegalStateException("boom"));
+
+        assertThatThrownBy(() -> service.placeOrder(USER, EVENT)).isInstanceOf(IllegalStateException.class);
+
+        assertThat(preOrderFailures.snapshot(EVENT)).isEmpty();
     }
 }

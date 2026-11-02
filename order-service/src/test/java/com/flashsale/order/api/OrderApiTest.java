@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.flashsale.order.TestcontainersConfiguration;
+import com.flashsale.order.application.PreOrderFailures;
 import com.flashsale.order.client.DownstreamException;
 import com.flashsale.order.client.EventInfo;
 import com.flashsale.order.client.EventNotFoundException;
@@ -64,9 +65,13 @@ class OrderApiTest {
     @MockitoBean
     Clock clock;
 
+    @Autowired
+    PreOrderFailures preOrderFailures;
+
     @BeforeEach
     void setUp() {
         repository.deleteAll();
+        preOrderFailures.reset();
         when(clock.instant()).thenReturn(NOW);
         when(productClient.getEvent(1)).thenReturn(event(Instant.parse("2026-11-01T09:59:00Z")));
         when(inventoryClient.decrease(7, 1)).thenReturn(StockDecreaseResult.SUCCESS);
@@ -186,5 +191,52 @@ class OrderApiTest {
         save(1, OrderStatus.PAID, null);
         mvc.perform(delete("/internal/orders")).andExpect(status().isNoContent());
         assertThat(repository.count()).isZero();
+    }
+
+    private static DownstreamException timeout() {
+        return new DownstreamException("t", new java.net.http.HttpTimeoutException("t"));
+    }
+
+    @Test
+    void conflictReturns409WithReason() throws Exception {
+        when(inventoryClient.decrease(7, 1)).thenReturn(StockDecreaseResult.CONFLICT);
+        order().andExpect(status().isConflict()).andExpect(jsonPath("$.reason").value("STOCK_CONFLICT"));
+    }
+
+    @Test
+    void inventoryTimeoutReturns504() throws Exception {
+        when(inventoryClient.decrease(7, 1)).thenThrow(timeout());
+        order().andExpect(status().isGatewayTimeout()).andExpect(jsonPath("$.reason").value("INVENTORY_TIMEOUT"));
+    }
+
+    @Test
+    void productTimeoutReturns504WithoutOrder() throws Exception {
+        when(productClient.getEvent(1)).thenThrow(timeout());
+        order().andExpect(status().isGatewayTimeout())
+                .andExpect(jsonPath("$.reason").value("PRODUCT_TIMEOUT"))
+                .andExpect(jsonPath("$.code").value("PRODUCT_TIMEOUT"));
+        assertThat(repository.count()).isZero();
+
+        mvc.perform(get("/internal/orders/stats").param("eventId", "1"))
+                .andExpect(jsonPath("$.preOrderFailedByReason.PRODUCT_TIMEOUT").value(1));
+    }
+
+    @Test
+    void preOrderFailuresCountOnlyRequestedEvent() throws Exception {
+        preOrderFailures.record(1, FailReason.PRODUCT_TIMEOUT);
+        preOrderFailures.record(2, FailReason.ORDER_DB_TIMEOUT);
+
+        mvc.perform(get("/internal/orders/stats").param("eventId", "1"))
+                .andExpect(jsonPath("$.preOrderFailedByReason.PRODUCT_TIMEOUT").value(1))
+                .andExpect(jsonPath("$.preOrderFailedByReason.ORDER_DB_TIMEOUT").doesNotExist());
+    }
+
+    @Test
+    void deleteResetsPreOrderFailures() throws Exception {
+        preOrderFailures.record(1, FailReason.PRODUCT_TIMEOUT);
+        mvc.perform(delete("/internal/orders")).andExpect(status().isNoContent());
+
+        mvc.perform(get("/internal/orders/stats").param("eventId", "1"))
+                .andExpect(jsonPath("$.preOrderFailedByReason.length()").value(0));
     }
 }

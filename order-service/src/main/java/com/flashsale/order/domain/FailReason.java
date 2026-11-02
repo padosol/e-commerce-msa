@@ -1,3 +1,14 @@
 package com.flashsale.order.domain;
 
-public enum FailReason { SOLD_OUT, PAYMENT_DECLINED, INVENTORY_ERROR, PAYMENT_ERROR }
+public enum FailReason {
+    SOLD_OUT,
+    STOCK_CONFLICT,
+    PAYMENT_DECLINED,
+    INVENTORY_TIMEOUT,
+    INVENTORY_ERROR,
+    PAYMENT_TIMEOUT,
+    PAYMENT_ERROR,
+    PRODUCT_TIMEOUT,
+    PRODUCT_ERROR,
+    ORDER_DB_TIMEOUT
+}

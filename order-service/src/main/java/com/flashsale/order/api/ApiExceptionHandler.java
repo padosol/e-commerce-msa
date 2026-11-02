@@ -1,6 +1,7 @@
 package com.flashsale.order.api;
 
 import com.flashsale.order.application.EventNotOpenException;
+import com.flashsale.order.application.PreOrderFailedException;
 import com.flashsale.order.client.DownstreamException;
 import com.flashsale.order.client.EventNotFoundException;
 import java.util.Map;
@@ -23,6 +24,13 @@ public class ApiExceptionHandler {
     @ExceptionHandler(EventNotOpenException.class)
     ResponseEntity<Map<String, String>> eventNotOpen(EventNotOpenException e) {
         return body(HttpStatus.BAD_REQUEST, "EVENT_NOT_OPEN", e.getMessage());
+    }
+
+    @ExceptionHandler(PreOrderFailedException.class)
+    ResponseEntity<Map<String, String>> preOrderFailed(PreOrderFailedException e) {
+        String reason = e.reason().name();
+        return ResponseEntity.status(FailReasonStatus.of(e.reason()))
+                .body(Map.of("code", reason, "reason", reason, "message", "order failed before creation: " + reason));
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)

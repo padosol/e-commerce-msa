@@ -31,11 +31,7 @@ public class OrderController {
     private static HttpStatus statusOf(OrderResult r) {
         return switch (r.status()) {
             case PAID -> HttpStatus.CREATED;
-            case FAILED -> switch (r.reason()) {
-                case SOLD_OUT -> HttpStatus.CONFLICT;
-                case PAYMENT_DECLINED -> HttpStatus.PAYMENT_REQUIRED;
-                case INVENTORY_ERROR, PAYMENT_ERROR -> HttpStatus.BAD_GATEWAY;
-            };
+            case FAILED -> FailReasonStatus.of(r.reason());
             case PENDING -> HttpStatus.INTERNAL_SERVER_ERROR;
         };
     }

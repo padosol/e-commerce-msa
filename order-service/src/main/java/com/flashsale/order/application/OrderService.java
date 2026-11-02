@@ -10,6 +10,7 @@ import com.flashsale.order.client.StockDecreaseResult;
 import com.flashsale.order.domain.FailReason;
 import com.flashsale.order.domain.OrderRepository;
 import com.flashsale.order.domain.OrderStatus;
+import java.sql.SQLTransientConnectionException;
 import java.time.Clock;
 import java.util.EnumMap;
 import java.util.Map;
@@ -28,31 +29,49 @@ public class OrderService {
     private final PaymentClient paymentClient;
     private final OrderWriter orderWriter;
     private final OrderRepository orderRepository;
+    private final PreOrderFailures preOrderFailures;
     private final Clock clock;
 
     public OrderService(ProductClient productClient, InventoryClient inventoryClient, PaymentClient paymentClient,
-                        OrderWriter orderWriter, OrderRepository orderRepository, Clock clock) {
+                        OrderWriter orderWriter, OrderRepository orderRepository, PreOrderFailures preOrderFailures, Clock clock) {
         this.productClient = productClient;
         this.inventoryClient = inventoryClient;
         this.paymentClient = paymentClient;
         this.orderWriter = orderWriter;
         this.orderRepository = orderRepository;
+        this.preOrderFailures = preOrderFailures;
         this.clock = clock;
     }
 
     public OrderResult placeOrder(long userId, long eventId) {
-        EventInfo event = productClient.getEvent(eventId);
+        EventInfo event;
+        try {
+            event = productClient.getEvent(eventId);
+        } catch (DownstreamException e) {
+            throw preOrderFailed(eventId, e.isTimeout() ? FailReason.PRODUCT_TIMEOUT : FailReason.PRODUCT_ERROR, e);
+        }
         if (clock.instant().isBefore(event.openAt())) {
             throw new EventNotOpenException(eventId);
         }
-        long orderId = orderWriter.createPending(userId, event).getId();
+        long orderId;
+        try {
+            orderId = orderWriter.createPending(userId, event).getId();
+        } catch (RuntimeException e) {
+            if (causedByConnectionTimeout(e)) {
+                throw preOrderFailed(eventId, FailReason.ORDER_DB_TIMEOUT, e);
+            }
+            throw e;
+        }
 
         StockDecreaseResult stock;
         try {
             stock = inventoryClient.decrease(event.productId(), 1);
         } catch (DownstreamException e) {
             log.warn("inventory decrease outcome unknown for order {}", orderId, e);
-            return fail(orderId, FailReason.INVENTORY_ERROR);
+            return fail(orderId, e.isTimeout() ? FailReason.INVENTORY_TIMEOUT : FailReason.INVENTORY_ERROR);
+        }
+        if (stock == StockDecreaseResult.CONFLICT) {
+            return fail(orderId, FailReason.STOCK_CONFLICT);
         }
         if (stock == StockDecreaseResult.OUT_OF_STOCK) {
             return fail(orderId, FailReason.SOLD_OUT);
@@ -64,7 +83,7 @@ public class OrderService {
         } catch (DownstreamException e) {
             // outcome unknown: do NOT restore stock
             log.warn("payment outcome unknown for order {}", orderId, e);
-            return fail(orderId, FailReason.PAYMENT_ERROR);
+            return fail(orderId, e.isTimeout() ? FailReason.PAYMENT_TIMEOUT : FailReason.PAYMENT_ERROR);
         }
         if (outcome == PaymentOutcome.DECLINED) {
             try {
@@ -96,15 +115,30 @@ public class OrderService {
                 byReason.put(c.getReason(), c.getCnt());
             }
         }
-        return new OrderStats(eventId, paid, failed, pending, byReason);
+        return new OrderStats(eventId, paid, failed, pending, byReason, preOrderFailures.snapshot(eventId));
     }
 
     public void deleteAll() {
         orderRepository.deleteAllInBatch();
+        preOrderFailures.reset();
     }
 
     private OrderResult fail(long orderId, FailReason reason) {
         orderWriter.markFailed(orderId, reason);
         return new OrderResult(orderId, OrderStatus.FAILED, reason);
+    }
+
+    private PreOrderFailedException preOrderFailed(long eventId, FailReason reason, Throwable cause) {
+        preOrderFailures.record(eventId, reason);
+        return new PreOrderFailedException(reason, cause);
+    }
+
+    private static boolean causedByConnectionTimeout(Throwable e) {
+        for (Throwable t = e; t != null; t = t.getCause() == t ? null : t.getCause()) {
+            if (t instanceof SQLTransientConnectionException) {
+                return true;
+            }
+        }
+        return false;
     }
 }
