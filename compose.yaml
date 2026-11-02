@@ -19,6 +19,20 @@ services:
           cpus: "4"
           memory: 1536m
 
+  mysqld-exporter:
+    image: prom/mysqld-exporter:v0.16.0
+    command: ["--mysqld.address=mysql:3306", "--mysqld.username=exporter"]
+    environment:
+      MYSQLD_EXPORTER_PASSWORD: exporter_pw
+    depends_on:
+      mysql:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 64m
+
   user-service:
     build:
       context: .
@@ -69,6 +83,7 @@ services:
     environment:
       DB_URL: jdbc:mysql://mysql:3306/inventory_db
       INVENTORY_STRATEGY: ${INVENTORY_STRATEGY:-naive}
+      INVENTORY_OPTIMISTIC_MAX_RETRIES: ${INVENTORY_OPTIMISTIC_MAX_RETRIES:-0}
     depends_on:
       mysql:
         condition: service_healthy

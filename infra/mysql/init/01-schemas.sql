@@ -17,3 +17,7 @@ GRANT ALL PRIVILEGES ON order_db.* TO 'order_svc'@'%';
 CREATE DATABASE payment_db;
 CREATE USER 'payment_svc'@'%' IDENTIFIED BY 'payment_pw';
 GRANT ALL PRIVILEGES ON payment_db.* TO 'payment_svc'@'%';
+
+CREATE USER 'exporter'@'%' IDENTIFIED BY 'exporter_pw' WITH MAX_USER_CONNECTIONS 3;
+GRANT PROCESS, REPLICATION CLIENT ON *.* TO 'exporter'@'%';
+GRANT SELECT ON performance_schema.* TO 'exporter'@'%';
