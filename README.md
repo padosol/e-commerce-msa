@@ -26,6 +26,8 @@ scripts/run-test.sh               # 초기화 -> 준비 -> k6 -> 검증 -> 결�
 
 예: `USERS=200 SALE_QUANTITY=20 scripts/run-test.sh`. 마지막 줄에 verdict(`OK` / `OVERSOLD` 등)가 출력된다.
 
+`run-test.sh` 는 k6 를 시작하기 전에 호스트의 TIME_WAIT 소켓이 500개 미만으로 줄 때까지(최대 120초) 기다린다. 5000 연결짜리 실행을 연달아 돌리면 앞 실행의 소켓이 남아 연결 단계에서 실패하기 때문이다.
+
 종료는 `docker compose down`.
 
 ## 재고 전략 교체

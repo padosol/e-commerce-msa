@@ -31,6 +31,7 @@ out=$(create_event "$SALE_QUANTITY")
 read -r EVENT_ID PRODUCT_ID <<<"$out"
 set_stock "$PRODUCT_ID" "$SALE_QUANTITY"
 issue_tokens "$USERS" "$TOKENS_FILE"
+read -r drain_wait_sec time_wait_before <<<"$(wait_tcp_drained 500 120)"
 started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 k6_args=(run --summary-export "$RUN_DIR/k6-summary.json" --tag "testid=$RUN_ID"
@@ -62,7 +63,8 @@ pay=$(payment_config)
 my_settings=$(mysql_settings)
 
 jq -n --arg r "$RUN_ID" --arg s "$strategy" --arg k "$kind" --argjson u "$USERS" --argjson q "$SALE_QUANTITY" --arg c "$commit" \
-  '{runId: $r, strategy: $s, kind: $k, users: $u, saleQuantity: $q, commit: $c}' > "$RUN_DIR/meta.json"
+  --argjson dw "$drain_wait_sec" --argjson tw "$time_wait_before" \
+  '{runId: $r, strategy: $s, kind: $k, users: $u, saleQuantity: $q, commit: $c, tcpDrainWaitSec: $dw, tcpTimeWaitBefore: $tw}' > "$RUN_DIR/meta.json"
 
 # Prometheus 구간 질의: 구간 W = 실행 시간 + 4s, 평가 시각 = t_end + 2
 W="$(( t_end - t_start + 4 ))s"
@@ -131,6 +133,7 @@ gw_cfg() { grep -E '^    read-timeout:' gateway/src/main/resources/application.y
   echo "- MySQL 격리 수준: $(jq -r .isolation <<<"$my_settings"), innodb_lock_wait_timeout: $(jq -r .lockWaitTimeout <<<"$my_settings")s"
   echo "- Hikari connectionTimeout: 30s (기본값)"
   echo "- Prometheus 스크레이프 간격: $scrape_interval (infra/prometheus/prometheus.yml)"
+  echo "- k6 시작 전 호스트 TIME_WAIT 대기: ${drain_wait_sec}초 (시작 시 ${time_wait_before}개, 기준 < 500)"
   echo "- kind: $kind"
   echo
   echo "## 실패 사유별 건수"

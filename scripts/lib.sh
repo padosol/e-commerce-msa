@@ -105,3 +105,31 @@ wait_orders_settled() {
     sleep 1
   done
 }
+
+# 호스트의 TIME_WAIT 소켓 수. macOS 는 `netstat -an -p tcp`, 지원하지 않으면(Linux) `netstat -an`.
+# 상태 열(마지막 열)이 정확히 TIME_WAIT 인 줄만 센다.
+tcp_time_wait_count() {
+  { netstat -an -p tcp 2>/dev/null || netstat -an 2>/dev/null; } | awk '$NF == "TIME_WAIT" {n++} END {print n + 0}'
+}
+
+# wait_tcp_drained [threshold=500] [timeout=120]
+# 호스트 TIME_WAIT 소켓이 threshold 미만이 될 때까지 1초마다 확인한다(부하 생성기 pacing; 대상 시스템 설정과 무관).
+# stdout: "<기다린 초> <마지막 개수>". 시간 초과여도 0 을 반환하고 stderr 에 WARN 을 남긴다.
+wait_tcp_drained() {
+  local threshold="${1:-500}" timeout="${2:-120}" start count waited
+  start=$(date +%s)
+  while :; do
+    count=$(tcp_time_wait_count)
+    waited=$(( $(date +%s) - start ))
+    if [ "$count" -lt "$threshold" ]; then
+      echo "$waited $count"
+      return 0
+    fi
+    if [ "$waited" -ge "$timeout" ]; then
+      echo "WARN: TIME_WAIT 소켓이 ${timeout}초 안에 ${threshold}개 미만으로 줄지 않았다(현재 ${count}개)" >&2
+      echo "$waited $count"
+      return 0
+    fi
+    sleep 1
+  done
+}
