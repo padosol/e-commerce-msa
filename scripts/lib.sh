@@ -158,7 +158,7 @@ APP_SERVICES=(gateway user-service product-service inventory-service order-servi
 svc_key() { [ "$1" = gateway ] && echo gateway || echo "${1%-service}"; }
 
 # hikari_acquire_json <W> <unix_time> : 구간 W 동안 서비스별 Hikari 커넥션 획득 횟수와 평균 획득 대기(ms).
-# {"order": {"acquisitions": n, "avgMs": x}, ...}. 획득 대기 최댓값은 Micrometer 가 약 2분 감쇠 창으로만 내보내
+# {"order": {"acquisitions": n, "avgMs": x}, ...}. 획득 대기 최댓값은 Micrometer 가 감쇠 최댓값(실측: 60초마다 갱신, 한 값이 120~180초 남음)으로만 내보내
 # 실행(약 10초 간격) 단위로 나눌 수 없어서 여기에 넣지 않는다.
 hikari_acquire_json() {
   local cnt sum
