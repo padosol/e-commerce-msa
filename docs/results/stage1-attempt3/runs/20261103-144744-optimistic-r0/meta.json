@@ -1,0 +1,10 @@
+{
+  "runId": "20261103-144744-optimistic-r0",
+  "strategy": "optimistic-r0",
+  "kind": "measure",
+  "users": 5000,
+  "saleQuantity": 100,
+  "commit": "5596cb0",
+  "tcpDrainWaitSec": 28,
+  "tcpTimeWaitBefore": 30
+}

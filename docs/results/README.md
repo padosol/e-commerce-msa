@@ -30,7 +30,7 @@
 ## 실행 목록
 
 0단계 기준선(커밋 b3cf43c) 행은 1단계 이전 환경이다.
-1단계 1차·2차 측정 기록은 `stage1-attempt1/`, `stage1-attempt2/` 에 보관했다(다시 잰 이유는 각 폴더의 README).
+1단계 1~3차 측정 기록은 `stage1-attempt1/`, `stage1-attempt2/`, `stage1-attempt3/` 에 보관했다(다시 잰 이유는 각 폴더의 README).
 
 | run | kind | strategy | users | stock | paid | oversold | undersold | finalStock | conflicts | timeouts | retries | verdict | p95(ms) | p99(ms) | rps |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|

@@ -1,0 +1,74 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: load-test/k6/flash-sale.js
+        output: Prometheus remote write (http://localhost:9090/api/v1/write)
+
+     scenarios: (100.00%) 1 scenario, 5000 max VUs, 5m30s max duration (incl. graceful stop):
+              * flash_sale: 1 iterations for each of 5000 VUs (maxDuration: 5m0s, gracefulStop: 30s)
+
+
+running (0m00.8s), 5000/5000 VUs, 0 complete and 0 interrupted iterations
+flash_sale   [   0% ] 5000 VUs  0m00.8s/5m0s  0000/5000 iters, 1 per VU
+
+running (0m01.8s), 4958/5000 VUs, 42 complete and 0 interrupted iterations
+flash_sale   [   1% ] 5000 VUs  0m01.8s/5m0s  0042/5000 iters, 1 per VU
+
+running (0m02.8s), 4500/5000 VUs, 500 complete and 0 interrupted iterations
+flash_sale   [  10% ] 5000 VUs  0m02.8s/5m0s  0500/5000 iters, 1 per VU
+
+running (0m03.8s), 3948/5000 VUs, 1052 complete and 0 interrupted iterations
+flash_sale   [  21% ] 5000 VUs  0m03.8s/5m0s  1052/5000 iters, 1 per VU
+
+running (0m04.8s), 3399/5000 VUs, 1601 complete and 0 interrupted iterations
+flash_sale   [  32% ] 5000 VUs  0m04.8s/5m0s  1601/5000 iters, 1 per VU
+
+running (0m05.8s), 2843/5000 VUs, 2157 complete and 0 interrupted iterations
+flash_sale   [  43% ] 5000 VUs  0m05.8s/5m0s  2157/5000 iters, 1 per VU
+
+running (0m06.8s), 2245/5000 VUs, 2755 complete and 0 interrupted iterations
+flash_sale   [  55% ] 5000 VUs  0m06.8s/5m0s  2755/5000 iters, 1 per VU
+
+running (0m07.8s), 1626/5000 VUs, 3374 complete and 0 interrupted iterations
+flash_sale   [  67% ] 5000 VUs  0m07.8s/5m0s  3374/5000 iters, 1 per VU
+
+running (0m08.8s), 0990/5000 VUs, 4010 complete and 0 interrupted iterations
+flash_sale   [  80% ] 5000 VUs  0m08.8s/5m0s  4010/5000 iters, 1 per VU
+
+running (0m09.8s), 0327/5000 VUs, 4674 complete and 0 interrupted iterations
+flash_sale   [  93% ] 5000 VUs  0m09.8s/5m0s  4674/5000 iters, 1 per VU
+
+
+  █ TOTAL RESULTS 
+
+    CUSTOM
+    orders_paid....................: 548    53.973371/s
+    orders_sold_out................: 4452   438.484392/s
+
+    HTTP
+    http_req_duration..............: avg=6.15s med=6.25s p(95)=9.69s p(99)=10.04s max=10.06s
+      { expected_response:true }...: avg=6.15s med=6.25s p(95)=9.69s p(99)=10.04s max=10.06s
+    http_req_failed................: 0.00%  0 out of 5000
+    http_reqs......................: 5000   492.457763/s
+
+    EXECUTION
+    iteration_duration.............: avg=6.23s med=6.39s p(95)=9.89s p(99)=10.09s max=10.14s
+    iterations.....................: 5000   492.457763/s
+    vus............................: 326    min=326       max=5000
+    vus_max........................: 5000   min=5000      max=5000
+
+    NETWORK
+    data_received..................: 891 kB 88 kB/s
+    data_sent......................: 1.5 MB 147 kB/s
+
+
+
+
+running (0m10.2s), 0000/5000 VUs, 5000 complete and 0 interrupted iterations
+flash_sale ✓ [ 100% ] 5000 VUs  0m10.2s/5m0s  5000/5000 iters, 1 per VU

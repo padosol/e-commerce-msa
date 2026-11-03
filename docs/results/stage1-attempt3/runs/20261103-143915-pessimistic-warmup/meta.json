@@ -1,0 +1,10 @@
+{
+  "runId": "20261103-143915-pessimistic-warmup",
+  "strategy": "pessimistic",
+  "kind": "warmup",
+  "users": 5000,
+  "saleQuantity": 100,
+  "commit": "5596cb0",
+  "tcpDrainWaitSec": 22,
+  "tcpTimeWaitBefore": 50
+}

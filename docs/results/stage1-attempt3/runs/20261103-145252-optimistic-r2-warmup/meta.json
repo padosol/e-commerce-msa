@@ -1,0 +1,10 @@
+{
+  "runId": "20261103-145252-optimistic-r2-warmup",
+  "strategy": "optimistic-r2",
+  "kind": "warmup",
+  "users": 5000,
+  "saleQuantity": 100,
+  "commit": "5596cb0",
+  "tcpDrainWaitSec": 22,
+  "tcpTimeWaitBefore": 52
+}
