@@ -1,0 +1,33 @@
+# tools/arm-summary.sh 출력 (runs/<이름>). r: 2단계 매트릭스 뒤 그대로인 gateway, a: 원래 설정 새 컨테이너, b: 메모리 1g + -Xmx448m, c: 원래 설정 + accept-count 4096
+r1 | max 5.6s p99wait 5.4s connMax 2.1s | ovf 5963 majf 54067 swapMax 304MiB | gw GC: Copy 9회 max 645ms, Mark 1회 max 1120ms | paid+failed 5000
+r2 | max 4.1s p99wait 3.9s connMax 1.1s | ovf 674 majf 10678 swapMax 308MiB | gw GC: Copy 9회 max 702ms | paid+failed 5000
+r3 | max 4s p99wait 3.9s connMax 3.1s | ovf 5097 majf 44279 swapMax 319MiB | gw GC: Copy 8회 max 661ms, Mark 1회 max 904ms | paid+failed 5000
+r4 | max 4.4s p99wait 4.4s connMax 0.3s | ovf 0 majf 19258 swapMax 285MiB | gw GC: Copy 8회 max 948ms | paid+failed 5000
+r5 | max 5.2s p99wait 3.8s connMax 3.2s | ovf 5945 majf 39199 swapMax 312MiB | gw GC: Copy 9회 max 723ms, Mark 1회 max 806ms | paid+failed 5000
+r6 | max 7.3s p99wait 7.2s connMax 1.1s | ovf 253 majf 48132 swapMax 312MiB | gw GC: Copy 7회 max 1248ms, Mark 1회 max 869ms | paid+failed 5000
+r7 | max 4.3s p99wait 4.2s connMax 2.1s | ovf 3745 majf 12369 swapMax 307MiB | gw GC: Copy 9회 max 967ms | paid+failed 5000
+r8 | max 4.4s p99wait 4.3s connMax 3.2s | ovf 2941 majf 45159 swapMax 320MiB | gw GC: Copy 8회 max 644ms, Mark 1회 max 844ms | paid+failed 5000
+a1 | max 5.5s p99wait 4.5s connMax 2.1s | ovf 6233 majf 31130 swapMax 302MiB | gw GC:  | paid+failed 5000
+a2 | max 3.7s p99wait 3.6s connMax 2.1s | ovf 6911 majf 14531 swapMax 346MiB | gw GC: Copy 8회 max 722ms | paid+failed 5000
+a3 | max 13.2s p99wait 6.7s connMax 3.1s | ovf 4391 majf 82670 swapMax 328MiB | gw GC: Copy 9회 max 680ms, Mark 1회 max 1698ms | paid+failed 5000
+a4 | max 3.3s p99wait 3.1s connMax 1.1s | ovf 7458 majf 17745 swapMax 321MiB | gw GC: Copy 9회 max 758ms | paid+failed 5000
+a5 | max 6.1s p99wait 5.8s connMax 4.3s | ovf 3313 majf 87490 swapMax 326MiB | gw GC: Copy 8회 max 804ms, Mark 1회 max 1822ms | paid+failed 5000
+a6 | max 3.3s p99wait 3.3s connMax 1.1s | ovf 7435 majf 20122 swapMax 319MiB | gw GC: Copy 9회 max 924ms | paid+failed 5000
+a7 | max 6s p99wait 6s connMax 2.1s | ovf 3496 majf 64885 swapMax 321MiB | gw GC: Copy 8회 max 542ms, Mark 1회 max 1630ms | paid+failed 5000
+a8 | max 58.8s p99wait 58.8s connMax 2s | ovf 16850 majf 16264 swapMax 311MiB | gw GC: Copy 10회 max 358ms | paid+failed 4943
+b1 | max 53.4s p99wait 53s connMax 1.6s | ovf 15144 majf 0 swapMax 0MiB | gw GC: Copy 93회 max 620ms | paid+failed 5000
+b2 | max 53s p99wait 26.9s connMax 2.1s | ovf 16588 majf 0 swapMax 0MiB | gw GC: Copy 11회 max 69ms | paid+failed 5000
+b3 | max 3.7s p99wait 3.6s connMax 1.1s | ovf 872 majf 0 swapMax 0MiB | gw GC: Copy 8회 max 112ms | paid+failed 5000
+b4 | max 3.9s p99wait 3.8s connMax 1.1s | ovf 987 majf 0 swapMax 0MiB | gw GC: Copy 8회 max 106ms, Mark 1회 max 94ms | paid+failed 5000
+b5 | max 3.8s p99wait 3.7s connMax 1.1s | ovf 377 majf 0 swapMax 0MiB | gw GC: Copy 8회 max 123ms | paid+failed 5000
+b6 | max 2.9s p99wait 2.9s connMax 1.1s | ovf 3667 majf 1 swapMax 0MiB | gw GC: Copy 8회 max 106ms, Mark 1회 max 86ms | paid+failed 5000
+b7 | max 3.8s p99wait 3.7s connMax 1.1s | ovf 219 majf 0 swapMax 0MiB | gw GC: Copy 7회 max 130ms, Mark 1회 max 101ms | paid+failed 5000
+b8 | max 13.3s p99wait 13.3s connMax 1.1s | ovf 7108 majf 0 swapMax 0MiB | gw GC: Copy 9회 max 111ms | paid+failed 5000
+c1 | max 5.4s p99wait 5.3s connMax 0.2s | ovf 0 majf 5811 swapMax 140MiB | gw GC: Copy 87회 max 830ms | paid+failed 5000
+c2 | max 5.4s p99wait 5.4s connMax 1.1s | ovf 89 majf 36499 swapMax 335MiB | gw GC: Copy 10회 max 527ms | paid+failed 5000
+c3 | max 4.4s p99wait 4.4s connMax 0.2s | ovf 0 majf 19742 swapMax 331MiB | gw GC: Copy 9회 max 778ms | paid+failed 5000
+c4 | max 5.8s p99wait 5.7s connMax 0.2s | ovf 0 majf 68431 swapMax 335MiB | gw GC: Copy 8회 max 567ms, Mark 1회 max 1413ms | paid+failed 5000
+c5 | max 4.4s p99wait 4.4s connMax 0.2s | ovf 0 majf 17962 swapMax 325MiB | gw GC: Copy 9회 max 777ms | paid+failed 5000
+c6 | max 6s p99wait 6s connMax 0.2s | ovf 0 majf 61818 swapMax 336MiB | gw GC: Copy 8회 max 574ms, Mark 1회 max 1560ms | paid+failed 5000
+c7 | max 4.4s p99wait 4.4s connMax 0.2s | ovf 0 majf 19145 swapMax 336MiB | gw GC: Copy 9회 max 696ms | paid+failed 5000
+c8 | max 6.4s p99wait 6.3s connMax 0.2s | ovf 0 majf 68770 swapMax 331MiB | gw GC: Copy 8회 max 760ms, Mark 1회 max 1566ms | paid+failed 5000
