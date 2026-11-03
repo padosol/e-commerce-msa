@@ -46,7 +46,7 @@ fi
 
 lock_before=$(mysql_lock_status)
 t_start=$(date +%s)
-k6 "${k6_args[@]}" "$ROOT/load-test/k6/flash-sale.js" 2>&1 | tee "$RUN_DIR/k6-stdout.txt"
+k6 "${k6_args[@]}" load-test/k6/flash-sale.js 2>&1 | tee "$RUN_DIR/k6-stdout.txt"
 t_end=$(date +%s)
 duration=$(( t_end - t_start ))
 
