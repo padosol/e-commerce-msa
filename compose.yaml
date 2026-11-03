@@ -147,11 +147,16 @@ services:
       PRODUCT_SERVICE_URL: http://product-service:8082
       ORDER_SERVICE_URL: http://order-service:8084
       JWT_SECRET: *jwt-secret
+      # 게이트웨이는 heap 448 MiB 에 heap 밖 메모리가 약 440 MiB 더 든다(1단계 5차 조건에서 측정한 최댓값 866 MiB).
+      # 640m 에서는 그 차이만큼 swap 을 써서 GC·요청 처리가 멈췄다. heap 과 GC 는 그대로 두고 메모리만 늘린다.
+      # MaxRAMPercentage 로 두면 heap 이 메모리 한도를 따라 커지므로 -Xmx 로 고정한다.
+      JAVA_TOOL_OPTIONS: "-Xmx448m -XX:+UseSerialGC"
+    memswap_limit: 1280m   # 메모리 한도와 같게 해서 swap 을 쓰지 않는다(넘으면 OOM 으로 드러난다)
     deploy:
       resources:
         limits:
           cpus: "2"
-          memory: 640m
+          memory: 1280m
 
   prometheus:
     image: prom/prometheus:v3.5.0

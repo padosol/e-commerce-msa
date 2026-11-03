@@ -22,7 +22,7 @@
 - gateway 하위 호출 read timeout: 30s
 - k6 요청 timeout: 60s, executor: per-vu-iterations, VU당 1 iteration
 - 부하 조건: 0단계~1단계 4차는 USERS 5000 이 같은 순간에 요청(`ARRIVAL_SECONDS=0`). 1단계 5차(2026-11-03)부터 USERS 500 이 1초 동안 같은 간격으로 요청(`ARRIVAL_SECONDS=1`, 사용자 i 가 i × 2ms 뒤 출발). 재고 100 은 같다. 실행마다 `meta.json` 의 `users`·`arrivalSeconds` 와 report.md 의 "요청 도착" 에 기록된다
-- 컨테이너 제한: 앱 cpus 2 / 640m, MySQL cpus 4 / 1536m
+- 컨테이너 제한: 앱 cpus 2 / 640m, MySQL cpus 4 / 1536m. 2단계(게이트웨이 메모리)부터 gateway 만 1280m·swap 없음, heap `-Xmx448m`·Serial GC 는 그대로(`stage2-gateway-memory.md`). 1단계 5차부터는 실행마다 `meta.json` 의 `jvm` 과 report.md 에 실제 값이 기록된다
 - Tomcat/Hikari 기본값, virtual threads off
 - MySQL 격리 수준 REPEATABLE-READ, `innodb_lock_wait_timeout` 50s (실행마다 report.md 에 실측값 기록)
 - Hikari connectionTimeout 30s (기본값)
@@ -102,3 +102,10 @@
 | 20261103-221312-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 12 | 0 | 120 | OK | 240.01 | 260.8 | 496.31 |
 | 20261103-221317-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 13 | 0 | 133 | OK | 232.98 | 253.4 | 496.69 |
 | 20261103-221322-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 9 | 0 | 92 | OK | 238.51 | 257.87 | 497.87 |
+
+### 2단계: 게이트웨이 메모리 1280m·swap 없음 (500명이 1초 동안 도착, 재고 100)
+
+`USERS=500 ARRIVAL_SECONDS=1`. 위의 1단계 5차 행과 같은 부하 조건이고, 게이트웨이 메모리만 다르다.
+
+| run | kind | strategy | users | stock | paid | oversold | undersold | finalStock | conflicts | timeouts | retries | verdict | p95(ms) | p99(ms) | rps |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|

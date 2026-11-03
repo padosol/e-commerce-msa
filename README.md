@@ -77,6 +77,11 @@ RUNS=1 USERS=200 SALE_QUANTITY=20 scripts/run-matrix.sh conditional optimistic-r
 결과를 구성별 3회 중앙값 표로 모으려면 `scripts/summarize.sh` 를 쓴다. 기본은 지금 부하 조건(`USERS=500 ARRIVAL_SECONDS=1`)으로 잰 실행만 모은다.
 예전 조건 기록은 `USERS=5000 ARRIVAL_SECONDS=0` 을 준다. 특정 측정만 모으려면 `FROM=<RUN_ID 앞부분>` 으로 그 이후 실행만 고른다(예: 1단계 4차 `USERS=5000 ARRIVAL_SECONDS=0 FROM=20261103-1548 scripts/summarize.sh`). 1단계 결과 해석은 `docs/results/stage1-summary.md`(4차, 5000명 동시 요청)와 `docs/results/stage1-attempt5-summary.md`(5차, 1초 동안 500명)에 있다.
 
+### 2단계: 게이트웨이 메모리
+
+게이트웨이만 메모리 1280m·swap 없음으로 바꿨다(`compose.yaml`). heap(`-Xmx448m`)과 GC(Serial)는 1단계와 같다.
+1단계 5차에서 게이트웨이는 640m 한도에 닿아 swap 을 286 MiB 썼고, 메모리를 얼마나 쓰는지 재서 정한 값이다(`docs/results/stage2-gateway-memory.md`).
+
 `causes.json` 에 커넥션 획득 대기·GC 정지가 없는 예전 실행은 `scripts/jvm-metrics.sh docs/results/runs/<RUN_ID>...` 로 같은 값을 Prometheus 에서 다시 계산할 수 있다(그 시각의 Prometheus 데이터가 남아 있을 때만). 1단계 4차 28회의 값은 `docs/results/stage1-attempt4-jvm-metrics.json` 에 있다.
 
 ### 검증·분류 도구
