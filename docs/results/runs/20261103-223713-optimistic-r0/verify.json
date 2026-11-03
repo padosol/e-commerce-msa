@@ -1,0 +1,39 @@
+{
+  "saleQuantity": 100,
+  "users": 500,
+  "paid": 100,
+  "failed": 400,
+  "pending": 0,
+  "preOrderFailed": 0,
+  "finalStock": 0,
+  "oversold": 0,
+  "undersold": 0,
+  "stockMismatch": 0,
+  "conflicts": 96,
+  "failedByReason": {
+    "SOLD_OUT": 304,
+    "STOCK_CONFLICT": 96
+  },
+  "preOrderFailedByReason": {},
+  "timeouts": {
+    "inventory": 0,
+    "payment": 0,
+    "product": 0,
+    "orderDb": 0,
+    "gateway": 0,
+    "client": 0,
+    "total": 0
+  },
+  "k6": {
+    "paid": 100,
+    "soldOut": 304,
+    "conflict": 96,
+    "orderTimeout": 0,
+    "gatewayTimeout": 0,
+    "clientTimeout": 0,
+    "other": 0,
+    "total": 500
+  },
+  "verdict": "OK",
+  "inconclusive": []
+}
