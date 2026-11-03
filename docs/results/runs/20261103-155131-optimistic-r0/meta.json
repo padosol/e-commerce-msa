@@ -1,0 +1,14 @@
+{
+  "runId": "20261103-155131-optimistic-r0",
+  "strategy": "optimistic-r0",
+  "kind": "measure",
+  "users": 5000,
+  "saleQuantity": 100,
+  "commit": "e7cc995",
+  "tcpDrainWaitSec": 0,
+  "tcpTimeWaitBefore": 117,
+  "k6Runner": "docker",
+  "k6Image": "grafana/k6:2.2.0",
+  "k6Cpus": "4",
+  "k6Memory": "2g"
+}

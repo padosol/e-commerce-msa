@@ -1,0 +1,60 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: /k6/flash-sale.js
+        output: Prometheus remote write (http://prometheus:9090/api/v1/write)
+
+     scenarios: (100.00%) 1 scenario, 5000 max VUs, 5m30s max duration (incl. graceful stop):
+              * flash_sale: 1 iterations for each of 5000 VUs (maxDuration: 5m0s, gracefulStop: 30s)
+
+
+running (0m00.6s), 4682/5000 VUs, 318 complete and 0 interrupted iterations
+flash_sale   [   6% ] 5000 VUs  0m00.6s/5m0s  0318/5000 iters, 1 per VU
+
+running (0m01.6s), 3801/5000 VUs, 1199 complete and 0 interrupted iterations
+flash_sale   [  24% ] 5000 VUs  0m01.6s/5m0s  1199/5000 iters, 1 per VU
+
+running (0m02.6s), 2539/5000 VUs, 2461 complete and 0 interrupted iterations
+flash_sale   [  49% ] 5000 VUs  0m02.6s/5m0s  2461/5000 iters, 1 per VU
+
+running (0m03.6s), 1378/5000 VUs, 3622 complete and 0 interrupted iterations
+flash_sale   [  72% ] 5000 VUs  0m03.6s/5m0s  3622/5000 iters, 1 per VU
+
+running (0m04.6s), 0057/5000 VUs, 4943 complete and 0 interrupted iterations
+flash_sale   [  99% ] 5000 VUs  0m04.6s/5m0s  4943/5000 iters, 1 per VU
+
+
+  █ TOTAL RESULTS 
+
+    CUSTOM
+    orders_conflict................: 246    52.783895/s
+    orders_paid....................: 100    21.456868/s
+    orders_sold_out................: 4654   998.60263/s
+
+    HTTP
+    http_req_duration..............: avg=2.41s med=2.49s p(95)=4.23s p(99)=4.38s max=4.45s
+      { expected_response:true }...: avg=2.41s med=2.49s p(95)=4.23s p(99)=4.38s max=4.45s
+    http_req_failed................: 0.00%  0 out of 5000
+    http_reqs......................: 5000   1072.843393/s
+
+    EXECUTION
+    iteration_duration.............: avg=2.57s med=2.63s p(95)=4.47s p(99)=4.6s  max=4.63s
+    iterations.....................: 5000   1072.843393/s
+    vus............................: 61     min=61        max=4684
+    vus_max........................: 5000   min=5000      max=5000
+
+    NETWORK
+    data_received..................: 906 kB 194 kB/s
+    data_sent......................: 1.5 MB 320 kB/s
+
+
+
+
+running (0m04.7s), 0000/5000 VUs, 5000 complete and 0 interrupted iterations
+flash_sale ✓ [ 100% ] 5000 VUs  0m04.7s/5m0s  5000/5000 iters, 1 per VU
