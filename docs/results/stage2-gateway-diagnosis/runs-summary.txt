@@ -31,3 +31,29 @@ c5 | max 4.4s p99wait 4.4s connMax 0.2s | ovf 0 majf 17962 swapMax 325MiB | gw G
 c6 | max 6s p99wait 6s connMax 0.2s | ovf 0 majf 61818 swapMax 336MiB | gw GC: Copy 8회 max 574ms, Mark 1회 max 1560ms | paid+failed 5000
 c7 | max 4.4s p99wait 4.4s connMax 0.2s | ovf 0 majf 19145 swapMax 336MiB | gw GC: Copy 9회 max 696ms | paid+failed 5000
 c8 | max 6.4s p99wait 6.3s connMax 0.2s | ovf 0 majf 68770 swapMax 331MiB | gw GC: Copy 8회 max 760ms, Mark 1회 max 1566ms | paid+failed 5000
+
+# CPU 비교 (k: 원래 설정 cpus 2 새 컨테이너, d: cpus 4, e: cpus 8. 나머지는 원래 설정)
+k1 | max 13.2s p99wait 6.9s connMax 3.1s | ovf 16845 majf 585 swapMax 38MiB cpuPeak 238% | gw GC: Copy 86회 max 756ms, Mark 1회 max 119ms | paid+failed 5000
+k2 | max 13.6s p99wait 13.1s connMax 1.1s | ovf 8629 majf 7646 swapMax 193MiB cpuPeak 216% | gw GC: Copy 9회 max 397ms | paid+failed 5000
+k3 | max 5.4s p99wait 5.2s connMax 2.1s | ovf 1456 majf 46734 swapMax 321MiB cpuPeak 207% | gw GC: Copy 8회 max 596ms, Mark 1회 max 814ms | paid+failed 5000
+k4 | max 3.4s p99wait 3.4s connMax 2.1s | ovf 8947 majf 7650 swapMax 305MiB cpuPeak 162% | gw GC: Copy 9회 max 537ms | paid+failed 5000
+k5 | max 5s p99wait 4.7s connMax 2.1s | ovf 2834 majf 35928 swapMax 322MiB cpuPeak 175% | gw GC: Copy 8회 max 470ms, Mark 1회 max 756ms | paid+failed 5000
+k6 | max 3.4s p99wait 3.4s connMax 2s | ovf 8857 majf 10675 swapMax 301MiB cpuPeak 140% | gw GC: Copy 9회 max 623ms | paid+failed 5000
+k7 | max 5.1s p99wait 4.8s connMax 2.2s | ovf 1611 majf 32636 swapMax 320MiB cpuPeak 132% | gw GC: Copy 8회 max 342ms, Mark 1회 max 874ms | paid+failed 5000
+k8 | max 13.3s p99wait 13.3s connMax 1.1s | ovf 10564 majf 7240 swapMax 304MiB cpuPeak 123% | gw GC: Copy 9회 max 387ms | paid+failed 5000
+d1 | max 58.8s p99wait 52.6s connMax 2.1s | ovf 19036 majf 5204 swapMax 152MiB cpuPeak 367% | gw GC: Copy 93회 max 306ms | paid+failed 4970
+d2 | max 13.2s p99wait 6.7s connMax 2.1s | ovf 11635 majf 33678 swapMax 328MiB cpuPeak 249% | gw GC: Copy 10회 max 627ms, Mark 1회 max 713ms | paid+failed 5000
+d3 | max 3.9s p99wait 3.8s connMax 1.1s | ovf 2331 majf 14504 swapMax 334MiB cpuPeak 194% | gw GC: Copy 9회 max 722ms | paid+failed 5000
+d4 | max 26.4s p99wait 26.4s connMax 4.1s | ovf 12626 majf 58793 swapMax 325MiB cpuPeak 259% | gw GC: Copy 8회 max 471ms, Mark 1회 max 1702ms | paid+failed 5000
+d5 | max 4.2s p99wait 4.1s connMax 1.1s | ovf 985 majf 14742 swapMax 323MiB cpuPeak 177% | gw GC: Copy 8회 max 597ms | paid+failed 5000
+d6 | max 6.7s p99wait 6.7s connMax 1.1s | ovf 5202 majf 59869 swapMax 328MiB cpuPeak 256% | gw GC: Copy 8회 max 453ms, Mark 1회 max 1510ms | paid+failed 5000
+d7 | max 3.2s p99wait 3.1s connMax 1.2s | ovf 2319 majf 10081 swapMax 317MiB cpuPeak 122% | gw GC: Copy 8회 max 498ms | paid+failed 5000
+d8 | max 5.4s p99wait 5.3s connMax 2.1s | ovf 772 majf 55121 swapMax 362MiB cpuPeak 181% | gw GC: Copy 9회 max 696ms, Mark 1회 max 1006ms | paid+failed 5000
+e1 | max 13.6s p99wait 6.7s connMax 1.2s | ovf 13440 majf 3173 swapMax 91MiB cpuPeak 364% | gw GC: Copy 89회 max 386ms | paid+failed 5000
+e2 | max 3.4s p99wait 3.4s connMax 3.1s | ovf 13125 majf 16499 swapMax 286MiB cpuPeak 226% | gw GC: Copy 10회 max 623ms | paid+failed 5000
+e3 | max 3.8s p99wait 3.7s connMax 1.2s | ovf 3443 majf 14977 swapMax 282MiB cpuPeak 200% | gw GC: Copy 8회 max 869ms | paid+failed 5000
+e4 | max 4.9s p99wait 4.8s connMax 3.1s | ovf 6850 majf 57409 swapMax 326MiB cpuPeak 499% | gw GC: Copy 8회 max 358ms, Mark 1회 max 1719ms | paid+failed 5000
+e5 | max 3.5s p99wait 3.3s connMax 2.2s | ovf 1641 majf 13204 swapMax 306MiB cpuPeak 158% | gw GC: Copy 8회 max 477ms | paid+failed 5000
+e6 | max 53s p99wait 53s connMax 2.1s | ovf 9289 majf 59395 swapMax 325MiB cpuPeak 432% | gw GC: Copy 9회 max 483ms, Mark 1회 max 1320ms | paid+failed 5000
+e7 | max 4.1s p99wait 3.9s connMax 1.1s | ovf 784 majf 14949 swapMax 331MiB cpuPeak 133% | gw GC: Copy 9회 max 596ms | paid+failed 5000
+e8 | max 6.6s p99wait 4.4s connMax 3.1s | ovf 8678 majf 51163 swapMax 322MiB cpuPeak 301% | gw GC: Copy 8회 max 677ms, Mark 1회 max 1205ms | paid+failed 5000
