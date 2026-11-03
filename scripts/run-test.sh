@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 # 초기화 -> 행사/재고/사용자 준비 -> k6 -> 검증 -> 결과 기록. env: USERS(5000) SALE_QUANTITY(100) WARMUP(0; 1 이면 워밍업으로 표시)
+# K6_RUNNER: docker(기본) = Docker 네트워크 안 k6 컨테이너가 gateway:8080 에 직접 연결 / host = 호스트 k6 가 localhost:8080(Docker Desktop 포트 포워딩, 1단계 3차까지)
+# K6_IMAGE(grafana/k6:2.2.0) K6_NETWORK(e-commerce_default) K6_CPUS(4) K6_MEMORY(2g): docker 실행 시 k6 컨테이너 자원 한도(빈 값이면 제한 없음)
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 source "$ROOT/scripts/lib.sh"
@@ -10,7 +12,16 @@ SALE_QUANTITY="${SALE_QUANTITY:-100}"
 WARMUP="${WARMUP:-0}"
 
 command -v jq >/dev/null || { echo "jq 가 필요하다" >&2; exit 1; }
-command -v k6 >/dev/null || { echo "k6 가 필요하다" >&2; exit 1; }
+K6_RUNNER="${K6_RUNNER:-docker}"
+K6_IMAGE="${K6_IMAGE:-grafana/k6:2.2.0}"
+K6_NETWORK="${K6_NETWORK:-e-commerce_default}"
+K6_CPUS="${K6_CPUS-4}"
+K6_MEMORY="${K6_MEMORY-2g}"
+case "$K6_RUNNER" in
+  docker) command -v docker >/dev/null || { echo "docker 가 필요하다" >&2; exit 1; } ;;
+  host) command -v k6 >/dev/null || { echo "k6 가 필요하다" >&2; exit 1; } ;;
+  *) echo "K6_RUNNER 는 docker 또는 host 여야 한다: $K6_RUNNER" >&2; exit 1 ;;
+esac
 
 if [ "$(ulimit -n)" != "unlimited" ] && [ "$(ulimit -n)" -lt 65536 ]; then
   ulimit -n 65536 2>/dev/null || echo "WARN: ulimit -n 을 65536 으로 올리지 못했다" >&2
@@ -34,19 +45,35 @@ issue_tokens "$USERS" "$TOKENS_FILE"
 read -r drain_wait_sec time_wait_before <<<"$(wait_tcp_drained 500 120)"
 started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
-k6_args=(run --summary-export "$RUN_DIR/k6-summary.json" --tag "testid=$RUN_ID"
-  -e "EVENT_ID=$EVENT_ID" -e "USERS=$USERS" -e "TOKENS_FILE=$TOKENS_FILE")
+if [ "$K6_RUNNER" = docker ]; then
+  k6_args=(run --summary-export /out/k6-summary.json --tag "testid=$RUN_ID"
+    -e "BASE_URL=http://gateway:8080" -e "EVENT_ID=$EVENT_ID" -e "USERS=$USERS" -e "TOKENS_FILE=/k6/.data/tokens.json")
+  rw_url="http://prometheus:9090/api/v1/write"
+else
+  k6_args=(run --summary-export "$RUN_DIR/k6-summary.json" --tag "testid=$RUN_ID"
+    -e "EVENT_ID=$EVENT_ID" -e "USERS=$USERS" -e "TOKENS_FILE=$TOKENS_FILE")
+  rw_url="$PROMETHEUS_URL/api/v1/write"
+fi
+rw_env=()
 if curl -sf --max-time 3 "$PROMETHEUS_URL/-/ready" >/dev/null 2>&1; then
   k6_args+=(-o experimental-prometheus-rw)
-  export K6_PROMETHEUS_RW_SERVER_URL="$PROMETHEUS_URL/api/v1/write"
-  export K6_PROMETHEUS_RW_TREND_STATS='p(95),p(99),avg,max'
+  rw_env=(K6_PROMETHEUS_RW_SERVER_URL="$rw_url" K6_PROMETHEUS_RW_TREND_STATS='p(95),p(99),avg,max')
 else
   echo "WARN: Prometheus 가 준비되지 않아 k6 지표를 원격 기록하지 않는다" >&2
 fi
 
 lock_before=$(mysql_lock_status)
 t_start=$(date +%s)
-k6 "${k6_args[@]}" load-test/k6/flash-sale.js 2>&1 | tee "$RUN_DIR/k6-stdout.txt"
+if [ "$K6_RUNNER" = docker ]; then
+  docker_opts=(--rm --network "$K6_NETWORK" --ulimit nofile=65536:65536
+    -v "$ROOT/load-test/k6:/k6:ro" -v "$RUN_DIR:/out")
+  [ -n "$K6_CPUS" ] && docker_opts+=(--cpus "$K6_CPUS")
+  [ -n "$K6_MEMORY" ] && docker_opts+=(--memory "$K6_MEMORY")
+  for kv in ${rw_env[@]+"${rw_env[@]}"}; do docker_opts+=(-e "$kv"); done
+  docker run "${docker_opts[@]}" "$K6_IMAGE" "${k6_args[@]}" /k6/flash-sale.js 2>&1 | tee "$RUN_DIR/k6-stdout.txt"
+else
+  env ${rw_env[@]+"${rw_env[@]}"} k6 "${k6_args[@]}" load-test/k6/flash-sale.js 2>&1 | tee "$RUN_DIR/k6-stdout.txt"
+fi
 t_end=$(date +%s)
 duration=$(( t_end - t_start ))
 
@@ -62,9 +89,12 @@ commit=$(git rev-parse --short HEAD)
 pay=$(payment_config)
 my_settings=$(mysql_settings)
 
+if [ "$K6_RUNNER" = docker ]; then k6_desc="$K6_IMAGE"; else k6_desc="$(k6 version 2>/dev/null | awk '{print $1" "$2; exit}')"; fi
 jq -n --arg r "$RUN_ID" --arg s "$strategy" --arg k "$kind" --argjson u "$USERS" --argjson q "$SALE_QUANTITY" --arg c "$commit" \
   --argjson dw "$drain_wait_sec" --argjson tw "$time_wait_before" \
-  '{runId: $r, strategy: $s, kind: $k, users: $u, saleQuantity: $q, commit: $c, tcpDrainWaitSec: $dw, tcpTimeWaitBefore: $tw}' > "$RUN_DIR/meta.json"
+  --arg kr "$K6_RUNNER" --arg ki "$k6_desc" --arg kc "${K6_CPUS:-none}" --arg km "${K6_MEMORY:-none}" \
+  '{runId: $r, strategy: $s, kind: $k, users: $u, saleQuantity: $q, commit: $c, tcpDrainWaitSec: $dw, tcpTimeWaitBefore: $tw,
+    k6Runner: $kr, k6Image: $ki, k6Cpus: $kc, k6Memory: $km}' > "$RUN_DIR/meta.json"
 
 # Prometheus 구간 질의: 구간 W = 실행 시간 + 4s, 평가 시각 = t_end + 2
 W="$(( t_end - t_start + 4 ))s"
@@ -136,6 +166,11 @@ gw_cfg() { grep -E '^    read-timeout:' gateway/src/main/resources/application.y
   echo "- Hikari connectionTimeout: 30s (기본값)"
   echo "- Prometheus 스크레이프 간격: $scrape_interval (infra/prometheus/prometheus.yml)"
   echo "- k6 시작 전 호스트 TIME_WAIT 대기: ${drain_wait_sec}초 (시작 시 ${time_wait_before}개, 기준 < 500)"
+  if [ "$K6_RUNNER" = docker ]; then
+    echo "- k6 실행 위치: Docker 네트워크 안 컨테이너 ($k6_desc, network $K6_NETWORK → gateway:8080 직접, cpus ${K6_CPUS:-제한 없음} / memory ${K6_MEMORY:-제한 없음})"
+  else
+    echo "- k6 실행 위치: 호스트 ($k6_desc, localhost:8080 → Docker Desktop 포트 포워딩)"
+  fi
   echo "- kind: $kind"
   echo
   echo "## 실패 사유별 건수"

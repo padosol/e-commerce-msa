@@ -6,7 +6,8 @@
 
 - JDK 25
 - Docker Desktop (VM 메모리 8GB 이상)
-- k6, jq, curl
+- jq, curl
+- k6 (호스트용, 선택): 측정은 기본으로 k6 컨테이너(`grafana/k6:2.2.0`)로 돌린다. 호스트 k6 는 `K6_RUNNER=host` 와 응답 분류 테스트에만 쓴다
 
 ## 실행
 
@@ -24,10 +25,14 @@ scripts/run-test.sh               # 초기화 -> 준비 -> k6 -> 검증 -> 결�
 | `USERS` | 5000 | 동시에 주문하는 사용자 수 |
 | `SALE_QUANTITY` | 100 | 판매 재고 |
 | `WARMUP` | 0 | `1` 이면 워밍업 실행으로 기록한다(RUN_ID 끝에 `-warmup`, `meta.json` 의 kind 가 `warmup`, 요약 표에서 제외) |
+| `K6_RUNNER` | docker | `docker`: Docker 네트워크 안 k6 컨테이너가 `gateway:8080` 에 직접 연결 / `host`: 호스트 k6 가 `localhost:8080` 으로 연결(1단계 3차까지의 방식) |
+| `K6_CPUS` / `K6_MEMORY` | 4 / 2g | k6 컨테이너 자원 한도(빈 값이면 제한 없음) |
 
 예: `USERS=200 SALE_QUANTITY=20 scripts/run-test.sh`. 마지막 줄에 verdict(`OK` / `OVERSOLD` 등)가 출력된다.
 
-`run-test.sh` 는 k6 를 시작하기 전에 호스트의 TIME_WAIT 소켓이 500개 미만으로 줄 때까지(최대 120초) 기다린다. 5000 연결짜리 실행을 연달아 돌리면 앞 실행의 소켓이 남아 연결 단계에서 실패하기 때문이다.
+k6 를 컨테이너로 돌리는 이유: macOS 의 `localhost:8080` 은 Docker Desktop 백엔드 프로세스가 받아 VM 안 게이트웨이로 연결을 한 번 더 맺어 중계한다. 연결 5000개가 한꺼번에 몰리면 이 중계 계층에서 일부가 실패해(`dial: i/o timeout`, `connection reset by peer`) 요청이 서비스에 닿지 않는다(1단계 3차 기록 참고). 같은 Docker 네트워크 안에서는 이 중계를 거치지 않는다.
+
+`run-test.sh` 는 k6 를 시작하기 전에 호스트의 TIME_WAIT 소켓이 500개 미만으로 줄 때까지(최대 120초) 기다린다. 호스트 k6 로 5000 연결짜리 실행을 연달아 돌리면 앞 실행의 소켓이 남아 연결 단계에서 실패하기 때문이다(컨테이너 실행에서는 영향이 거의 없다).
 
 0단계 스택이 이미 떠 있는 상태에서 1단계로 올라왔다면 먼저 `docker compose down` 으로 내린 뒤 다시 `up` 해야 한다. MySQL exporter 용 사용자는 MySQL 컨테이너를 새로 만들 때만 생성되므로, 그렇지 않으면 exporter 가 실패해 Grafana 패널 11~13 이 비고 `maxCurrentWaits` 가 `n/a` 가 된다.
 

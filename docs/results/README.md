@@ -26,6 +26,7 @@
 - MySQL 격리 수준 REPEATABLE-READ, `innodb_lock_wait_timeout` 50s (실행마다 report.md 에 실측값 기록)
 - Hikari connectionTimeout 30s (기본값)
 - Prometheus 스크레이프 간격: 0단계 5s / 1단계부터 1s
+- k6 실행 위치: 1단계 4차부터 Docker 네트워크 안 컨테이너(grafana/k6:2.2.0, cpus 4 / memory 2g)가 `gateway:8080` 에 직접 연결. 0단계~1단계 3차는 호스트 k6 → `localhost:8080`(Docker Desktop 포트 포워딩 경유)
 
 ## 실행 목록
 
