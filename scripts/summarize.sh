@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 1단계 측정 결과를 구성별 3회 중앙값 마크다운 표로 stdout 에 출력한다. 결과 파일을 읽기만 한다.
-# 사용: scripts/summarize.sh   env: RUNS_DIR(기본 docs/results/runs)
+# 사용: scripts/summarize.sh   env: RUNS_DIR(기본 docs/results/runs) FROM(기본 없음: RUN_ID 가 이 값 이상인 실행만, 예 FROM=20261104)
 #
 # 대상: runs/<RUN_ID>/ 중 meta.json 이 있고 kind == "measure", users == 5000, saleQuantity == 100 인 실행.
 #   meta.json 이 없는 0단계 기준선과 워밍업(kind == "warmup")은 빠진다.
@@ -14,6 +14,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 RUNS_DIR="${RUNS_DIR:-$ROOT/docs/results/runs}"
+FROM="${FROM:-}"
 CONFIGS='["naive","pessimistic","conditional","optimistic-r0","optimistic-r1","optimistic-r2","optimistic-r3"]'
 PER_CONFIG=3
 
@@ -26,6 +27,7 @@ collect() {
       || { echo "읽을 수 없음: $meta" >&2; exit 1; }
     [ "$target" = true ] || continue
     dir="$(dirname "$meta")"
+    if [ -n "$FROM" ] && [[ "$(basename "$dir")" < "$FROM" ]]; then continue; fi
     for f in verify.json causes.json k6-summary.json; do
       [ -f "$dir/$f" ] || { echo "없음: $dir/$f" >&2; exit 1; }
     done
@@ -49,6 +51,9 @@ jq -r -s --argjson configs "$CONFIGS" --argjson want "$PER_CONFIG" '
   def span: . as $all | nums
     | if length == 0 then "n/a" else "\(min | fmt)~\(max | fmt)" + mark($all) end;
   def row: "| " + join(" | ") + " |";
+  # gcPause.<svc> 의 GC 별 값 합/최댓값. 기록이 없는 실행(2단계 이전)은 "n/a"
+  def gcsum($svc): (.causes.gcPause[$svc] // null) | if . == null then "n/a" else ([.[].totalMs] | add // 0) end;
+  def gcmax($svc): (.causes.gcPause[$svc] // null) | if . == null then "n/a" else ([.[].max1sMs] | max // 0) end;
 
   sort_by(.meta.runId) as $all
   | [$configs[] as $c
@@ -80,19 +85,24 @@ jq -r -s --argjson configs "$CONFIGS" --argjson want "$PER_CONFIG" '
         (col(.causes.paymentCalls) | cell) ]
     | row ),
   "",
-  "`*`: 일부 실행의 값이 `n/a`(Prometheus 1s 표본 없음)라 숫자인 실행만으로 계산한 값. Hikari·Tomcat 최댓값과 서버 p95 는 1s 표본 값이다.",
+  "`*`: 일부 실행의 값이 `n/a`(Prometheus 1s 표본 없음, 또는 2단계 이전이라 기록 없음)라 숫자인 실행만으로 계산한 값. Hikari·Tomcat 최댓값과 서버 p95 는 1s 표본 값이다.",
   "",
   "보조 표 (같은 실행): 끝단 값의 3회 범위(최소~최대)와 앞단 서비스 포화 지표의 중앙값",
   "",
-  ( ["구성", "p95 범위(ms)", "rps 범위", "order Hikari pending 최대", "order Tomcat busy 최대", "gateway Tomcat busy 최대"] | row ),
-  ( [range(6) | "---"] | row ),
+  ( ["구성", "p95 범위(ms)", "rps 범위", "order Hikari pending 최대", "order Tomcat busy 최대", "gateway Tomcat busy 최대",
+     "order 커넥션 획득 평균 대기(ms)", "order GC 정지 합(ms)", "order GC 1s 최대(ms)", "gateway GC 정지 합(ms)"] | row ),
+  ( [range(10) | "---"] | row ),
   ( $groups[]
     | [ .config,
         (col(.k6.http_req_duration["p(95)"]) | span),
         (col(.k6.http_reqs.rate) | span),
         (col(.causes.hikariPendingMax.order) | cell),
         (col(.causes.tomcatBusyMax.order) | cell),
-        (col(.causes.tomcatBusyMax.gateway) | cell) ]
+        (col(.causes.tomcatBusyMax.gateway) | cell),
+        (col(.causes.hikariAcquire.order.avgMs // "n/a") | cell),
+        (col(gcsum("order")) | cell),
+        (col(gcmax("order")) | cell),
+        (col(gcsum("gateway")) | cell) ]
     | row ),
   "",
   "중앙값에 쓴 실행 (RUN_ID 순, INCONCLUSIVE 제외 앞 \($want)회):",
