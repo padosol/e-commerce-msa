@@ -21,7 +21,7 @@
 - order-service 클라이언트 connect/read timeout: 2s / 10s
 - gateway 하위 호출 read timeout: 30s
 - k6 요청 timeout: 60s, executor: per-vu-iterations, VU당 1 iteration
-- 컨테이너 제한: 앱 cpus 2 / 640m, MySQL cpus 4 / 1536m
+- 컨테이너 제한: 앱 cpus 2 / 640m, MySQL cpus 4 / 1536m. 2단계(GC)부터 order-service 만 cpus 2 / 1g + `-XX:+UseG1GC` (나머지 앱은 Serial GC). 2단계부터는 실행마다 `meta.json` 의 `jvm` 과 report.md 에 실제 값이 기록된다
 - Tomcat/Hikari 기본값, virtual threads off
 - MySQL 격리 수준 REPEATABLE-READ, `innodb_lock_wait_timeout` 50s (실행마다 report.md 에 실측값 기록)
 - Hikari connectionTimeout 30s (기본값)
@@ -66,3 +66,10 @@
 | 20261103-155343-optimistic-r3 | measure | optimistic-r3 | 5000 | 100 | 100 | 0 | 0 | 0 | 168 | 0 | 673 | OK | 4889.62 | 5097.82 | 886.73 |
 | 20261103-155354-optimistic-r3 | measure | optimistic-r3 | 5000 | 100 | 100 | 0 | 0 | 0 | 187 | 0 | 702 | OK | 3394.72 | 3577.37 | 1079.88 |
 | 20261103-155403-optimistic-r3 | measure | optimistic-r3 | 5000 | 100 | 100 | 0 | 0 | 0 | 191 | 0 | 709 | OK | 4544.07 | 4721.12 | 938.28 |
+
+### 2단계: order-service 1g + G1 GC
+
+1단계 4차와 같은 7개 구성 × (워밍업 1 + 측정 3). 위 표의 1단계 4차 행(20261103-1548~1554)과 비교한다.
+
+| run | kind | strategy | users | stock | paid | oversold | undersold | finalStock | conflicts | timeouts | retries | verdict | p95(ms) | p99(ms) | rps |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|

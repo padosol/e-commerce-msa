@@ -106,6 +106,9 @@ services:
       PRODUCT_SERVICE_URL: http://product-service:8082
       INVENTORY_SERVICE_URL: http://inventory-service:8083
       PAYMENT_SERVICE_URL: http://payment-service:8085
+      # 2단계: order-service 만 메모리 1g + G1 GC. 다른 앱은 640m 라 JVM 이 Serial GC 를 고른다.
+      # Dockerfile 의 JAVA_TOOL_OPTIONS 를 덮어쓰므로 MaxRAMPercentage 도 함께 적는다.
+      JAVA_TOOL_OPTIONS: "-XX:MaxRAMPercentage=70 -XX:+UseG1GC"
     depends_on:
       mysql:
         condition: service_healthy
@@ -113,7 +116,7 @@ services:
       resources:
         limits:
           cpus: "2"
-          memory: 640m
+          memory: 1g
 
   payment-service:
     build:
