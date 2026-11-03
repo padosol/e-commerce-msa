@@ -75,7 +75,7 @@ RUNS=1 USERS=200 SALE_QUANTITY=20 scripts/run-matrix.sh conditional optimistic-r
 판정은 `OVERSOLD` / `INCONCLUSIVE` / `UNDERSOLD` / `OK` 중 하나이고 정의는 `docs/results/README.md` 에 있다. 실행마다 `runs/<RUN_ID>/` 에 `meta.json`(전략·kind·커밋·부하 조건, 1단계 5차부터 앱별 컨테이너 한도·`JAVA_TOOL_OPTIONS`·GC 종류)과 `causes.json`(락 대기, 풀·스레드 포화, 낙관적 충돌, 타임아웃, 1단계 5차부터 커넥션 획득 대기와 GC 정지 같은 원인 지표)도 남는다.
 
 결과를 구성별 3회 중앙값 표로 모으려면 `scripts/summarize.sh` 를 쓴다. 기본은 지금 부하 조건(`USERS=500 ARRIVAL_SECONDS=1`)으로 잰 실행만 모은다.
-예전 조건 기록은 `USERS=5000 ARRIVAL_SECONDS=0` 을 준다. 특정 측정만 모으려면 `FROM=<RUN_ID 앞부분>` 으로 그 이후 실행만 고른다(예: 1단계 4차 `USERS=5000 ARRIVAL_SECONDS=0 FROM=20261103-1548 scripts/summarize.sh`). 1단계 결과 해석은 `docs/results/stage1-summary.md` 에 있다.
+예전 조건 기록은 `USERS=5000 ARRIVAL_SECONDS=0` 을 준다. 특정 측정만 모으려면 `FROM=<RUN_ID 앞부분>` 으로 그 이후 실행만 고른다(예: 1단계 4차 `USERS=5000 ARRIVAL_SECONDS=0 FROM=20261103-1548 scripts/summarize.sh`). 1단계 결과 해석은 `docs/results/stage1-summary.md`(4차, 5000명 동시 요청)와 `docs/results/stage1-attempt5-summary.md`(5차, 1초 동안 500명)에 있다.
 
 `causes.json` 에 커넥션 획득 대기·GC 정지가 없는 예전 실행은 `scripts/jvm-metrics.sh docs/results/runs/<RUN_ID>...` 로 같은 값을 Prometheus 에서 다시 계산할 수 있다(그 시각의 Prometheus 데이터가 남아 있을 때만). 1단계 4차 28회의 값은 `docs/results/stage1-attempt4-jvm-metrics.json` 에 있다.
 

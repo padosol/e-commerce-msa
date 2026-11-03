@@ -74,3 +74,31 @@
 
 | run | kind | strategy | users | stock | paid | oversold | undersold | finalStock | conflicts | timeouts | retries | verdict | p95(ms) | p99(ms) | rps |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 20261103-221028-naive-warmup | warmup | naive | 500 | 100 | 439 | 339 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 2152.03 | 2262.27 | 168.95 |
+| 20261103-221035-naive | measure | naive | 500 | 100 | 439 | 339 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 1047.79 | 1155.8 | 263.83 |
+| 20261103-221041-naive | measure | naive | 500 | 100 | 426 | 326 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 751.31 | 883.51 | 342.83 |
+| 20261103-221046-naive | measure | naive | 500 | 100 | 408 | 308 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 531.22 | 581.62 | 394.08 |
+| 20261103-221057-pessimistic-warmup | warmup | pessimistic | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 549.63 | 731.06 | 393.12 |
+| 20261103-221102-pessimistic | measure | pessimistic | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 351.51 | 418.53 | 448.63 |
+| 20261103-221107-pessimistic | measure | pessimistic | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 284.83 | 345.44 | 485.91 |
+| 20261103-221113-pessimistic | measure | pessimistic | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 275.42 | 306.98 | 477.24 |
+| 20261103-221123-conditional-warmup | warmup | conditional | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 284.9 | 324.51 | 479.92 |
+| 20261103-221128-conditional | measure | conditional | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 264.09 | 310.57 | 497.09 |
+| 20261103-221133-conditional | measure | conditional | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 253.45 | 287.72 | 494.73 |
+| 20261103-221138-conditional | measure | conditional | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 307 | 346.07 | 496.41 |
+| 20261103-221149-optimistic-r0-warmup | warmup | optimistic-r0 | 500 | 100 | 100 | 0 | 0 | 0 | 172 | 0 | 0 | OK | 259.05 | 278.27 | 496.67 |
+| 20261103-221154-optimistic-r0 | measure | optimistic-r0 | 500 | 100 | 100 | 0 | 0 | 0 | 187 | 0 | 0 | OK | 646.15 | 680.77 | 322.56 |
+| 20261103-221159-optimistic-r0 | measure | optimistic-r0 | 500 | 100 | 100 | 0 | 0 | 0 | 92 | 0 | 0 | OK | 245.76 | 265.4 | 497.25 |
+| 20261103-221204-optimistic-r0 | measure | optimistic-r0 | 500 | 100 | 100 | 0 | 0 | 0 | 77 | 0 | 0 | OK | 238.85 | 257.39 | 496.47 |
+| 20261103-221215-optimistic-r1-warmup | warmup | optimistic-r1 | 500 | 100 | 100 | 0 | 0 | 0 | 107 | 0 | 173 | OK | 240.63 | 264.02 | 493.91 |
+| 20261103-221220-optimistic-r1 | measure | optimistic-r1 | 500 | 100 | 100 | 0 | 0 | 0 | 51 | 0 | 104 | OK | 245.57 | 262.72 | 496.41 |
+| 20261103-221225-optimistic-r1 | measure | optimistic-r1 | 500 | 100 | 100 | 0 | 0 | 0 | 13 | 0 | 54 | OK | 237.71 | 258.53 | 498.06 |
+| 20261103-221230-optimistic-r1 | measure | optimistic-r1 | 500 | 100 | 100 | 0 | 0 | 0 | 34 | 0 | 70 | OK | 227.26 | 256.6 | 495.21 |
+| 20261103-221241-optimistic-r2-warmup | warmup | optimistic-r2 | 500 | 100 | 100 | 0 | 0 | 0 | 34 | 0 | 158 | OK | 245.39 | 264.35 | 496.85 |
+| 20261103-221246-optimistic-r2 | measure | optimistic-r2 | 500 | 100 | 100 | 0 | 0 | 0 | 20 | 0 | 118 | OK | 240.1 | 261.53 | 495.27 |
+| 20261103-221251-optimistic-r2 | measure | optimistic-r2 | 500 | 100 | 100 | 0 | 0 | 0 | 15 | 0 | 96 | OK | 241.72 | 258.94 | 497.08 |
+| 20261103-221256-optimistic-r2 | measure | optimistic-r2 | 500 | 100 | 100 | 0 | 0 | 0 | 13 | 0 | 79 | OK | 236.65 | 259.06 | 494.88 |
+| 20261103-221307-optimistic-r3-warmup | warmup | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 147 | 0 | 620 | OK | 401.19 | 457.36 | 494.55 |
+| 20261103-221312-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 12 | 0 | 120 | OK | 240.01 | 260.8 | 496.31 |
+| 20261103-221317-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 13 | 0 | 133 | OK | 232.98 | 253.4 | 496.69 |
+| 20261103-221322-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 9 | 0 | 92 | OK | 238.51 | 257.87 | 497.87 |
