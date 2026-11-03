@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# 초기화 -> 행사/재고/사용자 준비 -> k6 -> 검증 -> 결과 기록. env: USERS(5000) SALE_QUANTITY(100) WARMUP(0; 1 이면 워밍업으로 표시)
+# 초기화 -> 행사/재고/사용자 준비 -> k6 -> 검증 -> 결과 기록. env: USERS(500) SALE_QUANTITY(100) WARMUP(0; 1 이면 워밍업으로 표시)
+# ARRIVAL_SECONDS(1): USERS 건의 요청이 이 시간(초) 동안 고르게 도착. 0 이면 USERS 명이 같은 순간에 요청(0~2단계 방식, USERS 5000)
 # K6_RUNNER: docker(기본) = Docker 네트워크 안 k6 컨테이너가 gateway:8080 에 직접 연결 / host = 호스트 k6 가 localhost:8080(Docker Desktop 포트 포워딩, 1단계 3차까지)
 # K6_IMAGE(grafana/k6:2.2.0) K6_NETWORK(e-commerce_default) K6_CPUS(4) K6_MEMORY(2g): docker 실행 시 k6 컨테이너 자원 한도(빈 값이면 제한 없음)
 set -euo pipefail
@@ -7,7 +8,8 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 source "$ROOT/scripts/lib.sh"
 cd "$ROOT"
 
-USERS="${USERS:-5000}"
+USERS="${USERS:-500}"
+ARRIVAL_SECONDS="${ARRIVAL_SECONDS:-1}"
 SALE_QUANTITY="${SALE_QUANTITY:-100}"
 WARMUP="${WARMUP:-0}"
 
@@ -47,11 +49,11 @@ started_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
 if [ "$K6_RUNNER" = docker ]; then
   k6_args=(run --summary-export /out/k6-summary.json --tag "testid=$RUN_ID"
-    -e "BASE_URL=http://gateway:8080" -e "EVENT_ID=$EVENT_ID" -e "USERS=$USERS" -e "TOKENS_FILE=/k6/.data/tokens.json")
+    -e "BASE_URL=http://gateway:8080" -e "EVENT_ID=$EVENT_ID" -e "USERS=$USERS" -e "ARRIVAL_SECONDS=$ARRIVAL_SECONDS" -e "TOKENS_FILE=/k6/.data/tokens.json")
   rw_url="http://prometheus:9090/api/v1/write"
 else
   k6_args=(run --summary-export "$RUN_DIR/k6-summary.json" --tag "testid=$RUN_ID"
-    -e "EVENT_ID=$EVENT_ID" -e "USERS=$USERS" -e "TOKENS_FILE=$TOKENS_FILE")
+    -e "EVENT_ID=$EVENT_ID" -e "USERS=$USERS" -e "ARRIVAL_SECONDS=$ARRIVAL_SECONDS" -e "TOKENS_FILE=$TOKENS_FILE")
   rw_url="$PROMETHEUS_URL/api/v1/write"
 fi
 rw_env=()
@@ -98,7 +100,9 @@ jvm=$(jvm_settings "$(( t_end + 2 ))")
 jq -n --arg r "$RUN_ID" --arg s "$strategy" --arg k "$kind" --argjson u "$USERS" --argjson q "$SALE_QUANTITY" --arg c "$commit" \
   --argjson dw "$drain_wait_sec" --argjson tw "$time_wait_before" \
   --arg kr "$K6_RUNNER" --arg ki "$k6_desc" --arg kc "$k6_cpus_rec" --arg km "$k6_mem_rec" --argjson jvm "$jvm" \
-  '{runId: $r, strategy: $s, kind: $k, users: $u, saleQuantity: $q, commit: $c, tcpDrainWaitSec: $dw, tcpTimeWaitBefore: $tw,
+  --argjson as "$ARRIVAL_SECONDS" \
+  '{runId: $r, strategy: $s, kind: $k, users: $u, saleQuantity: $q, arrivalSeconds: $as, commit: $c,
+    tcpDrainWaitSec: $dw, tcpTimeWaitBefore: $tw,
     k6Runner: $kr, k6Image: $ki, k6Cpus: $kc, k6Memory: $km, jvm: $jvm}' > "$RUN_DIR/meta.json"
 
 # Prometheus 구간 질의: 구간 W = 실행 시간 + 4s, 평가 시각 = t_end + 2
@@ -157,6 +161,7 @@ gw_cfg() { grep -E '^    read-timeout:' gateway/src/main/resources/application.y
   echo "- 전략: $strategy"
   echo "- kind: $kind"
   echo "- USERS: $USERS"
+  echo "- 요청 도착: $(jq -r 'if .arrivalSeconds > 0 then "\(.users)명이 \(.arrivalSeconds)초 동안 같은 간격으로 1번씩" else "\(.users)명이 같은 순간에 1번씩" end' "$RUN_DIR/meta.json")"
   echo "- SALE_QUANTITY: $SALE_QUANTITY"
   echo "- payment 설정: \`$(echo "$pay" | jq -c .)\`"
   echo
@@ -171,7 +176,7 @@ gw_cfg() { grep -E '^    read-timeout:' gateway/src/main/resources/application.y
   echo "## 고정 설정"
   echo "- order-service -> inventory/payment 클라이언트 connect/read timeout: $(order_cfg connect-timeout) / $(order_cfg read-timeout) (order-service application.yml)"
   echo "- gateway 하위 호출 read timeout: $(gw_cfg) (gateway application.yml)"
-  echo "- k6 요청 timeout: $(grep -o "timeout: '[0-9a-z]*'" load-test/k6/flash-sale.js | head -1 | cut -d"'" -f2), executor: $(grep -o "executor: '[a-z-]*'" load-test/k6/flash-sale.js | cut -d"'" -f2), VU당 iterations: $(grep -o 'iterations: [0-9]*' load-test/k6/flash-sale.js | cut -d' ' -f2)"
+  echo "- k6 요청 timeout: $(grep -o "timeout: '[0-9a-z]*'" load-test/k6/flash-sale.js | head -1 | cut -d"'" -f2), executor: per-vu-iterations, 사용자당 요청 1번"
   echo "- 앱 컨테이너(실행 중 컨테이너·Prometheus 에서 확인): $(jq -r '.jvm | to_entries | map("\(.key) cpus \(.value.cpus) / \(.value.memoryMiB)MiB / \(.value.gc) GC / JAVA_TOOL_OPTIONS `\(.value.javaToolOptions)`") | join(", ")' "$RUN_DIR/meta.json")"
   echo "- MySQL 컨테이너 제한: cpus 4 / 1536m (compose.yaml)"
   echo "- Tomcat/Hikari 기본값, virtual threads off"

@@ -79,7 +79,7 @@ Serial GC 에서는 Old 영역(약 299 MiB)이 차서 Full GC 가 났다. G1 에
 
 ## 3. 결과표
 
-아래는 `FROM=20261103-1718 scripts/summarize.sh` 출력 그대로다. 열의 뜻은 `stage1-summary.md` 와 같다.
+아래는 `USERS=5000 ARRIVAL_SECONDS=0 FROM=20261103-1718 scripts/summarize.sh` 출력 그대로다(부하 조건을 바꾼 뒤에는 조건을 이렇게 지정해야 같은 표가 나온다). 열의 뜻은 `stage1-summary.md` 와 같다.
 conditional 과 optimistic-r2 는 `INCONCLUSIVE` 가 1회씩 나서 2회 값이다. 다시 재지 않았다.
 
 | 구성 | 판정(3회) | paid | undersold | conflicts | timeouts | retries | p95(ms) | p99(ms) | rps | inventory 차감 서버 p95(ms) | MySQL 락 대기 횟수 | 평균 락 대기(ms) | inventory Hikari pending 최대 | inventory Tomcat busy 최대 | 결제 호출 수 |

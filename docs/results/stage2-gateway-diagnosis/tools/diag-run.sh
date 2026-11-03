@@ -14,7 +14,7 @@ sleep 1
 echo "k6_start_epoch $(date +%s)" > "$OUT/times.txt"
 docker run --rm --network e-commerce_default --ulimit nofile=65536:65536 --cpus 4 --memory 2g \
   -v "$PWD/load-test/k6:/k6:ro" -v "$OUT:/out" grafana/k6:2.2.0 run --quiet --summary-export /out/k6-summary.json \
-  --out csv=/out/req.csv.gz -e BASE_URL=http://gateway:8080 -e EVENT_ID="$EVENT_ID" -e USERS=5000 \
+  --out csv=/out/req.csv.gz -e BASE_URL=http://gateway:8080 -e EVENT_ID="$EVENT_ID" -e USERS=5000 -e ARRIVAL_SECONDS=0 \
   -e TOKENS_FILE=/k6/.data/tokens.json /k6/flash-sale.js > "$OUT/k6.txt" 2>&1 || true
 echo "k6_end_epoch $(date +%s)" >> "$OUT/times.txt"
 sleep 2

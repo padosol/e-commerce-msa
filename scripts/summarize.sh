@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # 1단계 측정 결과를 구성별 3회 중앙값 마크다운 표로 stdout 에 출력한다. 결과 파일을 읽기만 한다.
 # 사용: scripts/summarize.sh   env: RUNS_DIR(기본 docs/results/runs) FROM(기본 없음: RUN_ID 가 이 값 이상인 실행만, 예 FROM=20261104)
+#   USERS(기본 500) ARRIVAL_SECONDS(기본 1): 이 부하 조건으로 잰 실행만. 0~2단계 기록은 USERS=5000 ARRIVAL_SECONDS=0
+#   (meta.json 에 arrivalSeconds 가 없는 예전 실행은 0 으로 본다)
 #
-# 대상: runs/<RUN_ID>/ 중 meta.json 이 있고 kind == "measure", users == 5000, saleQuantity == 100 인 실행.
+# 대상: runs/<RUN_ID>/ 중 meta.json 이 있고 kind == "measure", users == USERS, arrivalSeconds == ARRIVAL_SECONDS, saleQuantity == 100 인 실행.
 #   meta.json 이 없는 0단계 기준선과 워밍업(kind == "warmup")은 빠진다.
 #   대상 실행에는 verify.json, causes.json, k6-summary.json 이 모두 있어야 한다(없으면 실패).
 # 선택: 구성마다 RUN_ID 순(= 시간 순)으로 verdict 가 INCONCLUSIVE 가 아닌 실행을 앞에서부터 3개 쓴다.
@@ -15,6 +17,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 RUNS_DIR="${RUNS_DIR:-$ROOT/docs/results/runs}"
 FROM="${FROM:-}"
+USERS="${USERS:-500}"
+ARRIVAL_SECONDS="${ARRIVAL_SECONDS:-1}"
 CONFIGS='["naive","pessimistic","conditional","optimistic-r0","optimistic-r1","optimistic-r2","optimistic-r3"]'
 PER_CONFIG=3
 
@@ -23,7 +27,8 @@ PER_CONFIG=3
 collect() {
   local meta dir f target
   find "$RUNS_DIR" -mindepth 2 -maxdepth 2 -name meta.json | LC_ALL=C sort | while IFS= read -r meta; do
-    target="$(jq '.kind == "measure" and .users == 5000 and .saleQuantity == 100' "$meta")" \
+    target="$(jq --argjson u "$USERS" --argjson as "$ARRIVAL_SECONDS" \
+      '.kind == "measure" and .users == $u and (.arrivalSeconds // 0) == $as and .saleQuantity == 100' "$meta")" \
       || { echo "읽을 수 없음: $meta" >&2; exit 1; }
     [ "$target" = true ] || continue
     dir="$(dirname "$meta")"

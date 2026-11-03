@@ -22,7 +22,8 @@ scripts/run-test.sh               # 초기화 -> 준비 -> k6 -> 검증 -> 결�
 
 | env | 기본값 | 의미 |
 |---|---|---|
-| `USERS` | 5000 | 동시에 주문하는 사용자 수 |
+| `USERS` | 500 | 주문하는 사용자 수(사용자마다 1번 요청) |
+| `ARRIVAL_SECONDS` | 1 | 요청 `USERS` 건이 이 시간(초) 동안 같은 간격으로 도착한다(기본: 500명이 1초 동안, 2ms 마다 1명). `0` 이면 `USERS` 명이 같은 순간에 요청한다 |
 | `SALE_QUANTITY` | 100 | 판매 재고 |
 | `WARMUP` | 0 | `1` 이면 워밍업 실행으로 기록한다(RUN_ID 끝에 `-warmup`, `meta.json` 의 kind 가 `warmup`, 요약 표에서 제외) |
 | `K6_RUNNER` | docker | `docker`: Docker 네트워크 안 k6 컨테이너가 `gateway:8080` 에 직접 연결 / `host`: 호스트 k6 가 `localhost:8080` 으로 연결(1단계 3차까지의 방식) |
@@ -30,6 +31,11 @@ scripts/run-test.sh               # 초기화 -> 준비 -> k6 -> 검증 -> 결�
 | `K6_NETWORK` | e-commerce_default | k6 컨테이너를 붙일 Compose 네트워크. Compose 프로젝트 이름(기본은 저장소 디렉터리 이름) 뒤에 `_default` 가 붙는다 |
 
 예: `USERS=200 SALE_QUANTITY=20 scripts/run-test.sh`. 마지막 줄에 verdict(`OK` / `OVERSOLD` 등)가 출력된다.
+
+부하 조건은 2단계 진단 뒤(2026-11-03)에 바꿨다. 0~2단계 기록은 모두 `USERS=5000 ARRIVAL_SECONDS=0`(5000명이 같은 순간에 요청)이다.
+그 조건에서는 연결 5000개가 0.25초 안에 몰려, 게이트웨이의 커널 연결 대기열(100칸)이 넘쳤다(`docs/results/stage2-gateway-diagnosis/`).
+이 실험의 목표는 동시 주문의 정합성이다. 그래서 현실에 가까운 "1초 동안 500명" 으로 낮췄다. 재고는 그대로 100개다.
+예전 조건을 다시 재려면 `USERS=5000 ARRIVAL_SECONDS=0 scripts/run-test.sh` 로 돌린다.
 
 k6 를 컨테이너로 돌리는 이유: macOS 의 `localhost:8080` 은 Docker Desktop 백엔드 프로세스가 받아 VM 안 게이트웨이로 연결을 한 번 더 맺어 중계한다. 연결 5000개가 한꺼번에 몰리면 이 중계 계층에서 일부가 실패해(`dial: i/o timeout`, `connection reset by peer`) 요청이 서비스에 닿지 않는다(1단계 3차 기록 참고). 같은 Docker 네트워크 안에서는 이 중계를 거치지 않는다.
 
@@ -60,7 +66,7 @@ scripts/run-matrix.sh                                  # 7개 구성 x (워밍�
 RUNS=1 USERS=200 SALE_QUANTITY=20 scripts/run-matrix.sh conditional optimistic-r1   # 작은 규모 확인
 ```
 
-인자가 없으면 `naive pessimistic conditional optimistic-r0 optimistic-r1 optimistic-r2 optimistic-r3` 를 순서대로 돈다. 구성마다 inventory-service 를 다시 만들고, 전략이 맞는지 확인하고(다르면 중단), `scripts/smoke.sh` 로 order-service 의 예전 연결을 정리한 뒤 워밍업 1회와 측정 `RUNS`(기본 3)회를 돌린다. 끝나면 구성별 판정 목록을 출력하고 inventory-service 를 `naive` 로 되돌린다. 실행 하나라도 실패하면 즉시 중단하고 `naive` 로 되돌린다. `USERS`(5000), `SALE_QUANTITY`(100) 는 `run-test.sh` 로 그대로 전달된다.
+인자가 없으면 `naive pessimistic conditional optimistic-r0 optimistic-r1 optimistic-r2 optimistic-r3` 를 순서대로 돈다. `USERS`, `ARRIVAL_SECONDS`, `SALE_QUANTITY` 는 `run-test.sh` 로 그대로 전달된다. 구성마다 inventory-service 를 다시 만들고, 전략이 맞는지 확인하고(다르면 중단), `scripts/smoke.sh` 로 order-service 의 예전 연결을 정리한 뒤 워밍업 1회와 측정 `RUNS`(기본 3)회를 돌린다. 끝나면 구성별 판정 목록을 출력하고 inventory-service 를 `naive` 로 되돌린다. 실행 하나라도 실패하면 즉시 중단하고 `naive` 로 되돌린다. `USERS`(5000), `SALE_QUANTITY`(100) 는 `run-test.sh` 로 그대로 전달된다.
 
 예상 소요 시간은 구성당 약 5분(워밍업 포함), 전체 7개 구성이면 약 35분이다.
 
@@ -68,7 +74,8 @@ RUNS=1 USERS=200 SALE_QUANTITY=20 scripts/run-matrix.sh conditional optimistic-r
 
 판정은 `OVERSOLD` / `INCONCLUSIVE` / `UNDERSOLD` / `OK` 중 하나이고 정의는 `docs/results/README.md` 에 있다. 실행마다 `runs/<RUN_ID>/` 에 `meta.json`(전략·kind·커밋, 2단계부터 앱별 컨테이너 한도·`JAVA_TOOL_OPTIONS`·GC 종류 등)과 `causes.json`(락 대기, 풀·스레드 포화, 낙관적 충돌, 타임아웃, 2단계부터 커넥션 획득 대기와 GC 정지 같은 원인 지표)도 남는다.
 
-결과를 구성별 3회 중앙값 표로 모으려면 `scripts/summarize.sh` 를 쓴다. 특정 측정만 모으려면 `FROM=<RUN_ID 앞부분>` 으로 그 이후 실행만 고른다(예: `FROM=20261104 scripts/summarize.sh`). 1단계 결과 해석은 `docs/results/stage1-summary.md` 에 있다.
+결과를 구성별 3회 중앙값 표로 모으려면 `scripts/summarize.sh` 를 쓴다. 기본은 지금 부하 조건(`USERS=500 ARRIVAL_SECONDS=1`)으로 잰 실행만 모은다.
+0~2단계 기록은 `USERS=5000 ARRIVAL_SECONDS=0` 을 준다. 특정 측정만 모으려면 `FROM=<RUN_ID 앞부분>` 으로 그 이후 실행만 고른다(예: `USERS=5000 ARRIVAL_SECONDS=0 FROM=20261103-1718 scripts/summarize.sh`). 1단계 결과 해석은 `docs/results/stage1-summary.md` 에 있다.
 
 `causes.json` 에 커넥션 획득 대기·GC 정지가 없는 예전 실행은 `scripts/jvm-metrics.sh docs/results/runs/<RUN_ID>...` 로 같은 값을 Prometheus 에서 다시 계산할 수 있다(그 시각의 Prometheus 데이터가 남아 있을 때만).
 
