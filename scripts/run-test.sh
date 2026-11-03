@@ -89,10 +89,14 @@ commit=$(git rev-parse --short HEAD)
 pay=$(payment_config)
 my_settings=$(mysql_settings)
 
-if [ "$K6_RUNNER" = docker ]; then k6_desc="$K6_IMAGE"; else k6_desc="$(k6 version 2>/dev/null | awk '{print $1" "$2; exit}')"; fi
+if [ "$K6_RUNNER" = docker ]; then
+  k6_desc="$K6_IMAGE"; k6_cpus_rec="${K6_CPUS:-none}"; k6_mem_rec="${K6_MEMORY:-none}"
+else
+  k6_desc="$(k6 version 2>/dev/null | head -1 | cut -d' ' -f1-2 || true)"; k6_cpus_rec="n/a"; k6_mem_rec="n/a"
+fi
 jq -n --arg r "$RUN_ID" --arg s "$strategy" --arg k "$kind" --argjson u "$USERS" --argjson q "$SALE_QUANTITY" --arg c "$commit" \
   --argjson dw "$drain_wait_sec" --argjson tw "$time_wait_before" \
-  --arg kr "$K6_RUNNER" --arg ki "$k6_desc" --arg kc "${K6_CPUS:-none}" --arg km "${K6_MEMORY:-none}" \
+  --arg kr "$K6_RUNNER" --arg ki "$k6_desc" --arg kc "$k6_cpus_rec" --arg km "$k6_mem_rec" \
   '{runId: $r, strategy: $s, kind: $k, users: $u, saleQuantity: $q, commit: $c, tcpDrainWaitSec: $dw, tcpTimeWaitBefore: $tw,
     k6Runner: $kr, k6Image: $ki, k6Cpus: $kc, k6Memory: $km}' > "$RUN_DIR/meta.json"
 

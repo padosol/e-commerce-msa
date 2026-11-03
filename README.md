@@ -27,6 +27,7 @@ scripts/run-test.sh               # 초기화 -> 준비 -> k6 -> 검증 -> 결�
 | `WARMUP` | 0 | `1` 이면 워밍업 실행으로 기록한다(RUN_ID 끝에 `-warmup`, `meta.json` 의 kind 가 `warmup`, 요약 표에서 제외) |
 | `K6_RUNNER` | docker | `docker`: Docker 네트워크 안 k6 컨테이너가 `gateway:8080` 에 직접 연결 / `host`: 호스트 k6 가 `localhost:8080` 으로 연결(1단계 3차까지의 방식) |
 | `K6_CPUS` / `K6_MEMORY` | 4 / 2g | k6 컨테이너 자원 한도(빈 값이면 제한 없음) |
+| `K6_NETWORK` | e-commerce_default | k6 컨테이너를 붙일 Compose 네트워크. Compose 프로젝트 이름(기본은 저장소 디렉터리 이름) 뒤에 `_default` 가 붙는다 |
 
 예: `USERS=200 SALE_QUANTITY=20 scripts/run-test.sh`. 마지막 줄에 verdict(`OK` / `OVERSOLD` 등)가 출력된다.
 
