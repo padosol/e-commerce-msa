@@ -21,6 +21,7 @@
 - order-service 클라이언트 connect/read timeout: 2s / 10s
 - gateway 하위 호출 read timeout: 30s
 - k6 요청 timeout: 60s, executor: per-vu-iterations, VU당 1 iteration
+- 부하 조건: 0단계~1단계 4차는 USERS 5000 이 같은 순간에 요청(`ARRIVAL_SECONDS=0`). 1단계 5차(2026-11-03)부터 USERS 500 이 1초 동안 같은 간격으로 요청(`ARRIVAL_SECONDS=1`, 사용자 i 가 i × 2ms 뒤 출발). 재고 100 은 같다. 실행마다 `meta.json` 의 `users`·`arrivalSeconds` 와 report.md 의 "요청 도착" 에 기록된다
 - 컨테이너 제한: 앱 cpus 2 / 640m, MySQL cpus 4 / 1536m
 - Tomcat/Hikari 기본값, virtual threads off
 - MySQL 격리 수준 REPEATABLE-READ, `innodb_lock_wait_timeout` 50s (실행마다 report.md 에 실측값 기록)
@@ -66,3 +67,10 @@
 | 20261103-155343-optimistic-r3 | measure | optimistic-r3 | 5000 | 100 | 100 | 0 | 0 | 0 | 168 | 0 | 673 | OK | 4889.62 | 5097.82 | 886.73 |
 | 20261103-155354-optimistic-r3 | measure | optimistic-r3 | 5000 | 100 | 100 | 0 | 0 | 0 | 187 | 0 | 702 | OK | 3394.72 | 3577.37 | 1079.88 |
 | 20261103-155403-optimistic-r3 | measure | optimistic-r3 | 5000 | 100 | 100 | 0 | 0 | 0 | 191 | 0 | 709 | OK | 4544.07 | 4721.12 | 938.28 |
+
+### 1단계 5차: 500명이 1초 동안 도착 (재고 100)
+
+`USERS=500 ARRIVAL_SECONDS=1`. 위의 0단계·1단계 4차 행(5000명 동시 요청)과는 부하 조건이 달라 직접 비교하지 않는다.
+
+| run | kind | strategy | users | stock | paid | oversold | undersold | finalStock | conflicts | timeouts | retries | verdict | p95(ms) | p99(ms) | rps |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|

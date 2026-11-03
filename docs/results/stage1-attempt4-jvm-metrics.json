@@ -1,0 +1,2039 @@
+[
+  {
+    "runId": "20261103-154814-naive-warmup",
+    "startedAt": "2026-11-03T06:48:15Z",
+    "durationSec": 11,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5011,
+        "avgMs": 0.29
+      },
+      "user": {
+        "acquisitions": 10,
+        "avgMs": 0.02
+      },
+      "product": {
+        "acquisitions": 5009,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 537,
+        "avgMs": 0.81
+      },
+      "order": {
+        "acquisitions": 10021,
+        "avgMs": 128.6
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 9,
+          "totalMs": 523,
+          "max1sMs": 523
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 1006,
+          "max1sMs": 1006
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 17,
+          "max1sMs": 16
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 24,
+          "max1sMs": 6
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 33,
+          "max1sMs": 8
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 131,
+          "max1sMs": 51
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 3269,
+          "max1sMs": 3269
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 3,
+          "totalMs": 14,
+          "max1sMs": 6
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-154828-naive",
+    "startedAt": "2026-11-03T06:48:29Z",
+    "durationSec": 6,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 0.32
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.04
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 537,
+        "avgMs": 0.62
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 58.6
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 937,
+          "max1sMs": 937
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 10,
+          "max1sMs": 8
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 22,
+          "max1sMs": 6
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 30,
+          "max1sMs": 7
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 11,
+          "totalMs": 66,
+          "max1sMs": 16
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 3,
+          "totalMs": 9,
+          "max1sMs": 7
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-154838-naive",
+    "startedAt": "2026-11-03T06:48:39Z",
+    "durationSec": 7,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 0.22
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.06
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 543,
+        "avgMs": 0.01
+      },
+      "order": {
+        "acquisitions": 10016,
+        "avgMs": 63.34
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 9,
+          "totalMs": 374,
+          "max1sMs": 342
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 846,
+          "max1sMs": 846
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 18,
+          "max1sMs": 17
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 27,
+          "max1sMs": 8
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 31,
+          "max1sMs": 8
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 97,
+          "max1sMs": 50
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 3,
+          "totalMs": 9,
+          "max1sMs": 4
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-154848-naive",
+    "startedAt": "2026-11-03T06:48:49Z",
+    "durationSec": 6,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 0.23
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.04
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0.01
+      },
+      "payment": {
+        "acquisitions": 511,
+        "avgMs": 0.1
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 64.67
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 595,
+          "max1sMs": 595
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 13,
+          "max1sMs": 11
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 18,
+          "totalMs": 27,
+          "max1sMs": 7
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 28,
+          "max1sMs": 7
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 11,
+          "totalMs": 87,
+          "max1sMs": 31
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 3,
+          "totalMs": 10,
+          "max1sMs": 8
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-154903-pessimistic-warmup",
+    "startedAt": "2026-11-03T06:49:04Z",
+    "durationSec": 7,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": -20023,
+        "avgMs": 0
+      },
+      "user": {
+        "acquisitions": 8,
+        "avgMs": 0.03
+      },
+      "product": {
+        "acquisitions": 5007,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 109,
+        "avgMs": 0.02
+      },
+      "order": {
+        "acquisitions": 10018,
+        "avgMs": 51.87
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 559,
+          "max1sMs": 559
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 876,
+          "max1sMs": 876
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 13,
+          "max1sMs": 12
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 27,
+          "max1sMs": 7
+        }
+      },
+      "inventory": {},
+      "order": {
+        "Copy": {
+          "count": 11,
+          "totalMs": 111,
+          "max1sMs": 50
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 2,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-154914-pessimistic",
+    "startedAt": "2026-11-03T06:49:15Z",
+    "durationSec": 6,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 2.37
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.05
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.02
+      },
+      "order": {
+        "acquisitions": 10016,
+        "avgMs": 66.67
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 9,
+          "totalMs": 799,
+          "max1sMs": 790
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 12,
+          "max1sMs": 12
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 27,
+          "max1sMs": 8
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 49,
+          "max1sMs": 12
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 77,
+          "max1sMs": 27
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 2,
+          "totalMs": 3,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-154923-pessimistic",
+    "startedAt": "2026-11-03T06:49:24Z",
+    "durationSec": 7,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 1.89
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.04
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.73
+      },
+      "order": {
+        "acquisitions": 10015,
+        "avgMs": 68.09
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 510,
+          "max1sMs": 510
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 682,
+          "max1sMs": 682
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 16,
+          "max1sMs": 15
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 26,
+          "max1sMs": 8
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 16,
+          "totalMs": 40,
+          "max1sMs": 11
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 59,
+          "max1sMs": 20
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 2,
+          "totalMs": 4,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-154933-pessimistic",
+    "startedAt": "2026-11-03T06:49:35Z",
+    "durationSec": 5,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 2.8
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.05
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.03
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 60.3
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 9,
+          "totalMs": 989,
+          "max1sMs": 989
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 14,
+          "max1sMs": 12
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 18,
+          "totalMs": 28,
+          "max1sMs": 7
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 16,
+          "totalMs": 38,
+          "max1sMs": 10
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 11,
+          "totalMs": 102,
+          "max1sMs": 51
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 2,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-154948-conditional-warmup",
+    "startedAt": "2026-11-03T06:49:49Z",
+    "durationSec": 6,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": -10116,
+        "avgMs": 0
+      },
+      "user": {
+        "acquisitions": 8,
+        "avgMs": 0.02
+      },
+      "product": {
+        "acquisitions": 5007,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 109,
+        "avgMs": 0.05
+      },
+      "order": {
+        "acquisitions": 10014,
+        "avgMs": 52.4
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 372,
+          "max1sMs": 372
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 732,
+          "max1sMs": 732
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 14,
+          "max1sMs": 13
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 31,
+          "max1sMs": 9
+        }
+      },
+      "inventory": {},
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 94,
+          "max1sMs": 48
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 2,
+          "totalMs": 4,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-154959-conditional",
+    "startedAt": "2026-11-03T06:50:00Z",
+    "durationSec": 5,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 9905,
+        "avgMs": 1.81
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.04
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0.01
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.02
+      },
+      "order": {
+        "acquisitions": 10011,
+        "avgMs": 64.13
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 9,
+          "totalMs": 750,
+          "max1sMs": 750
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 14,
+          "max1sMs": 11
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 26,
+          "max1sMs": 8
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 15,
+          "totalMs": 40,
+          "max1sMs": 12
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 11,
+          "totalMs": 84,
+          "max1sMs": 30
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 2,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155008-conditional",
+    "startedAt": "2026-11-03T06:50:09Z",
+    "durationSec": 55,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 9905,
+        "avgMs": 0.76
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.04
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0.01
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.01
+      },
+      "order": {
+        "acquisitions": 10016,
+        "avgMs": 59.73
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 604,
+          "max1sMs": 552
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 497,
+          "max1sMs": 497
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 15,
+          "totalMs": 23,
+          "max1sMs": 13
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 19,
+          "totalMs": 30,
+          "max1sMs": 9
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 18,
+          "totalMs": 47,
+          "max1sMs": 6
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 11,
+          "totalMs": 63,
+          "max1sMs": 15
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 5,
+          "totalMs": 17,
+          "max1sMs": 5
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155106-conditional",
+    "startedAt": "2026-11-03T06:51:07Z",
+    "durationSec": 6,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 9905,
+        "avgMs": 1.24
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.04
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0.01
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.01
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 60.79
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 737,
+          "max1sMs": 737
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 12,
+          "max1sMs": 10
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 27,
+          "max1sMs": 8
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 29,
+          "max1sMs": 9
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 105,
+          "max1sMs": 67
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 4,
+          "max1sMs": 4
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155121-optimistic-r0-warmup",
+    "startedAt": "2026-11-03T06:51:22Z",
+    "durationSec": 6,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": -34615,
+        "avgMs": 0
+      },
+      "user": {
+        "acquisitions": 8,
+        "avgMs": 0.02
+      },
+      "product": {
+        "acquisitions": 5007,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 109,
+        "avgMs": 0.03
+      },
+      "order": {
+        "acquisitions": 10014,
+        "avgMs": 56.16
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 586,
+          "max1sMs": 586
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 708,
+          "max1sMs": 708
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 14,
+          "max1sMs": 11
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 24,
+          "max1sMs": 7
+        }
+      },
+      "inventory": {},
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 93,
+          "max1sMs": 35
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 2,
+          "totalMs": 4,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155131-optimistic-r0",
+    "startedAt": "2026-11-03T06:51:32Z",
+    "durationSec": 5,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 0.01
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.04
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0.01
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.14
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 59.98
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 9,
+          "totalMs": 755,
+          "max1sMs": 667
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 9,
+          "max1sMs": 5
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 25,
+          "max1sMs": 9
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 34,
+          "max1sMs": 11
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 67,
+          "max1sMs": 25
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 2,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155140-optimistic-r0",
+    "startedAt": "2026-11-03T06:51:41Z",
+    "durationSec": 6,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 0.01
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.1
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.02
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 64.48
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 463,
+          "max1sMs": 463
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 625,
+          "max1sMs": 625
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 11,
+          "max1sMs": 11
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 23,
+          "max1sMs": 7
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 23,
+          "max1sMs": 6
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 11,
+          "totalMs": 71,
+          "max1sMs": 26
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 3,
+          "max1sMs": 3
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155150-optimistic-r0",
+    "startedAt": "2026-11-03T06:51:51Z",
+    "durationSec": 9,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 0
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.04
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.01
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 58.71
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 9,
+          "totalMs": 543,
+          "max1sMs": 295
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 14,
+          "max1sMs": 10
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 18,
+          "totalMs": 23,
+          "max1sMs": 6
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 25,
+          "max1sMs": 6
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 66,
+          "max1sMs": 20
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 2,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155208-optimistic-r1-warmup",
+    "startedAt": "2026-11-03T06:52:09Z",
+    "durationSec": 6,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": -15015,
+        "avgMs": 0
+      },
+      "user": {
+        "acquisitions": 8,
+        "avgMs": 0.03
+      },
+      "product": {
+        "acquisitions": 5007,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 109,
+        "avgMs": 0.02
+      },
+      "order": {
+        "acquisitions": 10021,
+        "avgMs": 60.59
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 405,
+          "max1sMs": 405
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 390,
+          "max1sMs": 390
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 7,
+          "max1sMs": 7
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 27,
+          "max1sMs": 7
+        }
+      },
+      "inventory": {},
+      "order": {
+        "Copy": {
+          "count": 11,
+          "totalMs": 118,
+          "max1sMs": 45
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 2,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155217-optimistic-r1",
+    "startedAt": "2026-11-03T06:52:18Z",
+    "durationSec": 9,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 1.08
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.05
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.02
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 54.69
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 9,
+          "totalMs": 677,
+          "max1sMs": 310
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 15,
+          "max1sMs": 10
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 28,
+          "max1sMs": 8
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 14,
+          "totalMs": 42,
+          "max1sMs": 13
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 57,
+          "max1sMs": 20
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 2,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155230-optimistic-r1",
+    "startedAt": "2026-11-03T06:52:31Z",
+    "durationSec": 5,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 1.43
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.06
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0.01
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.01
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 60.32
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 271,
+          "max1sMs": 266
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 401,
+          "max1sMs": 401
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 13,
+          "max1sMs": 10
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 18,
+          "totalMs": 32,
+          "max1sMs": 7
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 28,
+          "max1sMs": 9
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 11,
+          "totalMs": 64,
+          "max1sMs": 16
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 2,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155239-optimistic-r1",
+    "startedAt": "2026-11-03T06:52:40Z",
+    "durationSec": 5,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 0.9
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.06
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.01
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 61.57
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 524,
+          "max1sMs": 524
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 14,
+          "max1sMs": 14
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 18,
+          "totalMs": 34,
+          "max1sMs": 10
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 26,
+          "max1sMs": 7
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 56,
+          "max1sMs": 18
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 2,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155253-optimistic-r2-warmup",
+    "startedAt": "2026-11-03T06:52:54Z",
+    "durationSec": 6,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": -15015,
+        "avgMs": 0
+      },
+      "user": {
+        "acquisitions": 8,
+        "avgMs": 0.03
+      },
+      "product": {
+        "acquisitions": 5007,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 109,
+        "avgMs": 0.02
+      },
+      "order": {
+        "acquisitions": 10021,
+        "avgMs": 56.35
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 220,
+          "max1sMs": 208
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 290,
+          "max1sMs": 290
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 9,
+          "max1sMs": 7
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 27,
+          "max1sMs": 8
+        }
+      },
+      "inventory": {},
+      "order": {
+        "Copy": {
+          "count": 11,
+          "totalMs": 148,
+          "max1sMs": 65
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 2,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155302-optimistic-r2",
+    "startedAt": "2026-11-03T06:53:03Z",
+    "durationSec": 6,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 3.53
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.12
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0.01
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.01
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 65.71
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 7,
+          "totalMs": 302,
+          "max1sMs": 302
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 303,
+          "max1sMs": 303
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 16,
+          "max1sMs": 12
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 25,
+          "max1sMs": 7
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 39,
+          "max1sMs": 11
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 94,
+          "max1sMs": 39
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 3,
+          "max1sMs": 3
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155312-optimistic-r2",
+    "startedAt": "2026-11-03T06:53:13Z",
+    "durationSec": 4,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 6.14
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.04
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.02
+      },
+      "order": {
+        "acquisitions": 10009,
+        "avgMs": 61.55
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 202,
+          "max1sMs": 189
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 92,
+          "max1sMs": 92
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 12,
+          "max1sMs": 12
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 18,
+          "totalMs": 25,
+          "max1sMs": 6
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 33,
+          "max1sMs": 12
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 11,
+          "totalMs": 72,
+          "max1sMs": 19
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 3,
+          "max1sMs": 3
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155320-optimistic-r2",
+    "startedAt": "2026-11-03T06:53:21Z",
+    "durationSec": 5,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 5.94
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.05
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.02
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 62.61
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 7,
+          "totalMs": 112,
+          "max1sMs": 112
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 222,
+          "max1sMs": 222
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 9,
+          "max1sMs": 6
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 27,
+          "max1sMs": 9
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 28,
+          "max1sMs": 8
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 71,
+          "max1sMs": 27
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 2,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155335-optimistic-r3-warmup",
+    "startedAt": "2026-11-03T06:53:35Z",
+    "durationSec": 5,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": -15016,
+        "avgMs": 0
+      },
+      "user": {
+        "acquisitions": 8,
+        "avgMs": 0.03
+      },
+      "product": {
+        "acquisitions": 5007,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 109,
+        "avgMs": 0.02
+      },
+      "order": {
+        "acquisitions": 10014,
+        "avgMs": 62.62
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 9,
+          "totalMs": 213,
+          "max1sMs": 134
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 16,
+          "max1sMs": 12
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 25,
+          "max1sMs": 7
+        }
+      },
+      "inventory": {},
+      "order": {
+        "Copy": {
+          "count": 11,
+          "totalMs": 117,
+          "max1sMs": 60
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 2,
+          "totalMs": 8,
+          "max1sMs": 6
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155343-optimistic-r3",
+    "startedAt": "2026-11-03T06:53:44Z",
+    "durationSec": 7,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 4.19
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.05
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.02
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 71.53
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 555,
+          "max1sMs": 555
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 665,
+          "max1sMs": 665
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 9,
+          "max1sMs": 8
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 18,
+          "totalMs": 30,
+          "max1sMs": 7
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 44,
+          "max1sMs": 12
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 92,
+          "max1sMs": 37
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 2,
+          "max1sMs": 2
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155354-optimistic-r3",
+    "startedAt": "2026-11-03T06:53:55Z",
+    "durationSec": 5,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 6.12
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.04
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0.03
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.02
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 61.67
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 9,
+          "totalMs": 743,
+          "max1sMs": 743
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 13,
+          "max1sMs": 10
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 18,
+          "totalMs": 32,
+          "max1sMs": 7
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 13,
+          "totalMs": 32,
+          "max1sMs": 8
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 10,
+          "totalMs": 71,
+          "max1sMs": 31
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 3,
+          "max1sMs": 3
+        }
+      }
+    }
+  },
+  {
+    "runId": "20261103-155403-optimistic-r3",
+    "startedAt": "2026-11-03T06:54:04Z",
+    "durationSec": 6,
+    "hikariAcquire": {
+      "inventory": {
+        "acquisitions": 5005,
+        "avgMs": 3.5
+      },
+      "user": {
+        "acquisitions": 4,
+        "avgMs": 0.06
+      },
+      "product": {
+        "acquisitions": 5003,
+        "avgMs": 0
+      },
+      "payment": {
+        "acquisitions": 103,
+        "avgMs": 0.01
+      },
+      "order": {
+        "acquisitions": 10013,
+        "avgMs": 67.34
+      }
+    },
+    "gcPause": {
+      "gateway": {
+        "Copy": {
+          "count": 8,
+          "totalMs": 371,
+          "max1sMs": 371
+        },
+        "MarkSweepCompact": {
+          "count": 1,
+          "totalMs": 724,
+          "max1sMs": 724
+        }
+      },
+      "user": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 8,
+          "max1sMs": 8
+        }
+      },
+      "product": {
+        "Copy": {
+          "count": 17,
+          "totalMs": 30,
+          "max1sMs": 8
+        }
+      },
+      "inventory": {
+        "Copy": {
+          "count": 12,
+          "totalMs": 28,
+          "max1sMs": 9
+        }
+      },
+      "order": {
+        "Copy": {
+          "count": 11,
+          "totalMs": 61,
+          "max1sMs": 19
+        }
+      },
+      "payment": {
+        "Copy": {
+          "count": 1,
+          "totalMs": 4,
+          "max1sMs": 4
+        }
+      }
+    }
+  }
+]

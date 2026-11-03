@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # 구성별로 inventory-service 를 교체하며 (워밍업 1 + 측정 RUNS) 회 실행한다.
 # 사용: scripts/run-matrix.sh [config...]   기본: naive pessimistic conditional optimistic-r0..r3
-# env: RUNS(3) USERS SALE_QUANTITY (run-test.sh 로 전달). 실행 중 실패하면 즉시 중단한다.
+# env: RUNS(3) USERS SALE_QUANTITY ARRIVAL_SECONDS (run-test.sh 로 전달). 실행 중 실패하면 즉시 중단한다.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 source "$ROOT/scripts/lib.sh"
