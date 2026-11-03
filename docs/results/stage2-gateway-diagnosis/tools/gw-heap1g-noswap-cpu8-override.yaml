@@ -1,0 +1,10 @@
+services:
+  gateway:
+    environment:
+      JAVA_TOOL_OPTIONS: "-Xmx1g -XX:+UseSerialGC"
+    memswap_limit: 2g
+    deploy:
+      resources:
+        limits:
+          cpus: "8"
+          memory: 2g
