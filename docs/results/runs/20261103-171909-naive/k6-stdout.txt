@@ -1,0 +1,643 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: /k6/flash-sale.js
+        output: Prometheus remote write (http://prometheus:9090/api/v1/write)
+
+     scenarios: (100.00%) 1 scenario, 5000 max VUs, 5m30s max duration (incl. graceful stop):
+              * flash_sale: 1 iterations for each of 5000 VUs (maxDuration: 5m0s, gracefulStop: 30s)
+
+
+running (0m00.7s), 4805/5000 VUs, 195 complete and 0 interrupted iterations
+flash_sale   [   4% ] 5000 VUs  0m00.7s/5m0s  0195/5000 iters, 1 per VU
+
+running (0m01.7s), 4081/5000 VUs, 919 complete and 0 interrupted iterations
+flash_sale   [  18% ] 5000 VUs  0m01.7s/5m0s  0919/5000 iters, 1 per VU
+
+running (0m02.7s), 3954/5000 VUs, 1046 complete and 0 interrupted iterations
+flash_sale   [  21% ] 5000 VUs  0m02.7s/5m0s  1046/5000 iters, 1 per VU
+
+running (0m03.7s), 3331/5000 VUs, 1669 complete and 0 interrupted iterations
+flash_sale   [  33% ] 5000 VUs  0m03.7s/5m0s  1669/5000 iters, 1 per VU
+
+running (0m04.7s), 2260/5000 VUs, 2740 complete and 0 interrupted iterations
+flash_sale   [  55% ] 5000 VUs  0m04.7s/5m0s  2740/5000 iters, 1 per VU
+
+running (0m05.7s), 1632/5000 VUs, 3368 complete and 0 interrupted iterations
+flash_sale   [  67% ] 5000 VUs  0m05.7s/5m0s  3368/5000 iters, 1 per VU
+
+running (0m06.7s), 1632/5000 VUs, 3368 complete and 0 interrupted iterations
+flash_sale   [  67% ] 5000 VUs  0m06.7s/5m0s  3368/5000 iters, 1 per VU
+
+running (0m07.7s), 1632/5000 VUs, 3368 complete and 0 interrupted iterations
+flash_sale   [  67% ] 5000 VUs  0m07.7s/5m0s  3368/5000 iters, 1 per VU
+
+running (0m08.7s), 1017/5000 VUs, 3983 complete and 0 interrupted iterations
+flash_sale   [  80% ] 5000 VUs  0m08.7s/5m0s  3983/5000 iters, 1 per VU
+
+running (0m09.7s), 1017/5000 VUs, 3983 complete and 0 interrupted iterations
+flash_sale   [  80% ] 5000 VUs  0m09.7s/5m0s  3983/5000 iters, 1 per VU
+
+running (0m10.7s), 1017/5000 VUs, 3983 complete and 0 interrupted iterations
+flash_sale   [  80% ] 5000 VUs  0m10.7s/5m0s  3983/5000 iters, 1 per VU
+
+running (0m11.7s), 1017/5000 VUs, 3983 complete and 0 interrupted iterations
+flash_sale   [  80% ] 5000 VUs  0m11.7s/5m0s  3983/5000 iters, 1 per VU
+
+running (0m12.7s), 1017/5000 VUs, 3983 complete and 0 interrupted iterations
+flash_sale   [  80% ] 5000 VUs  0m12.7s/5m0s  3983/5000 iters, 1 per VU
+
+running (0m13.7s), 1017/5000 VUs, 3983 complete and 0 interrupted iterations
+flash_sale   [  80% ] 5000 VUs  0m13.7s/5m0s  3983/5000 iters, 1 per VU
+
+running (0m14.7s), 1017/5000 VUs, 3983 complete and 0 interrupted iterations
+flash_sale   [  80% ] 5000 VUs  0m14.7s/5m0s  3983/5000 iters, 1 per VU
+
+running (0m15.7s), 0728/5000 VUs, 4272 complete and 0 interrupted iterations
+flash_sale   [  85% ] 5000 VUs  0m15.7s/5m0s  4272/5000 iters, 1 per VU
+
+running (0m16.7s), 0728/5000 VUs, 4272 complete and 0 interrupted iterations
+flash_sale   [  85% ] 5000 VUs  0m16.7s/5m0s  4272/5000 iters, 1 per VU
+
+running (0m17.7s), 0728/5000 VUs, 4272 complete and 0 interrupted iterations
+flash_sale   [  85% ] 5000 VUs  0m17.7s/5m0s  4272/5000 iters, 1 per VU
+
+running (0m18.7s), 0728/5000 VUs, 4272 complete and 0 interrupted iterations
+flash_sale   [  85% ] 5000 VUs  0m18.7s/5m0s  4272/5000 iters, 1 per VU
+
+running (0m19.7s), 0728/5000 VUs, 4272 complete and 0 interrupted iterations
+flash_sale   [  85% ] 5000 VUs  0m19.7s/5m0s  4272/5000 iters, 1 per VU
+
+running (0m20.7s), 0728/5000 VUs, 4272 complete and 0 interrupted iterations
+flash_sale   [  85% ] 5000 VUs  0m20.7s/5m0s  4272/5000 iters, 1 per VU
+
+running (0m21.7s), 0728/5000 VUs, 4272 complete and 0 interrupted iterations
+flash_sale   [  85% ] 5000 VUs  0m21.7s/5m0s  4272/5000 iters, 1 per VU
+
+running (0m22.7s), 0728/5000 VUs, 4272 complete and 0 interrupted iterations
+flash_sale   [  85% ] 5000 VUs  0m22.7s/5m0s  4272/5000 iters, 1 per VU
+
+running (0m23.7s), 0728/5000 VUs, 4272 complete and 0 interrupted iterations
+flash_sale   [  85% ] 5000 VUs  0m23.7s/5m0s  4272/5000 iters, 1 per VU
+
+running (0m24.7s), 0728/5000 VUs, 4272 complete and 0 interrupted iterations
+flash_sale   [  85% ] 5000 VUs  0m24.7s/5m0s  4272/5000 iters, 1 per VU
+
+running (0m25.7s), 0728/5000 VUs, 4272 complete and 0 interrupted iterations
+flash_sale   [  85% ] 5000 VUs  0m25.7s/5m0s  4272/5000 iters, 1 per VU
+
+running (0m26.7s), 0728/5000 VUs, 4272 complete and 0 interrupted iterations
+flash_sale   [  85% ] 5000 VUs  0m26.7s/5m0s  4272/5000 iters, 1 per VU
+
+running (0m27.7s), 0728/5000 VUs, 4272 complete and 0 interrupted iterations
+flash_sale   [  85% ] 5000 VUs  0m27.7s/5m0s  4272/5000 iters, 1 per VU
+
+running (0m28.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m28.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m29.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m29.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m30.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m30.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m31.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m31.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m32.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m32.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m33.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m33.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m34.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m34.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m35.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m35.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m36.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m36.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m37.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m37.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m38.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m38.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m39.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m39.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m40.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m40.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m41.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m41.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m42.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m42.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m43.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m43.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m44.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m44.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m45.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m45.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m46.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m46.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m47.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m47.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m48.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m48.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m49.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m49.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m50.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m50.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m51.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m51.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m52.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m52.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m53.7s), 0625/5000 VUs, 4375 complete and 0 interrupted iterations
+flash_sale   [  88% ] 5000 VUs  0m53.7s/5m0s  4375/5000 iters, 1 per VU
+
+running (0m54.7s), 0515/5000 VUs, 4485 complete and 0 interrupted iterations
+flash_sale   [  90% ] 5000 VUs  0m54.7s/5m0s  4485/5000 iters, 1 per VU
+
+running (0m55.7s), 0418/5000 VUs, 4582 complete and 0 interrupted iterations
+flash_sale   [  92% ] 5000 VUs  0m55.7s/5m0s  4582/5000 iters, 1 per VU
+
+running (0m56.7s), 0418/5000 VUs, 4582 complete and 0 interrupted iterations
+flash_sale   [  92% ] 5000 VUs  0m56.7s/5m0s  4582/5000 iters, 1 per VU
+
+running (0m57.7s), 0418/5000 VUs, 4582 complete and 0 interrupted iterations
+flash_sale   [  92% ] 5000 VUs  0m57.7s/5m0s  4582/5000 iters, 1 per VU
+
+running (0m58.7s), 0418/5000 VUs, 4582 complete and 0 interrupted iterations
+flash_sale   [  92% ] 5000 VUs  0m58.7s/5m0s  4582/5000 iters, 1 per VU
+
+running (0m59.7s), 0418/5000 VUs, 4582 complete and 0 interrupted iterations
+flash_sale   [  92% ] 5000 VUs  0m59.7s/5m0s  4582/5000 iters, 1 per VU
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+time="2026-11-03T08:20:11Z" level=warning msg="Request Failed" error="Post \"http://gateway:8080/api/orders\": request timeout"
+
+
+  █ TOTAL RESULTS 
+
+    CUSTOM
+    orders_client_timeout..........: 418    6.957981/s
+    orders_paid....................: 602    10.020824/s
+    orders_sold_out................: 3980   66.250628/s
+
+    HTTP
+    http_req_duration..............: avg=10.78s med=2.8s  p(95)=58.78s p(99)=58.81s max=58.84s
+      { expected_response:true }...: avg=6.4s   med=2.76s p(95)=26.9s  p(99)=53.48s max=53.5s 
+    http_req_failed................: 8.36%  418 out of 5000
+    http_reqs......................: 5000   83.229432/s
+
+    EXECUTION
+    iteration_duration.............: avg=11.86s med=4.47s p(95)=1m0s   p(99)=1m0s   max=1m0s  
+    iterations.....................: 5000   83.229432/s
+    vus............................: 418    min=418         max=4805
+    vus_max........................: 5000   min=5000        max=5000
+
+    NETWORK
+    data_received..................: 825 kB 14 kB/s
+    data_sent......................: 1.5 MB 25 kB/s
+
+
+
+
+running (1m00.1s), 0000/5000 VUs, 5000 complete and 0 interrupted iterations
+flash_sale ✓ [ 100% ] 5000 VUs  1m00.1s/5m0s  5000/5000 iters, 1 per VU

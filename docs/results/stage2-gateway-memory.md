@@ -66,7 +66,7 @@
 | e-commerce-prometheus-1 | 0.79% | 195.4MiB / 512MiB |
 | e-commerce-user-service-1 | 4.22% | 303.1MiB / 640MiB |
 
-아래는 `FROM=20261103-2235 scripts/summarize.sh` 출력 그대로다.
+아래는 `FROM=20261103-2235 TO=20261103-2300 scripts/summarize.sh` 출력 그대로다.
 
 | 구성 | 판정(3회) | paid | undersold | conflicts | timeouts | retries | p95(ms) | p99(ms) | rps | inventory 차감 서버 p95(ms) | MySQL 락 대기 횟수 | 평균 락 대기(ms) | inventory Hikari pending 최대 | inventory Tomcat busy 최대 | 결제 호출 수 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -78,7 +78,7 @@
 | optimistic-r2 | OK/OK/OK | 100 | 0 | 9 | 0 | 74 | 235.58 | 254.83 | 496.98 | 3.65 | 78 | 0.87 | 0 | 1 | 100 |
 | optimistic-r3 | OK/OK/OK | 100 | 0 | 7 | 0 | 57 | 238.14 | 257.82 | 495.84 | 2.62 | 64 | 0.92 | 0 | 1 | 100 |
 
-`*`: 일부 실행의 값이 `n/a`(Prometheus 1s 표본 없음, 또는 1단계 4차 이전이라 기록 없음)라 숫자인 실행만으로 계산한 값. Hikari·Tomcat 최댓값과 서버 p95 는 1s 표본 값이다.
+`*`: 일부 실행의 값이 `n/a`(Prometheus 1s 표본 없음, 또는 1단계 4차까지라 기록 없음)라 숫자인 실행만으로 계산한 값. Hikari·Tomcat 최댓값과 서버 p95 는 1s 표본 값이다.
 
 보조 표 (같은 실행): 끝단 값의 3회 범위(최소~최대)와 앞단 서비스 포화 지표의 중앙값
 

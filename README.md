@@ -32,8 +32,8 @@ scripts/run-test.sh               # 초기화 -> 준비 -> k6 -> 검증 -> 결�
 
 예: `USERS=200 SALE_QUANTITY=20 scripts/run-test.sh`. 마지막 줄에 verdict(`OK` / `OVERSOLD` 등)가 출력된다.
 
-부하 조건은 2026-11-03 에 바꿨다. 0단계와 1단계 1~4차 기록은 모두 `USERS=5000 ARRIVAL_SECONDS=0`(5000명이 같은 순간에 요청)이다.
-그 조건에서는 연결 5000개가 0.25초 안에 몰려 게이트웨이의 커널 연결 대기열(100칸)이 넘쳤다. 조사 기록은 2단계 브랜치(`feat/flash-sale-stage2-gc`)의 `docs/results/stage2-gateway-diagnosis/` 에 있다.
+부하 조건은 2026-11-03 에 바꿨다. 0단계, 1단계 1~4차, 2단계 GC 실험의 기록은 모두 `USERS=5000 ARRIVAL_SECONDS=0`(5000명이 같은 순간에 요청)이다.
+그 조건에서는 연결 5000개가 0.25초 안에 몰려 게이트웨이의 커널 연결 대기열(100칸)이 넘쳤다(`docs/results/stage2-gateway-diagnosis/`).
 이 실험의 목표는 동시 주문의 정합성이다. 그래서 현실에 가까운 "1초 동안 500명" 으로 낮췄다. 재고는 그대로 100개다.
 예전 조건을 다시 재려면 `USERS=5000 ARRIVAL_SECONDS=0 scripts/run-test.sh` 로 돌린다.
 
@@ -72,15 +72,30 @@ RUNS=1 USERS=200 SALE_QUANTITY=20 scripts/run-matrix.sh conditional optimistic-r
 
 ### 판정과 결과 파일
 
-판정은 `OVERSOLD` / `INCONCLUSIVE` / `UNDERSOLD` / `OK` 중 하나이고 정의는 `docs/results/README.md` 에 있다. 실행마다 `runs/<RUN_ID>/` 에 `meta.json`(전략·kind·커밋·부하 조건, 1단계 5차부터 앱별 컨테이너 한도·`JAVA_TOOL_OPTIONS`·GC 종류)과 `causes.json`(락 대기, 풀·스레드 포화, 낙관적 충돌, 타임아웃, 1단계 5차부터 커넥션 획득 대기와 GC 정지 같은 원인 지표)도 남는다.
+판정은 `OVERSOLD` / `INCONCLUSIVE` / `UNDERSOLD` / `OK` 중 하나이고 정의는 `docs/results/README.md` 에 있다. 실행마다 `runs/<RUN_ID>/` 에 `meta.json`(전략·kind·커밋·부하 조건, 2단계 GC 실험부터 앱별 컨테이너 한도·`JAVA_TOOL_OPTIONS`·GC 종류)과 `causes.json`(락 대기, 풀·스레드 포화, 낙관적 충돌, 타임아웃, 2단계 GC 실험부터 커넥션 획득 대기와 GC 정지 같은 원인 지표)도 남는다.
 
 결과를 구성별 3회 중앙값 표로 모으려면 `scripts/summarize.sh` 를 쓴다. 기본은 지금 부하 조건(`USERS=500 ARRIVAL_SECONDS=1`)으로 잰 실행만 모은다.
-예전 조건 기록은 `USERS=5000 ARRIVAL_SECONDS=0` 을 준다. 특정 측정만 모으려면 `FROM=<RUN_ID 앞부분>` 으로 그 이후 실행만 고른다(예: 1단계 4차 `USERS=5000 ARRIVAL_SECONDS=0 FROM=20261103-1548 scripts/summarize.sh`). 1단계 결과 해석은 `docs/results/stage1-summary.md`(4차, 5000명 동시 요청)와 `docs/results/stage1-attempt5-summary.md`(5차, 1초 동안 500명)에 있다.
+예전 조건 기록은 `USERS=5000 ARRIVAL_SECONDS=0` 을 준다. 특정 측정만 모으려면 `FROM` 과 `TO`(RUN_ID 앞부분, `TO` 는 그 값 미만)로 범위를 고른다.
+
+| 측정 | 명령 |
+|---|---|
+| 1단계 4차 | `USERS=5000 ARRIVAL_SECONDS=0 FROM=20261103-1548 TO=20261103-1600 scripts/summarize.sh` |
+| 2단계 GC 실험 | `USERS=5000 ARRIVAL_SECONDS=0 FROM=20261103-1718 TO=20261103-1800 scripts/summarize.sh` |
+| 1단계 5차 | `FROM=20261103-2210 TO=20261103-2235 scripts/summarize.sh` |
+| 2단계 게이트웨이 메모리 | `FROM=20261103-2235 TO=20261103-2300 scripts/summarize.sh` |
+ 1단계 결과 해석은 `docs/results/stage1-summary.md`(4차, 5000명 동시 요청)와 `docs/results/stage1-attempt5-summary.md`(5차, 1초 동안 500명)에 있다.
 
 ### 2단계: 게이트웨이 메모리
 
 게이트웨이만 메모리 1280m·swap 없음으로 바꿨다(`compose.yaml`). heap(`-Xmx448m`)과 GC(Serial)는 1단계와 같다.
 1단계 5차에서 게이트웨이는 640m 한도에 닿아 swap 을 286 MiB 썼고, 메모리를 얼마나 쓰는지 재서 정한 값이다(`docs/results/stage2-gateway-memory.md`).
+
+### 2단계 GC 실험 (5000명 조건, 설정은 반영하지 않음)
+
+5000명 동시 조건에서 order-service 만 메모리 1g·`-XX:+UseG1GC` 로 바꿔 쟀다(`docs/results/stage2-summary.md`, `docs/results/stage2-environment.md`).
+1단계 4차에서 order-service 의 커넥션 대기 최댓값 3.74s 가 Serial GC 의 Full GC 정지(3.27s)와 겹쳤기 때문이다.
+지금 `compose.yaml` 에는 이 설정을 넣지 않았다. order-service 는 1단계 그대로 640m·Serial GC 다.
+이 실험 중 나온 게이트웨이 60초 타임아웃의 원인 조사는 `docs/results/stage2-gateway-diagnosis/` 에 있다. 조사에 쓴 게이트웨이 설정 변경은 진단용 override 파일로만 적용했다.
 
 `causes.json` 에 커넥션 획득 대기·GC 정지가 없는 예전 실행은 `scripts/jvm-metrics.sh docs/results/runs/<RUN_ID>...` 로 같은 값을 Prometheus 에서 다시 계산할 수 있다(그 시각의 Prometheus 데이터가 남아 있을 때만). 1단계 4차 28회의 값은 `docs/results/stage1-attempt4-jvm-metrics.json` 에 있다.
 

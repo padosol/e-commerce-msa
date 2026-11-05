@@ -1,0 +1,109 @@
+{
+  "mysql": {
+    "lockWaits": 662,
+    "lockTimeMs": 1770,
+    "avgLockWaitMs": 2.67,
+    "maxCurrentWaits": 0
+  },
+  "hikariPendingMax": {
+    "inventory": 3,
+    "order": 189,
+    "payment": 0,
+    "product": 0
+  },
+  "tomcatBusyMax": {
+    "gateway": 195,
+    "inventory": 14,
+    "order": 200,
+    "payment": 21,
+    "product": 8
+  },
+  "hikariAcquire": {
+    "inventory": {
+      "acquisitions": 5011,
+      "avgMs": 2.9
+    },
+    "user": {
+      "acquisitions": 8,
+      "avgMs": 0.03
+    },
+    "product": {
+      "acquisitions": 5007,
+      "avgMs": 0.01
+    },
+    "payment": {
+      "acquisitions": 109,
+      "avgMs": 0.02
+    },
+    "order": {
+      "acquisitions": 10014,
+      "avgMs": 56.3
+    }
+  },
+  "gcPause": {
+    "gateway": {
+      "Copy": {
+        "count": 8,
+        "totalMs": 764,
+        "max1sMs": 764
+      },
+      "MarkSweepCompact": {
+        "count": 1,
+        "totalMs": 1056,
+        "max1sMs": 1056
+      }
+    },
+    "user": {
+      "Copy": {
+        "count": 13,
+        "totalMs": 13,
+        "max1sMs": 10
+      }
+    },
+    "product": {
+      "Copy": {
+        "count": 16,
+        "totalMs": 29,
+        "max1sMs": 9
+      }
+    },
+    "inventory": {
+      "Copy": {
+        "count": 14,
+        "totalMs": 48,
+        "max1sMs": 9
+      }
+    },
+    "order": {
+      "G1 Young Generation": {
+        "count": 11,
+        "totalMs": 52,
+        "max1sMs": 15
+      }
+    },
+    "payment": {
+      "Copy": {
+        "count": 1,
+        "totalMs": 2,
+        "max1sMs": 2
+      }
+    }
+  },
+  "optimistic": {
+    "conflicts": 645,
+    "retries": 473,
+    "exhausted": 172
+  },
+  "timeouts": {
+    "inventory": 0,
+    "payment": 0,
+    "product": 0,
+    "orderDb": 0,
+    "gateway": 0,
+    "client": 0,
+    "total": 0
+  },
+  "inventoryDecreaseP95Ms": 27.25,
+  "decreaseCalls": 5000,
+  "paymentCalls": 100
+}

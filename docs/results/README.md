@@ -21,8 +21,11 @@
 - order-service 클라이언트 connect/read timeout: 2s / 10s
 - gateway 하위 호출 read timeout: 30s
 - k6 요청 timeout: 60s, executor: per-vu-iterations, VU당 1 iteration
-- 부하 조건: 0단계~1단계 4차는 USERS 5000 이 같은 순간에 요청(`ARRIVAL_SECONDS=0`). 1단계 5차(2026-11-03)부터 USERS 500 이 1초 동안 같은 간격으로 요청(`ARRIVAL_SECONDS=1`, 사용자 i 가 i × 2ms 뒤 출발). 재고 100 은 같다. 실행마다 `meta.json` 의 `users`·`arrivalSeconds` 와 report.md 의 "요청 도착" 에 기록된다
-- 컨테이너 제한: 앱 cpus 2 / 640m, MySQL cpus 4 / 1536m. 2단계(게이트웨이 메모리)부터 gateway 만 1280m·swap 없음, heap `-Xmx448m`·Serial GC 는 그대로(`stage2-gateway-memory.md`). 1단계 5차부터는 실행마다 `meta.json` 의 `jvm` 과 report.md 에 실제 값이 기록된다
+- 부하 조건: 0단계~1단계 4차와 2단계 GC 실험은 USERS 5000 이 같은 순간에 요청(`ARRIVAL_SECONDS=0`). 1단계 5차(2026-11-03)부터 USERS 500 이 1초 동안 같은 간격으로 요청(`ARRIVAL_SECONDS=1`, 사용자 i 가 i × 2ms 뒤 출발). 재고 100 은 같다. 실행마다 `meta.json` 의 `users`·`arrivalSeconds` 와 report.md 의 "요청 도착" 에 기록된다
+- 컨테이너 제한: 앱 cpus 2 / 640m, MySQL cpus 4 / 1536m.
+  - 2단계 GC 실험(5000명 조건)에서만 order-service 를 1g + `-XX:+UseG1GC` 로 바꿨다. 지금 `compose.yaml` 에는 없다.
+  - 2단계(게이트웨이 메모리)부터 gateway 만 1280m·swap 없음이다. heap `-Xmx448m`·Serial GC 는 그대로다(`stage2-gateway-memory.md`).
+  - 2단계 GC 실험부터는 실행마다 `meta.json` 의 `jvm` 과 report.md 에 실제 값이 기록된다
 - Tomcat/Hikari 기본값, virtual threads off
 - MySQL 격리 수준 REPEATABLE-READ, `innodb_lock_wait_timeout` 50s (실행마다 report.md 에 실측값 기록)
 - Hikari connectionTimeout 30s (기본값)
@@ -68,9 +71,44 @@
 | 20261103-155354-optimistic-r3 | measure | optimistic-r3 | 5000 | 100 | 100 | 0 | 0 | 0 | 187 | 0 | 702 | OK | 3394.72 | 3577.37 | 1079.88 |
 | 20261103-155403-optimistic-r3 | measure | optimistic-r3 | 5000 | 100 | 100 | 0 | 0 | 0 | 191 | 0 | 709 | OK | 4544.07 | 4721.12 | 938.28 |
 
+### 2단계 GC 실험: order-service 1g + G1 GC (5000명 동시 요청, 설정은 반영하지 않음)
+
+1단계 4차와 같은 7개 구성 × (워밍업 1 + 측정 3). 위 표의 1단계 4차 행(20261103-1548~1554)과 비교한다. 해석은 `stage2-summary.md`.
+
+| run | kind | strategy | users | stock | paid | oversold | undersold | finalStock | conflicts | timeouts | retries | verdict | p95(ms) | p99(ms) | rps |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 20261103-171838-naive-warmup | warmup | naive | 5000 | 100 | 485 | 385 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 10706.66 | 11859.4 | 379.77 |
+| 20261103-171856-naive | measure | naive | 5000 | 100 | 576 | 476 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 5797.42 | 6452.62 | 610.61 |
+| 20261103-171909-naive | measure | naive | 5000 | 100 | 602 | 502 | 0 | 0 | 0 | 418 | 0 | OVERSOLD | 58787.97 | 58819.51 | 83.23 |
+| 20261103-172116-naive | measure | naive | 5000 | 100 | 601 | 501 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 4207.54 | 4357.85 | 1020.77 |
+| 20261103-172131-pessimistic-warmup | warmup | pessimistic | 5000 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 3533.93 | 3622.19 | 565.91 |
+| 20261103-172145-pessimistic | measure | pessimistic | 5000 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 3774.87 | 3919.22 | 1148.7 |
+| 20261103-172155-pessimistic | measure | pessimistic | 5000 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 6701.22 | 26461.42 | 181.05 |
+| 20261103-172228-pessimistic | measure | pessimistic | 5000 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 2769.83 | 3400.71 | 1067.85 |
+| 20261103-172243-conditional-warmup | warmup | conditional | 5000 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 4240.79 | 6744.12 | 320.88 |
+| 20261103-172304-conditional | measure | conditional | 5000 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 3583.83 | 3776.93 | 1087.42 |
+| 20261103-172314-conditional | measure | conditional | 5000 | 100 | 100 | 0 | 0 | 0 | 0 | 17 | 0 | INCONCLUSIVE | 26558.4 | 52623.75 | 83.3 |
+| 20261103-172519-conditional | measure | conditional | 5000 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 3389.6 | 3549.41 | 639.17 |
+| 20261103-172538-optimistic-r0-warmup | warmup | optimistic-r0 | 5000 | 100 | 100 | 0 | 0 | 0 | 656 | 0 | 0 | OK | 6749.86 | 13228.87 | 346.83 |
+| 20261103-172558-optimistic-r0 | measure | optimistic-r0 | 5000 | 100 | 100 | 0 | 0 | 0 | 517 | 0 | 0 | OK | 3489.68 | 3644.16 | 1153 |
+| 20261103-172607-optimistic-r0 | measure | optimistic-r0 | 5000 | 100 | 100 | 0 | 0 | 0 | 504 | 0 | 0 | OK | 3516.43 | 3631.84 | 639.61 |
+| 20261103-172620-optimistic-r0 | measure | optimistic-r0 | 5000 | 100 | 100 | 0 | 0 | 0 | 518 | 0 | 0 | OK | 3778.93 | 3967.89 | 1122.3 |
+| 20261103-172635-optimistic-r1-warmup | warmup | optimistic-r1 | 5000 | 100 | 100 | 0 | 0 | 0 | 332 | 99 | 403 | INCONCLUSIVE | 26939.95 | 58872.07 | 83.21 |
+| 20261103-172840-optimistic-r1 | measure | optimistic-r1 | 5000 | 100 | 100 | 0 | 0 | 0 | 368 | 0 | 438 | OK | 3201.92 | 3400.15 | 1176.61 |
+| 20261103-172849-optimistic-r1 | measure | optimistic-r1 | 5000 | 100 | 100 | 0 | 0 | 0 | 389 | 0 | 459 | OK | 4627.03 | 4773.03 | 647.42 |
+| 20261103-172902-optimistic-r1 | measure | optimistic-r1 | 5000 | 100 | 100 | 0 | 0 | 0 | 381 | 0 | 436 | OK | 2884.69 | 2984.42 | 1156.55 |
+| 20261103-172917-optimistic-r2-warmup | warmup | optimistic-r2 | 5000 | 100 | 100 | 0 | 0 | 0 | 172 | 0 | 473 | OK | 4965.73 | 5151.99 | 874.11 |
+| 20261103-172928-optimistic-r2 | measure | optimistic-r2 | 5000 | 100 | 100 | 0 | 0 | 0 | 253 | 0 | 631 | OK | 1835.44 | 2851.29 | 1111.33 |
+| 20261103-172938-optimistic-r2 | measure | optimistic-r2 | 5000 | 100 | 100 | 0 | 0 | 0 | 254 | 0 | 605 | OK | 4653.53 | 4808.39 | 925.38 |
+| 20261103-172949-optimistic-r2 | measure | optimistic-r2 | 5000 | 100 | 100 | 0 | 0 | 0 | 255 | 26 | 621 | INCONCLUSIVE | 26791.43 | 52906.14 | 83.28 |
+| 20261103-173200-optimistic-r3-warmup | warmup | optimistic-r3 | 5000 | 100 | 100 | 0 | 0 | 0 | 153 | 0 | 647 | OK | 5270.98 | 5437.3 | 844.22 |
+| 20261103-173211-optimistic-r3 | measure | optimistic-r3 | 5000 | 100 | 100 | 0 | 0 | 0 | 183 | 0 | 701 | OK | 3269.15 | 3413.08 | 1153.21 |
+| 20261103-173221-optimistic-r3 | measure | optimistic-r3 | 5000 | 100 | 100 | 0 | 0 | 0 | 178 | 0 | 681 | OK | 4683.71 | 6705.82 | 637.29 |
+| 20261103-173234-optimistic-r3 | measure | optimistic-r3 | 5000 | 100 | 100 | 0 | 0 | 0 | 183 | 0 | 709 | OK | 3170.91 | 3352.65 | 1090.64 |
+
 ### 1단계 5차: 500명이 1초 동안 도착 (재고 100)
 
-`USERS=500 ARRIVAL_SECONDS=1`. 위의 0단계·1단계 4차 행(5000명 동시 요청)과는 부하 조건이 달라 직접 비교하지 않는다.
+`USERS=500 ARRIVAL_SECONDS=1`. 위의 0단계·1단계 4차·2단계 GC 실험 행(5000명 동시 요청)과는 부하 조건이 달라 직접 비교하지 않는다.
 
 | run | kind | strategy | users | stock | paid | oversold | undersold | finalStock | conflicts | timeouts | retries | verdict | p95(ms) | p99(ms) | rps |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|

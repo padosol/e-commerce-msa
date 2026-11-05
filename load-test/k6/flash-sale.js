@@ -8,7 +8,7 @@ const BASE_URL = __ENV.BASE_URL || 'http://localhost:8080';
 const EVENT_ID = __ENV.EVENT_ID;
 const USERS = parseInt(__ENV.USERS || '500', 10);
 // 요청이 도착하는 시간(초). 0 보다 크면 사용자 i(0부터)가 i × ARRIVAL_SECONDS / USERS 초 뒤에 요청해서,
-// USERS 건이 이 시간 동안 같은 간격으로 도착한다. 0 이면 USERS 명이 같은 순간에 요청한다(0단계~1단계 4차 측정 방식).
+// USERS 건이 이 시간 동안 같은 간격으로 도착한다. 0 이면 USERS 명이 같은 순간에 요청한다(5000명 동시 조건의 측정 방식).
 const ARRIVAL_SECONDS = parseFloat(__ENV.ARRIVAL_SECONDS || '1');
 if (!(ARRIVAL_SECONDS >= 0)) throw new Error(`ARRIVAL_SECONDS must be >= 0: ${__ENV.ARRIVAL_SECONDS}`);
 const TOKENS_FILE = __ENV.TOKENS_FILE;

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # 1단계 측정 결과를 구성별 3회 중앙값 마크다운 표로 stdout 에 출력한다. 결과 파일을 읽기만 한다.
 # 사용: scripts/summarize.sh   env: RUNS_DIR(기본 docs/results/runs) FROM(기본 없음: RUN_ID 가 이 값 이상인 실행만, 예 FROM=20261104)
-#   USERS(기본 500) ARRIVAL_SECONDS(기본 1): 이 부하 조건으로 잰 실행만. 0단계~1단계 4차 기록은 USERS=5000 ARRIVAL_SECONDS=0
+#   TO(기본 없음: RUN_ID 가 이 값 미만인 실행만, 예 TO=20261105)
+#   USERS(기본 500) ARRIVAL_SECONDS(기본 1): 이 부하 조건으로 잰 실행만. 5000명 동시 조건(0단계~1단계 4차, 2단계 GC 실험)은 USERS=5000 ARRIVAL_SECONDS=0
 #   (meta.json 에 arrivalSeconds 가 없는 예전 실행은 0 으로 본다)
 #
 # 대상: runs/<RUN_ID>/ 중 meta.json 이 있고 kind == "measure", users == USERS, arrivalSeconds == ARRIVAL_SECONDS, saleQuantity == 100 인 실행.
@@ -17,6 +18,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 RUNS_DIR="${RUNS_DIR:-$ROOT/docs/results/runs}"
 FROM="${FROM:-}"
+TO="${TO:-}"
 USERS="${USERS:-500}"
 ARRIVAL_SECONDS="${ARRIVAL_SECONDS:-1}"
 CONFIGS='["naive","pessimistic","conditional","optimistic-r0","optimistic-r1","optimistic-r2","optimistic-r3"]'
@@ -33,6 +35,7 @@ collect() {
     [ "$target" = true ] || continue
     dir="$(dirname "$meta")"
     if [ -n "$FROM" ] && [[ "$(basename "$dir")" < "$FROM" ]]; then continue; fi
+    if [ -n "$TO" ] && ! [[ "$(basename "$dir")" < "$TO" ]]; then continue; fi
     for f in verify.json causes.json k6-summary.json; do
       [ -f "$dir/$f" ] || { echo "없음: $dir/$f" >&2; exit 1; }
     done
@@ -56,7 +59,7 @@ jq -r -s --argjson configs "$CONFIGS" --argjson want "$PER_CONFIG" '
   def span: . as $all | nums
     | if length == 0 then "n/a" else "\(min | fmt)~\(max | fmt)" + mark($all) end;
   def row: "| " + join(" | ") + " |";
-  # gcPause.<svc> 의 GC 별 값 합/최댓값. 기록이 없는 실행(1단계 4차 이전)은 "n/a"
+  # gcPause.<svc> 의 GC 별 값 합/최댓값. 기록이 없는 실행(1단계 4차까지)은 "n/a"
   def gcsum($svc): (.causes.gcPause[$svc] // null) | if . == null then "n/a" else ([.[].totalMs] | add // 0) end;
   def gcmax($svc): (.causes.gcPause[$svc] // null) | if . == null then "n/a" else ([.[].max1sMs] | max // 0) end;
 
@@ -90,7 +93,7 @@ jq -r -s --argjson configs "$CONFIGS" --argjson want "$PER_CONFIG" '
         (col(.causes.paymentCalls) | cell) ]
     | row ),
   "",
-  "`*`: 일부 실행의 값이 `n/a`(Prometheus 1s 표본 없음, 또는 1단계 4차 이전이라 기록 없음)라 숫자인 실행만으로 계산한 값. Hikari·Tomcat 최댓값과 서버 p95 는 1s 표본 값이다.",
+  "`*`: 일부 실행의 값이 `n/a`(Prometheus 1s 표본 없음, 또는 1단계 4차까지라 기록 없음)라 숫자인 실행만으로 계산한 값. Hikari·Tomcat 최댓값과 서버 p95 는 1s 표본 값이다.",
   "",
   "보조 표 (같은 실행): 끝단 값의 3회 범위(최소~최대)와 앞단 서비스 포화 지표의 중앙값",
   "",

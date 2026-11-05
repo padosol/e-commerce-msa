@@ -14,7 +14,7 @@
 
 ## 결과표
 
-아래는 `scripts/summarize.sh` 출력 그대로다.
+아래는 4차 당시 `scripts/summarize.sh` 출력 그대로다. 지금 스크립트로는 열이 더 붙는다(`USERS=5000 ARRIVAL_SECONDS=0 FROM=20261103-1548 TO=20261103-1600 scripts/summarize.sh`).
 열 뜻: conflicts 는 최종 `STOCK_CONFLICT` 수, timeouts 는 계층별 타임아웃 합계, retries 는 낙관적 락 재시도 총횟수다. rps 는 k6 의 `http_reqs.rate`, 즉 요청 5000건 ÷ 실행 시간이다.
 MySQL 락 대기는 `Innodb_row_lock_waits` 의 구간 증가량이다. MySQL 전체 카운터라 재고 행이 아닌 대기도 섞일 수 있다.
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # 초기화 -> 행사/재고/사용자 준비 -> k6 -> 검증 -> 결과 기록. env: USERS(500) SALE_QUANTITY(100) WARMUP(0; 1 이면 워밍업으로 표시)
-# ARRIVAL_SECONDS(1): USERS 건의 요청이 이 시간(초) 동안 고르게 도착. 0 이면 USERS 명이 같은 순간에 요청(0단계~1단계 4차 방식, USERS 5000)
+# ARRIVAL_SECONDS(1): USERS 건의 요청이 이 시간(초) 동안 고르게 도착. 0 이면 USERS 명이 같은 순간에 요청(5000명 동시 조건: 0단계~1단계 4차, 2단계 GC 실험, USERS 5000)
 # K6_RUNNER: docker(기본) = Docker 네트워크 안 k6 컨테이너가 gateway:8080 에 직접 연결 / host = 호스트 k6 가 localhost:8080(Docker Desktop 포트 포워딩, 1단계 3차까지)
 # K6_IMAGE(grafana/k6:2.2.0) K6_NETWORK(e-commerce_default) K6_CPUS(4) K6_MEMORY(2g): docker 실행 시 k6 컨테이너 자원 한도(빈 값이면 제한 없음)
 set -euo pipefail

@@ -1,0 +1,7 @@
+services:
+  gateway:
+    deploy:
+      resources:
+        limits:
+          cpus: "8"
+          memory: 640m

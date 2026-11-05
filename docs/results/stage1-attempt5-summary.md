@@ -17,7 +17,7 @@
 
 ## 결과표
 
-아래는 `FROM=20261103-2210 scripts/summarize.sh` 출력 그대로다(기본 부하 조건 `USERS=500 ARRIVAL_SECONDS=1`).
+아래는 `FROM=20261103-2210 TO=20261103-2235 scripts/summarize.sh` 출력 그대로다(기본 부하 조건 `USERS=500 ARRIVAL_SECONDS=1`).
 열의 뜻은 `stage1-summary.md` 와 같다.
 
 | 구성 | 판정(3회) | paid | undersold | conflicts | timeouts | retries | p95(ms) | p99(ms) | rps | inventory 차감 서버 p95(ms) | MySQL 락 대기 횟수 | 평균 락 대기(ms) | inventory Hikari pending 최대 | inventory Tomcat busy 최대 | 결제 호출 수 |
@@ -30,7 +30,7 @@
 | optimistic-r2 | OK/OK/OK | 100 | 0 | 15 | 0 | 96 | 240.1 | 259.06 | 495.27 | 5.27 | 111 | 1.16 | 0 | 1 | 100 |
 | optimistic-r3 | OK/OK/OK | 100 | 0 | 12 | 0 | 120 | 238.51 | 257.87 | 496.69 | 5.97 | 131 | 1.12 | 0 | 1 | 100 |
 
-`*`: 일부 실행의 값이 `n/a`(Prometheus 1s 표본 없음, 또는 1단계 4차 이전이라 기록 없음)라 숫자인 실행만으로 계산한 값. Hikari·Tomcat 최댓값과 서버 p95 는 1s 표본 값이다.
+`*`: 일부 실행의 값이 `n/a`(Prometheus 1s 표본 없음, 또는 1단계 4차까지라 기록 없음)라 숫자인 실행만으로 계산한 값. Hikari·Tomcat 최댓값과 서버 p95 는 1s 표본 값이다.
 
 보조 표 (같은 실행): 끝단 값의 3회 범위(최소~최대)와 앞단 서비스 포화 지표의 중앙값
 

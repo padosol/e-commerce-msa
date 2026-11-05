@@ -1,0 +1,4 @@
+services:
+  gateway:
+    environment:
+      SERVER_TOMCAT_ACCEPTCOUNT: "4096"
