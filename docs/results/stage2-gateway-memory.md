@@ -2,7 +2,7 @@
 
 1단계 5차(500명이 1초 동안 요청, 재고 100)에서 게이트웨이는 640 MiB 한도에 닿아 swap 을 286 MiB 썼다.
 매트릭스 동안 메모리 한도에 1,642번 닿았다(`stage1-attempt5-environment.md`).
-2단계 진단(5000명 동시 조건, `feat/flash-sale-stage2-gc` 브랜치의 `docs/results/stage2-gateway-diagnosis/`)에서는 이 swap 때문에 게이트웨이 GC 가 0.4~1.8초씩 멈췄다.
+2단계 진단(5000명 동시 조건, `docs/results/stage2-gateway-diagnosis/`)에서는 이 swap 때문에 게이트웨이 GC 가 0.4~1.8초씩 멈췄다.
 그래서 게이트웨이만 swap 을 쓰지 않을 만큼 메모리를 준다. heap 크기와 GC 는 그대로 둔다.
 
 ## 바꾼 설정 (`compose.yaml` 의 gateway)
