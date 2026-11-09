@@ -1,4 +1,4 @@
-package com.flashsale.user.auth;
+package com.flashsale.user.adapter.out.token;
 
 import java.time.Duration;
 import org.springframework.boot.context.properties.ConfigurationProperties;

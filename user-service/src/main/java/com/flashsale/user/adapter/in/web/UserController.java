@@ -1,6 +1,6 @@
-package com.flashsale.user.api;
+package com.flashsale.user.adapter.in.web;
 
-import com.flashsale.user.UserService;
+import com.flashsale.user.application.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;

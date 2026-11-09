@@ -1,4 +1,4 @@
-package com.flashsale.user.auth;
+package com.flashsale.user.adapter.out.token;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

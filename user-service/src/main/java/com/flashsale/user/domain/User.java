@@ -1,60 +1,48 @@
 package com.flashsale.user.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import java.time.Instant;
 
-@Entity
-@Table(name = "users")
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final Long id;
+    private final String email;
+    private final String passwordHash;
+    private final String name;
+    private final Instant createdAt;
 
-    @Column(nullable = false)
-    private String email;
-
-    @Column(name = "password_hash", nullable = false, length = 100)
-    private String passwordHash;
-
-    @Column(nullable = false, length = 100)
-    private String name;
-
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
-
-    protected User() {
-    }
-
-    public User(String email, String passwordHash, String name) {
+    private User(Long id, String email, String passwordHash, String name, Instant createdAt) {
+        this.id = id;
         this.email = email;
         this.passwordHash = passwordHash;
         this.name = name;
-        this.createdAt = Instant.now();
+        this.createdAt = createdAt;
     }
 
-    public Long getId() {
+    public static User register(String email, String passwordHash, String name, Instant now) {
+        return new User(null, email, passwordHash, name, now);
+    }
+
+    public static User restore(long id, String email, String passwordHash, String name, Instant createdAt) {
+        return new User(id, email, passwordHash, name, createdAt);
+    }
+
+    public Long id() {
         return id;
     }
 
-    public String getEmail() {
+    public String email() {
         return email;
     }
 
-    public String getPasswordHash() {
+    public String passwordHash() {
         return passwordHash;
     }
 
-    public String getName() {
+    public String name() {
         return name;
     }
 
-    public Instant getCreatedAt() {
+    public Instant createdAt() {
         return createdAt;
     }
 }

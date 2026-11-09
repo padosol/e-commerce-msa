@@ -1,7 +1,7 @@
-package com.flashsale.user.api;
+package com.flashsale.user.adapter.in.web;
 
-import com.flashsale.user.UserService.EmailTakenException;
-import com.flashsale.user.UserService.InvalidCredentialsException;
+import com.flashsale.user.domain.EmailTakenException;
+import com.flashsale.user.domain.InvalidCredentialsException;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

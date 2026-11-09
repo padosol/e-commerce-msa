@@ -1,4 +1,4 @@
-package com.flashsale.user.api;
+package com.flashsale.user.adapter.in.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -6,8 +6,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.flashsale.user.TestcontainersConfiguration;
-import com.flashsale.user.auth.JwtProperties;
-import com.flashsale.user.domain.UserRepository;
+import com.flashsale.user.adapter.out.token.JwtProperties;
+import com.flashsale.user.adapter.out.persistence.UserJpaRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
@@ -34,7 +34,7 @@ class UserApiTest {
     MockMvc mvc;
 
     @Autowired
-    UserRepository repository;
+    UserJpaRepository repository;
 
     @Autowired
     JwtProperties jwtProperties;
