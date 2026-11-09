@@ -125,6 +125,7 @@ services:
       - "8085:8085"
     environment:
       DB_URL: jdbc:mysql://mysql:3306/payment_db
+      PAYMENT_FAILURE_RATE: ${PAYMENT_FAILURE_RATE:-0.1}
     depends_on:
       mysql:
         condition: service_healthy

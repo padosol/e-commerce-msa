@@ -130,7 +130,7 @@ RUNS=1 USERS=200 SALE_QUANTITY=20 scripts/run-matrix.sh conditional optimistic-r
 
 서비스 안 패키지: 각 서비스는 `com.flashsale.<service>` 아래 `domain`(순수 Java 도메인 클래스), `application`(서비스와 `port.out` 포트), `adapter.in`(웹 컨트롤러)·`adapter.out`(JPA·원격 호출 구현), `config` 로 나눈다. 의존 방향은 ArchUnit 테스트(`ArchitectureTest`)가 지킨다: `domain` 은 Spring·JPA 에 의존하지 않고, `application` 은 `adapter` 를 모른다.
 
-결제 실패율: fake PG 의 실패율 기본값은 10%(`0.1`)다. payment-service 의 `PAYMENT_FAILURE_RATE` 환경변수로 바꾼다. 선착순 측정과 `scripts/smoke*.sh` 는 실행 전에 실패율만 0 으로 고정한다(`smoke-shop.sh` 는 끝날 때 원래 설정으로 되돌린다). 그 밖의 경로(직접 호출, 화면 확인)에서는 10% 가 그대로 적용되어 결제가 가끔 거절된다.
+결제 실패율: fake PG 의 실패율 기본값은 10%(`0.1`)다. `PAYMENT_FAILURE_RATE=0.3 docker compose up -d payment-service` 처럼 바꾸거나, 실행 중에는 `PUT /internal/payments/config` 로 바꾼다. 선착순 측정과 `scripts/smoke*.sh` 는 실행 전에 실패율만 0 으로 고정한다(`smoke-shop.sh` 는 끝날 때 원래 설정으로 되돌린다). 그 밖의 경로(직접 호출, 화면 확인)에서는 10% 가 그대로 적용되어 결제가 가끔 거절된다.
 
 장바구니 주문의 일괄 차감(`inventory-service`)은 `INVENTORY_STRATEGY` 와 관계없이 항상 조건부 UPDATE 로 한다. 선착순 단건 주문만 위의 재고 전략을 따른다. 결제가 거절되면 차감한 재고를 전부 되돌리고, 성공하면 주문한 줄만 장바구니에서 지운다.
 
