@@ -14,6 +14,7 @@ class StubHttpServer implements AutoCloseable {
     private final HttpServer server;
     private final Map<String, AtomicInteger> hits = new ConcurrentHashMap<>();
     private final Map<String, String> lastBodies = new ConcurrentHashMap<>();
+    private final Map<String, String> lastQueries = new ConcurrentHashMap<>();
 
     StubHttpServer() {
         try {
@@ -31,6 +32,7 @@ class StubHttpServer implements AutoCloseable {
     StubHttpServer respond(String path, int status, String json, long delayMs) {
         server.createContext(path, exchange -> {
             hits.computeIfAbsent(path, k -> new AtomicInteger()).incrementAndGet();
+            lastQueries.put(path, String.valueOf(exchange.getRequestURI().getRawQuery()));
             lastBodies.put(path, new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8));
             try {
                 if (delayMs > 0) {
@@ -62,6 +64,10 @@ class StubHttpServer implements AutoCloseable {
 
     String lastBody(String path) {
         return lastBodies.get(path);
+    }
+
+    String lastQuery(String path) {
+        return lastQueries.get(path);
     }
 
     @Override

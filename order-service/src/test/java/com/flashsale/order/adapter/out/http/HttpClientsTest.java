@@ -3,6 +3,7 @@ package com.flashsale.order.adapter.out.http;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.flashsale.order.application.port.out.CatalogProduct;
 import com.flashsale.order.application.port.out.DownstreamException;
 import com.flashsale.order.application.port.out.EventInfo;
 import com.flashsale.order.application.port.out.EventNotFoundException;
@@ -13,6 +14,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.client.RestClient;
@@ -63,6 +65,38 @@ class HttpClientsTest {
             assertThat(info.productName()).isEqualTo("Sneakers");
             assertThat(info).isEqualTo(
                     new EventInfo(3, 4, "Sneakers", 59000, Instant.parse("2026-11-01T10:00:00Z"), 100));
+        }
+    }
+
+    @Test
+    void findListedSendsIdsAndParsesProducts() {
+        String json = "[{\"productId\":7,\"name\":\"A\",\"price\":1000},{\"productId\":8,\"name\":\"B\",\"price\":500}]";
+        try (StubHttpServer stub = new StubHttpServer().respond("/internal/products", 200, json)) {
+            ProductHttpClient client = new ProductHttpClient(restClient(stub.baseUrl(), READ));
+
+            List<CatalogProduct> products = client.findListed(List.of(7L, 8L));
+
+            assertThat(stub.lastQuery("/internal/products")).isEqualTo("ids=7,8");
+            assertThat(products).containsExactly(new CatalogProduct(7, "A", 1000), new CatalogProduct(8, "B", 500));
+        }
+    }
+
+    @Test
+    void findListedWithNoIdsMakesNoCall() {
+        try (StubHttpServer stub = new StubHttpServer().respond("/internal/products", 200, "[]")) {
+            ProductHttpClient client = new ProductHttpClient(restClient(stub.baseUrl(), READ));
+
+            assertThat(client.findListed(List.of())).isEmpty();
+            assertThat(stub.hits("/internal/products")).isZero();
+        }
+    }
+
+    @Test
+    void findListedFailureIsDownstreamError() {
+        try (StubHttpServer stub = new StubHttpServer().respond("/internal/products", 500, "{}")) {
+            ProductHttpClient client = new ProductHttpClient(restClient(stub.baseUrl(), READ));
+
+            assertThatThrownBy(() -> client.findListed(List.of(7L))).isInstanceOf(DownstreamException.class);
         }
     }
 
