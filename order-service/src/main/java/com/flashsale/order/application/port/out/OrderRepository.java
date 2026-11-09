@@ -3,6 +3,7 @@ package com.flashsale.order.application.port.out;
 import com.flashsale.order.domain.FailReason;
 import com.flashsale.order.domain.Order;
 import com.flashsale.order.domain.OrderStatus;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -15,6 +16,14 @@ public interface OrderRepository {
     Order save(Order order);
 
     Optional<Order> findById(long orderId);
+
+    /** One page of a user's orders with their lines, newest (highest id) first, read with a fixed number of queries. */
+    List<Order> findByUserId(long userId, int page, int size);
+
+    long countByUserId(long userId);
+
+    /** Empty when the order does not exist or belongs to another user. */
+    Optional<Order> findByIdAndUserId(long orderId, long userId);
 
     /** Order counts per status for one event; statuses with no orders are absent. */
     Map<OrderStatus, Long> countByStatus(long eventId);

@@ -5,8 +5,10 @@ import com.flashsale.order.domain.FailReason;
 import com.flashsale.order.domain.Order;
 import com.flashsale.order.domain.OrderStatus;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +41,26 @@ class OrderPersistenceAdapter implements OrderRepository {
     @Override
     public Optional<Order> findById(long orderId) {
         return jpa.findWithLinesById(orderId).map(OrderJpaEntity::toDomain);
+    }
+
+    /** Two queries whatever the page size: the page of ids, then those orders with their lines. */
+    @Override
+    public List<Order> findByUserId(long userId, int page, int size) {
+        List<Long> ids = jpa.findIdsByUserId(userId, PageRequest.of(page, size));
+        if (ids.isEmpty()) {
+            return List.of();
+        }
+        return jpa.findWithLinesByIdIn(ids).stream().map(OrderJpaEntity::toDomain).toList();
+    }
+
+    @Override
+    public long countByUserId(long userId) {
+        return jpa.countByUserId(userId);
+    }
+
+    @Override
+    public Optional<Order> findByIdAndUserId(long orderId, long userId) {
+        return jpa.findWithLinesByIdAndUserId(orderId, userId).map(OrderJpaEntity::toDomain);
     }
 
     @Override

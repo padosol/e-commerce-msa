@@ -4,14 +4,19 @@ import com.flashsale.order.application.EventNotOpenException;
 import com.flashsale.order.application.PreOrderFailedException;
 import com.flashsale.order.application.port.out.DownstreamException;
 import com.flashsale.order.application.port.out.EventNotFoundException;
+import com.flashsale.order.domain.OrderNotFoundException;
+import jakarta.validation.ConstraintViolationException;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -43,7 +48,14 @@ public class ApiExceptionHandler {
         return body(HttpStatus.BAD_GATEWAY, "DOWNSTREAM_ERROR", e.getMessage());
     }
 
-    @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class})
+    @ExceptionHandler(OrderNotFoundException.class)
+    ResponseEntity<Map<String, String>> orderNotFound(OrderNotFoundException e) {
+        return body(HttpStatus.NOT_FOUND, "ORDER_NOT_FOUND", e.getMessage());
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class,
+        HandlerMethodValidationException.class, ConstraintViolationException.class,
+        MissingServletRequestParameterException.class, MethodArgumentTypeMismatchException.class})
     ResponseEntity<Map<String, String>> invalid(Exception e) {
         return body(HttpStatus.BAD_REQUEST, "INVALID_REQUEST", "request is invalid");
     }
