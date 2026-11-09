@@ -9,6 +9,7 @@ import com.flashsale.order.application.port.out.EventInfo;
 import com.flashsale.order.application.port.out.EventNotFoundException;
 import com.flashsale.order.application.port.out.PaymentOutcome;
 import com.flashsale.order.application.port.out.StockDecreaseResult;
+import com.flashsale.order.application.port.out.StockLine;
 import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -39,6 +40,52 @@ class HttpClientsTest {
 
             assertThat(client.decrease(7, 1)).isEqualTo(StockDecreaseResult.OUT_OF_STOCK);
             assertThat(stub.lastBody("/internal/inventory/7/decrease")).isEqualTo("{\"quantity\":1}");
+        }
+    }
+
+    @Test
+    void decreaseAllSendsItemsAndParsesResult() {
+        try (StubHttpServer stub = new StubHttpServer()
+                .respond("/internal/inventory/decrease-all", 200, "{\"result\":\"OUT_OF_STOCK\"}")) {
+            InventoryHttpClient client = new InventoryHttpClient(restClient(stub.baseUrl(), READ));
+
+            assertThat(client.decreaseAll(List.of(new StockLine(1, 2), new StockLine(2, 1))))
+                    .isEqualTo(StockDecreaseResult.OUT_OF_STOCK);
+            assertThat(stub.lastBody("/internal/inventory/decrease-all")).isEqualTo(
+                    "{\"items\":[{\"productId\":1,\"quantity\":2},{\"productId\":2,\"quantity\":1}]}");
+        }
+    }
+
+    @Test
+    void decreaseAllErrorIsDownstreamException() {
+        try (StubHttpServer stub = new StubHttpServer().respond("/internal/inventory/decrease-all", 400, "{}")) {
+            InventoryHttpClient client = new InventoryHttpClient(restClient(stub.baseUrl(), READ));
+
+            assertThatThrownBy(() -> client.decreaseAll(List.of(new StockLine(1, 2))))
+                    .isInstanceOf(DownstreamException.class);
+        }
+    }
+
+    @Test
+    void increaseAllSendsItems() {
+        try (StubHttpServer stub = new StubHttpServer().respond("/internal/inventory/increase-all", 204, "")) {
+            InventoryHttpClient client = new InventoryHttpClient(restClient(stub.baseUrl(), READ));
+
+            client.increaseAll(List.of(new StockLine(1, 2), new StockLine(2, 1)));
+
+            assertThat(stub.hits("/internal/inventory/increase-all")).isEqualTo(1);
+            assertThat(stub.lastBody("/internal/inventory/increase-all")).isEqualTo(
+                    "{\"items\":[{\"productId\":1,\"quantity\":2},{\"productId\":2,\"quantity\":1}]}");
+        }
+    }
+
+    @Test
+    void increaseAllNotFoundIsDownstreamException() {
+        try (StubHttpServer stub = new StubHttpServer().respond("/internal/inventory/increase-all", 404, "{}")) {
+            InventoryHttpClient client = new InventoryHttpClient(restClient(stub.baseUrl(), READ));
+
+            assertThatThrownBy(() -> client.increaseAll(List.of(new StockLine(1, 2))))
+                    .isInstanceOf(DownstreamException.class);
         }
     }
 

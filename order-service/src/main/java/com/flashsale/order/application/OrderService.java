@@ -12,7 +12,6 @@ import com.flashsale.order.domain.FailReason;
 import com.flashsale.order.domain.Order;
 import com.flashsale.order.domain.OrderLine;
 import com.flashsale.order.domain.OrderStatus;
-import java.sql.SQLTransientConnectionException;
 import java.time.Clock;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +60,7 @@ public class OrderService {
         try {
             orderId = orderWriter.createPending(pending).id();
         } catch (RuntimeException e) {
-            if (causedByConnectionTimeout(e)) {
+            if (ConnectionTimeouts.isCausing(e)) {
                 throw preOrderFailed(eventId, FailReason.ORDER_DB_TIMEOUT, e);
             }
             throw e;
@@ -125,14 +124,5 @@ public class OrderService {
     private PreOrderFailedException preOrderFailed(long eventId, FailReason reason, Throwable cause) {
         preOrderFailures.record(eventId, reason);
         return new PreOrderFailedException(reason, cause);
-    }
-
-    private static boolean causedByConnectionTimeout(Throwable e) {
-        for (Throwable t = e; t != null; t = t.getCause() == t ? null : t.getCause()) {
-            if (t instanceof SQLTransientConnectionException) {
-                return true;
-            }
-        }
-        return false;
     }
 }

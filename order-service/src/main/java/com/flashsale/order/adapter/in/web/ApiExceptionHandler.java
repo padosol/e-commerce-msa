@@ -1,5 +1,6 @@
 package com.flashsale.order.adapter.in.web;
 
+import com.flashsale.order.application.CartEmptyException;
 import com.flashsale.order.application.EventNotOpenException;
 import com.flashsale.order.application.PreOrderFailedException;
 import com.flashsale.order.application.ProductUnavailableException;
@@ -59,6 +60,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler(ProductUnavailableException.class)
     ResponseEntity<Map<String, String>> productUnavailable(ProductUnavailableException e) {
         return body(HttpStatus.BAD_REQUEST, "PRODUCT_UNAVAILABLE", e.getMessage());
+    }
+
+    @ExceptionHandler(CartEmptyException.class)
+    ResponseEntity<Map<String, String>> cartEmpty(CartEmptyException e) {
+        return body(HttpStatus.BAD_REQUEST, "CART_EMPTY", e.getMessage());
     }
 
     @ExceptionHandler(CartFullException.class)

@@ -3,6 +3,8 @@ package com.flashsale.order.adapter.out.http;
 import com.flashsale.order.application.port.out.DownstreamException;
 import com.flashsale.order.application.port.out.InventoryPort;
 import com.flashsale.order.application.port.out.StockDecreaseResult;
+import com.flashsale.order.application.port.out.StockLine;
+import java.util.List;
 import java.util.Map;
 import org.springframework.web.client.RestClient;
 
@@ -56,6 +58,48 @@ public class InventoryHttpClient implements InventoryPort {
             throw e;
         } catch (RuntimeException e) {
             throw new DownstreamException("inventory increase failed: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public StockDecreaseResult decreaseAll(List<StockLine> lines) {
+        try {
+            DecreaseResponse body = restClient.post()
+                    .uri("/internal/inventory/decrease-all")
+                    .body(Map.of("items", lines))
+                    .exchange((req, res) -> {
+                        if (!res.getStatusCode().is2xxSuccessful()) {
+                            throw new DownstreamException("inventory-service returned " + res.getStatusCode().value());
+                        }
+                        return res.bodyTo(DecreaseResponse.class);
+                    });
+            if (body == null || body.result() == null) {
+                throw new DownstreamException("inventory-service returned empty result");
+            }
+            return body.result();
+        } catch (DownstreamException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            throw new DownstreamException("inventory decrease-all failed: " + e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public void increaseAll(List<StockLine> lines) {
+        try {
+            restClient.post()
+                    .uri("/internal/inventory/increase-all")
+                    .body(Map.of("items", lines))
+                    .exchange((req, res) -> {
+                        if (!res.getStatusCode().is2xxSuccessful()) {
+                            throw new DownstreamException("inventory-service returned " + res.getStatusCode().value());
+                        }
+                        return null;
+                    });
+        } catch (DownstreamException e) {
+            throw e;
+        } catch (RuntimeException e) {
+            throw new DownstreamException("inventory increase-all failed: " + e.getMessage(), e);
         }
     }
 }

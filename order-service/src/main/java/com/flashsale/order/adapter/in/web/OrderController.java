@@ -6,7 +6,6 @@ import com.flashsale.order.application.OrderService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +34,7 @@ public class OrderController {
     ResponseEntity<OrderResponse> place(@RequestHeader("X-User-Id") long userId,
                                         @Valid @RequestBody PlaceOrderRequest request) {
         OrderResult result = orderService.placeOrder(userId, request.eventId());
-        return ResponseEntity.status(statusOf(result)).body(OrderResponse.from(result));
+        return ResponseEntity.status(FailReasonStatus.of(result)).body(OrderResponse.from(result));
     }
 
     @GetMapping
@@ -48,13 +47,5 @@ public class OrderController {
     @GetMapping("/{orderId}")
     OrderHistoryResponses.Detail get(@RequestHeader("X-User-Id") long userId, @PathVariable long orderId) {
         return OrderHistoryResponses.Detail.from(queryService.myOrder(userId, orderId));
-    }
-
-    private static HttpStatus statusOf(OrderResult r) {
-        return switch (r.status()) {
-            case PAID -> HttpStatus.CREATED;
-            case FAILED -> FailReasonStatus.of(r.reason());
-            case PENDING -> HttpStatus.INTERNAL_SERVER_ERROR;
-        };
     }
 }
