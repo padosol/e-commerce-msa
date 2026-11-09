@@ -22,4 +22,10 @@ public class ApiExceptionHandler {
         return ResponseEntity.badRequest()
             .body(Map.of("code", "INVALID_REQUEST", "message", "quantity is out of range"));
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    ResponseEntity<Map<String, String>> illegalArgument(IllegalArgumentException e) {
+        return ResponseEntity.badRequest()
+            .body(Map.of("code", "INVALID_REQUEST", "message", e.getMessage()));
+    }
 }

@@ -49,6 +49,17 @@ public class InventoryController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/inventory/decrease-all")
+    public DecreaseResponse decreaseAll(@Valid @RequestBody BatchStockRequest request) {
+        return new DecreaseResponse(service.decreaseAll(request.toLines()));
+    }
+
+    @PostMapping("/inventory/increase-all")
+    public ResponseEntity<Void> increaseAll(@Valid @RequestBody BatchStockRequest request) {
+        service.increaseAll(request.toLines());
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/inventory/stats")
     public StockStatsResponse stats() {
         StockStats.Snapshot snapshot = stats.snapshot();
