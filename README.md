@@ -105,6 +105,48 @@ RUNS=1 USERS=200 SALE_QUANTITY=20 scripts/run-matrix.sh conditional optimistic-r
 - 판정 규칙 테스트: `scripts/test-verdict.sh`
 - k6 응답 분류 테스트: `k6 run --quiet load-test/k6/classify-test.js`
 
+## 2단계: 이커머스 기본 기능
+
+선착순 실험을 다 마친 뒤 로드맵을 바꿔 일반 쇼핑 흐름(상품 조회, 장바구니, 장바구니 주문, 주문 내역)을 붙였다. 위의 "2단계 GC 실험"·"2단계: 게이트웨이 메모리" 는 로드맵을 바꾸기 전 1단계 브랜치에서 한 추가 실험이다. 이름이 같아도 이 절과는 다르며, 그 절의 제목은 그대로 둔다. Redis 단계는 근거가 생길 때까지 보류한다.
+
+사용자 API (게이트웨이 `localhost:8080`, `/api/users/*` 와 `GET /api/products*` 를 뺀 나머지는 `Authorization: Bearer <accessToken>` 필요):
+
+| 메서드·경로 | 설명 |
+|---|---|
+| `POST /api/users/signup` | `{email,password,name}` -> 201 `{userId}` |
+| `POST /api/users/login` | `{email,password}` -> 200 `{accessToken}` |
+| `GET /api/products?page=0&size=20` | 상품 목록 `{products:[{productId,name,price}],page,size,total}` |
+| `GET /api/products/{id}` | 상품 상세. 이벤트 상품과 없는 상품은 404 `PRODUCT_NOT_FOUND` |
+| `GET /api/cart` | 장바구니 `{items:[{productId,name,unitPrice,quantity,subtotal,available}],total}` |
+| `PUT /api/cart/items/{productId}` | `{quantity}`(1~99)로 담기·수량 바꾸기. 살 수 없는 상품은 400 `PRODUCT_UNAVAILABLE`. 서로 다른 상품은 100개까지 |
+| `DELETE /api/cart/items/{productId}` | 장바구니에서 빼기 -> 204 |
+| `POST /api/cart/checkout` | 장바구니 주문 `{orderId,status,reason}`. 201 `PAID`, 결제 거절 402 `PAYMENT_DECLINED`, 빈 장바구니 400 `CART_EMPTY` |
+| `GET /api/orders?page=0&size=20` | 내 주문 목록(최신순) `{orders:[{orderId,status,reason,amount,createdAt,itemCount,firstProductName}],page,size,total}` |
+| `GET /api/orders/{id}` | 주문 상세(`items` 포함). 없으면 404 `ORDER_NOT_FOUND` |
+| `POST /api/orders` | 1단계 선착순 주문 `{eventId}`. 측정 스크립트가 쓰므로 그대로다 |
+
+`page` 는 0 이상, `size` 는 1~100 이고 범위 밖이면 400 `INVALID_REQUEST` 다.
+일반 상품은 `POST /internal/products`(product-service, 게이트웨이 밖)로 만든다. `scripts/lib.sh` 의 `create_product <name> <price>` 가 이 호출을 감싼다.
+
+서비스 안 패키지: 각 서비스는 `com.flashsale.<service>` 아래 `domain`(순수 Java 도메인 클래스), `application`(서비스와 `port.out` 포트), `adapter.in`(웹 컨트롤러)·`adapter.out`(JPA·원격 호출 구현), `config` 로 나눈다. 의존 방향은 ArchUnit 테스트(`ArchitectureTest`)가 지킨다: `domain` 은 Spring·JPA 에 의존하지 않고, `application` 은 `adapter` 를 모른다.
+
+결제 실패율: fake PG 의 실패율 기본값은 10%(`0.1`)다. payment-service 의 `PAYMENT_FAILURE_RATE` 환경변수로 바꾼다. 선착순 측정과 `scripts/smoke*.sh` 는 실행 전에 실패율만 0 으로 고정한다(`smoke-shop.sh` 는 끝날 때 원래 설정으로 되돌린다). 그 밖의 경로(직접 호출, 화면 확인)에서는 10% 가 그대로 적용되어 결제가 가끔 거절된다.
+
+장바구니 주문의 일괄 차감(`inventory-service`)은 `INVENTORY_STRATEGY` 와 관계없이 항상 조건부 UPDATE 로 한다. 선착순 단건 주문만 위의 재고 전략을 따른다. 결제가 거절되면 차감한 재고를 전부 되돌리고, 성공하면 주문한 줄만 장바구니에서 지운다.
+
+### 사용자 흐름 스모크
+
+```bash
+./gradlew bootJar
+docker compose up -d --build      # service.Dockerfile 이 미리 빌드한 jar 를 복사하므로 bootJar 가 먼저다
+scripts/smoke.sh                  # SMOKE OK (선착순 주문 1건)
+scripts/smoke-shop.sh             # SHOP SMOKE OK
+```
+
+`scripts/smoke-shop.sh` 는 게이트웨이로 회원가입·로그인, 상품 조회, 장바구니 담기, 결제 거절(재고·장바구니 그대로), 결제 성공(재고 차감·장바구니 비움), 주문 내역 조회를 차례로 확인한다. 실패하면 `SHOP SMOKE FAIL: <단계> <http 코드> <본문 앞 300자>` 를 찍고 exit 1 이다. 매번 새 이메일과 새 상품을 쓰므로 연달아 돌려도 된다. 끝나면 결제 설정을 시작할 때 값으로 되돌린다. 이전 스택이 떠 있어도 `up -d --build` 하면 Flyway 마이그레이션이 기존 볼륨에 적용된다.
+
+호스트의 8080(또는 9090/3000/3306) 포트가 다른 프로그램에 쓰이고 있으면 compose override 파일로 게이트웨이 등의 호스트 포트를 옮기고, 스크립트에는 `GATEWAY_URL`(Prometheus 는 `PROMETHEUS_URL`)을 그 주소로 지정한다. 예: `GATEWAY_URL=http://localhost:18080 scripts/smoke-shop.sh`. override 파일은 저장소에 넣지 않았다.
+
 ## 모니터링
 
 - Grafana: http://localhost:3000/d/flash-sale (익명 접근)

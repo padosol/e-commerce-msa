@@ -40,6 +40,13 @@ create_event() {
     | jq -r '"\(.eventId) \(.productId)"'
 }
 
+# create_product <name> <price> : 일반 상품을 만들고 productId 를 출력한다.
+create_product() {
+  curl -fsS -X POST "$PRODUCT_URL/internal/products" \
+    -H 'Content-Type: application/json' \
+    -d "{\"name\":\"$1\",\"price\":$2}" | jq -r '.productId'
+}
+
 set_stock() {
   curl -fsS -X PUT "$INVENTORY_URL/internal/inventory/$1" \
     -H 'Content-Type: application/json' \
