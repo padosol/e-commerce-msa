@@ -99,6 +99,28 @@ class GatewayRoutingTest {
     }
 
     @Test
+    void cartWithoutTokenReturn401AndSkipDownstream() throws Exception {
+        HttpResponse<String> response = send("GET", "/api/cart");
+
+        assertThat(response.statusCode()).isEqualTo(401);
+        assertThat(JSON.readTree(response.body()).get("code").asString()).isEqualTo("UNAUTHORIZED");
+        assertThat(ORDER.hits()).isZero();
+    }
+
+    @Test
+    void cartWithValidTokenForwardsUserId() throws Exception {
+        String t = token("42", key(secret), Instant.now().plusSeconds(600));
+
+        HttpResponse<String> response = send("GET", "/api/cart/items/7", "Authorization", "Bearer " + t);
+
+        assertThat(response.statusCode()).isEqualTo(200);
+        JsonNode body = JSON.readTree(response.body());
+        assertThat(body.get("userId").asString()).isEqualTo("42");
+        assertThat(body.get("path").asString()).isEqualTo("/api/cart/items/7");
+        assertThat(ORDER.hits()).isEqualTo(1);
+    }
+
+    @Test
     void clientSuppliedUserIdIsReplaced() throws Exception {
         String t = token("42", key(secret), Instant.now().plusSeconds(600));
 

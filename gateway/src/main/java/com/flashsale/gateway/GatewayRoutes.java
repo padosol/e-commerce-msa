@@ -46,7 +46,7 @@ public class GatewayRoutes {
     @Bean
     RouterFunction<ServerResponse> orderRoute(GatewayProperties props, JwtVerifier verifier) {
         return route("order-service")
-            .route(path("/api/orders/**"), http())
+            .route(path("/api/orders/**").or(path("/api/cart/**")), http())
             .filter(authenticate(verifier))
             .filter(downstreamTimeout())
             .before(uri(props.orderUri()))
