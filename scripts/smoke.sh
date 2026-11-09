@@ -3,6 +3,7 @@ set -euo pipefail
 source "$(dirname "$0")/lib.sh"
 
 wait_healthy
+set_payment_failure_rate 0 || { echo "결제 실패율을 0 으로 고정하지 못했다" >&2; exit 1; }
 reset_data
 read -r event_id product_id <<<"$(create_event 1)"
 set_stock "$product_id" 1

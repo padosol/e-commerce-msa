@@ -1,4 +1,4 @@
-package com.flashsale.payment.api;
+package com.flashsale.payment.adapter.in.web;
 
 import java.util.Map;
 import org.springframework.http.ResponseEntity;

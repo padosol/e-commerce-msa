@@ -1,16 +1,12 @@
-package com.flashsale.payment.api;
+package com.flashsale.payment.adapter.in.web;
 
-import com.flashsale.payment.PaymentResult;
-import com.flashsale.payment.PaymentService;
-import com.flashsale.payment.domain.PaymentRepository;
-import com.flashsale.payment.simulation.PaymentSimulator;
-import com.flashsale.payment.simulation.SimulationConfig;
+import com.flashsale.payment.application.PaymentResult;
+import com.flashsale.payment.application.PaymentService;
+import com.flashsale.payment.application.port.out.PaymentRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,12 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class PaymentController {
 
     private final PaymentService service;
-    private final PaymentSimulator simulator;
     private final PaymentRepository repository;
 
-    public PaymentController(PaymentService service, PaymentSimulator simulator, PaymentRepository repository) {
+    public PaymentController(PaymentService service, PaymentRepository repository) {
         this.service = service;
-        this.simulator = simulator;
         this.repository = repository;
     }
 
@@ -35,20 +29,9 @@ public class PaymentController {
         return new PayResponse(result.paymentId(), result.status());
     }
 
-    @GetMapping("/config")
-    public SimulationConfig getConfig() {
-        return simulator.current();
-    }
-
-    @PutMapping("/config")
-    public SimulationConfig putConfig(@Valid @RequestBody ConfigRequest request) {
-        simulator.update(request.toConfig());
-        return simulator.current();
-    }
-
     @DeleteMapping
     public ResponseEntity<Void> deleteAll() {
-        repository.deleteAllInBatch();
+        repository.deleteAll();
         return ResponseEntity.noContent().build();
     }
 }

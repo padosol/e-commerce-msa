@@ -60,6 +60,14 @@ payment_config() {
   curl -fsS "$PAYMENT_URL/internal/payments/config"
 }
 
+# set_payment_failure_rate <rate> : 지금 설정을 GET 해서 failureRate 만 바꿔 PUT 한다. 실패하면 비-0.
+set_payment_failure_rate() {
+  local cfg
+  cfg=$(payment_config | jq -c --argjson r "$1" '.failureRate = $r') || return 1
+  curl -fsS -X PUT "$PAYMENT_URL/internal/payments/config" \
+    -H 'Content-Type: application/json' -d "$cfg" >/dev/null
+}
+
 order_stats() {
   curl -fsS "$ORDER_URL/internal/orders/stats?eventId=$1"
 }

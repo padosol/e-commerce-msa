@@ -1,4 +1,4 @@
-package com.flashsale.payment.api;
+package com.flashsale.payment.adapter.in.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -9,10 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.flashsale.payment.TestcontainersConfiguration;
-import com.flashsale.payment.domain.PaymentRepository;
+import com.flashsale.payment.adapter.out.persistence.PaymentJpaRepository;
 import com.flashsale.payment.domain.PaymentStatus;
-import com.flashsale.payment.simulation.PaymentSimulator;
-import com.flashsale.payment.simulation.SimulationConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +30,11 @@ class PaymentControllerTest {
     MockMvc mvc;
 
     @Autowired
-    PaymentRepository repository;
-
-    @Autowired
-    PaymentSimulator simulator;
+    PaymentJpaRepository repository;
 
     @BeforeEach
-    void reset() {
-        simulator.update(new SimulationConfig(0, 0, 0.0));
+    void reset() throws Exception {
+        putConfig("{\"delayMs\":0,\"jitterMs\":0,\"failureRate\":0.0}").andExpect(status().isOk());
         repository.deleteAll();
     }
 

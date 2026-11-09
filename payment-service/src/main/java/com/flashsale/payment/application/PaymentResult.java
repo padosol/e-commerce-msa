@@ -1,4 +1,4 @@
-package com.flashsale.payment;
+package com.flashsale.payment.application;
 
 import com.flashsale.payment.domain.PaymentStatus;
 

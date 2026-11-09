@@ -1,4 +1,4 @@
-package com.flashsale.payment.api;
+package com.flashsale.payment.adapter.in.web;
 
 import jakarta.validation.constraints.NotNull;
 

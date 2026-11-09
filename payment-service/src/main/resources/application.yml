@@ -19,6 +19,7 @@ management:
   metrics.distribution.percentiles-histogram.http.server.requests: true
 
 payment:
+  gateway: ${PAYMENT_GATEWAY:fake}
   delay-ms: 200
   jitter-ms: 50
-  failure-rate: 0.0
+  failure-rate: ${PAYMENT_FAILURE_RATE:0.1}
