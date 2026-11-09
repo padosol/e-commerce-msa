@@ -90,6 +90,35 @@ class CartApiTest {
     }
 
     @Test
+    void linesAreListedByProductIdWhateverTheAddOrder() throws Exception {
+        listing(A, B);
+        addItem(1, 2, 1);
+        addItem(1, 1, 1);
+
+        mvc.perform(get("/api/cart").header("X-User-Id", 1))
+                .andExpect(jsonPath("$.items[0].productId").value(1))
+                .andExpect(jsonPath("$.items[1].productId").value(2));
+    }
+
+    @Test
+    void the101stProductReturns400AndLeavesCartUnchanged() throws Exception {
+        for (long id = 1; id <= 100; id++) {
+            jdbc.update("INSERT INTO cart_items (user_id, product_id, quantity) VALUES (1, ?, 1)", id);
+        }
+        listing(new CatalogProduct(101, "Z", 100));
+
+        mvc.perform(put("/api/cart/items/101").header("X-User-Id", 1)
+                .contentType(MediaType.APPLICATION_JSON).content("{\"quantity\":1}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("INVALID_REQUEST"))
+                .andExpect(jsonPath("$.message").value("cart can hold at most 100 products"));
+
+        org.assertj.core.api.Assertions.assertThat(
+                jdbc.queryForObject("SELECT COUNT(*) FROM cart_items WHERE user_id = 1", Integer.class))
+                .isEqualTo(100);
+    }
+
+    @Test
     void putReturnsTheCart() throws Exception {
         mvc.perform(put("/api/cart/items/1").header("X-User-Id", 1)
                 .contentType(MediaType.APPLICATION_JSON).content("{\"quantity\":3}"))

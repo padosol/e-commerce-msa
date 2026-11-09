@@ -41,4 +41,26 @@ class CartTest {
 
         assertThat(cart.items()).containsExactly(new CartItem(8, 1));
     }
+
+    @Test
+    void itemsAreOrderedByProductId() {
+        Cart cart = Cart.empty(1);
+        cart.put(9, 1);
+        cart.put(2, 3);
+
+        assertThat(cart.items()).containsExactly(new CartItem(2, 3), new CartItem(9, 1));
+    }
+
+    @Test
+    void the101stDistinctProductIsRejected() {
+        Cart cart = Cart.empty(1);
+        for (long id = 1; id <= 100; id++) {
+            cart.put(id, 1);
+        }
+
+        assertThatThrownBy(() -> cart.put(101, 1)).isInstanceOf(CartFullException.class);
+        cart.put(100, 5);
+        assertThat(cart.items()).hasSize(100);
+        assertThat(cart.items().get(99)).isEqualTo(new CartItem(100, 5));
+    }
 }

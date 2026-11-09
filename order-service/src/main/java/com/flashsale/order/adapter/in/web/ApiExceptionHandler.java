@@ -5,6 +5,7 @@ import com.flashsale.order.application.PreOrderFailedException;
 import com.flashsale.order.application.ProductUnavailableException;
 import com.flashsale.order.application.port.out.DownstreamException;
 import com.flashsale.order.application.port.out.EventNotFoundException;
+import com.flashsale.order.domain.CartFullException;
 import com.flashsale.order.domain.InvalidQuantityException;
 import com.flashsale.order.domain.OrderNotFoundException;
 import jakarta.validation.ConstraintViolationException;
@@ -58,6 +59,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler(ProductUnavailableException.class)
     ResponseEntity<Map<String, String>> productUnavailable(ProductUnavailableException e) {
         return body(HttpStatus.BAD_REQUEST, "PRODUCT_UNAVAILABLE", e.getMessage());
+    }
+
+    @ExceptionHandler(CartFullException.class)
+    ResponseEntity<Map<String, String>> cartFull(CartFullException e) {
+        return body(HttpStatus.BAD_REQUEST, "INVALID_REQUEST", e.getMessage());
     }
 
     @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class,
