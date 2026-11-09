@@ -22,7 +22,7 @@ public class EventService {
 
     @Transactional
     public FlashSaleEvent create(String productName, long price, Instant openAt, int saleQuantity) {
-        Product product = products.save(Product.create(productName, price));
+        Product product = products.save(Product.unlisted(productName, price));
         return events.save(FlashSaleEvent.create(product, openAt, saleQuantity));
     }
 

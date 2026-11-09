@@ -22,6 +22,9 @@ public class ProductJpaEntity {
     @Column(nullable = false)
     private long price;
 
+    @Column(nullable = false)
+    private boolean listed;
+
     protected ProductJpaEntity() {
     }
 
@@ -30,10 +33,11 @@ public class ProductJpaEntity {
         entity.id = product.id();
         entity.name = product.name();
         entity.price = product.price();
+        entity.listed = product.listed();
         return entity;
     }
 
     Product toDomain() {
-        return Product.restore(id, name, price);
+        return Product.restore(id, name, price, listed);
     }
 }
