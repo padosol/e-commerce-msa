@@ -2,6 +2,7 @@ package com.flashsale.inventory.adapter.in.web;
 
 import com.flashsale.inventory.domain.InventoryNotFoundException;
 import java.util.Map;
+import java.util.Objects;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -26,6 +27,6 @@ public class ApiExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     ResponseEntity<Map<String, String>> illegalArgument(IllegalArgumentException e) {
         return ResponseEntity.badRequest()
-            .body(Map.of("code", "INVALID_REQUEST", "message", e.getMessage()));
+            .body(Map.of("code", "INVALID_REQUEST", "message", Objects.requireNonNullElse(e.getMessage(), "request is invalid")));
     }
 }

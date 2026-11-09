@@ -12,6 +12,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
@@ -30,7 +31,7 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler({MethodArgumentNotValidException.class, HttpMessageNotReadableException.class,
         HandlerMethodValidationException.class, ConstraintViolationException.class,
-        MissingServletRequestParameterException.class})
+        MissingServletRequestParameterException.class, MethodArgumentTypeMismatchException.class})
     ResponseEntity<Map<String, String>> invalid(Exception e) {
         return ResponseEntity.badRequest()
             .body(Map.of("code", "INVALID_REQUEST", "message", "request is invalid"));

@@ -121,6 +121,13 @@ class ProductApiTest {
     }
 
     @Test
+    void nonNumericIdReturns400() throws Exception {
+        mvc.perform(get("/api/products/abc"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("INVALID_REQUEST"));
+    }
+
+    @Test
     void sizeOver100Returns400() throws Exception {
         mvc.perform(get("/api/products").param("size", "101"))
             .andExpect(status().isBadRequest())

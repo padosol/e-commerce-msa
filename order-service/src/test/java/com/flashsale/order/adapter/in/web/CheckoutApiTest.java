@@ -20,6 +20,7 @@ import com.flashsale.order.application.port.out.PaymentPort;
 import com.flashsale.order.application.port.out.ProductPort;
 import com.flashsale.order.application.port.out.StockDecreaseResult;
 import com.flashsale.order.application.port.out.StockLine;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +33,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -114,5 +116,29 @@ class CheckoutApiTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("CART_EMPTY"));
         assertThat(jdbc.queryForObject("SELECT COUNT(*) FROM orders", Integer.class)).isZero();
+    }
+
+    @Test
+    void remoteCallsRunOutsideTransactions() throws Exception {
+        List<Boolean> active = new ArrayList<>();
+        doAnswer(inv -> {
+            active.add(TransactionSynchronizationManager.isActualTransactionActive());
+            Collection<Long> ids = inv.getArgument(0);
+            return List.of(A, B).stream().filter(p -> ids.contains(p.productId())).toList();
+        }).when(productPort).findListed(any());
+        when(inventoryPort.decreaseAll(anyList())).thenAnswer(inv -> {
+            active.add(TransactionSynchronizationManager.isActualTransactionActive());
+            return StockDecreaseResult.SUCCESS;
+        });
+        when(paymentPort.pay(anyLong(), anyLong(), anyLong())).thenAnswer(inv -> {
+            active.add(TransactionSynchronizationManager.isActualTransactionActive());
+            return PaymentOutcome.APPROVED;
+        });
+
+        mvc.perform(post("/api/cart/checkout").header("X-User-Id", 1))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.status").value("PAID"));
+
+        assertThat(active).hasSize(3).containsOnly(false);
     }
 }
