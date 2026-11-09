@@ -1,9 +1,8 @@
 package com.flashsale.order.application;
 
-import com.flashsale.order.client.EventInfo;
+import com.flashsale.order.application.port.out.OrderRepository;
 import com.flashsale.order.domain.FailReason;
 import com.flashsale.order.domain.Order;
-import com.flashsale.order.domain.OrderRepository;
 import java.time.Clock;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,17 +20,21 @@ public class OrderWriter {
     }
 
     @Transactional
-    public Order createPending(long userId, EventInfo event) {
-        return repository.save(new Order(userId, event.eventId(), event.productId(), 1, event.price(), clock.instant()));
+    public Order createPending(Order pending) {
+        return repository.save(pending);
     }
 
     @Transactional
     public void markPaid(long orderId) {
-        repository.findById(orderId).orElseThrow().markPaid(clock.instant());
+        Order order = repository.findById(orderId).orElseThrow();
+        order.markPaid(clock.instant());
+        repository.save(order);
     }
 
     @Transactional
     public void markFailed(long orderId, FailReason reason) {
-        repository.findById(orderId).orElseThrow().markFailed(reason, clock.instant());
+        Order order = repository.findById(orderId).orElseThrow();
+        order.markFailed(reason, clock.instant());
+        repository.save(order);
     }
 }

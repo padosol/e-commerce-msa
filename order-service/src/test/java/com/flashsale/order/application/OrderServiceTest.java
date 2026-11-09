@@ -12,27 +12,29 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import com.flashsale.order.client.DownstreamException;
-import com.flashsale.order.client.EventInfo;
-import com.flashsale.order.client.EventNotFoundException;
-import com.flashsale.order.client.InventoryClient;
-import com.flashsale.order.client.PaymentClient;
-import com.flashsale.order.client.PaymentOutcome;
-import com.flashsale.order.client.ProductClient;
-import com.flashsale.order.client.StockDecreaseResult;
+import com.flashsale.order.application.port.out.DownstreamException;
+import com.flashsale.order.application.port.out.EventInfo;
+import com.flashsale.order.application.port.out.EventNotFoundException;
+import com.flashsale.order.application.port.out.InventoryPort;
+import com.flashsale.order.application.port.out.OrderRepository;
+import com.flashsale.order.application.port.out.PaymentOutcome;
+import com.flashsale.order.application.port.out.PaymentPort;
+import com.flashsale.order.application.port.out.ProductPort;
+import com.flashsale.order.application.port.out.StockDecreaseResult;
 import com.flashsale.order.domain.FailReason;
 import com.flashsale.order.domain.Order;
-import com.flashsale.order.domain.OrderRepository;
+import com.flashsale.order.domain.OrderLine;
 import com.flashsale.order.domain.OrderStatus;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.Map;
 import java.sql.SQLTransientConnectionException;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils;
+import org.mockito.ArgumentCaptor;
 
 class OrderServiceTest {
 
@@ -40,65 +42,83 @@ class OrderServiceTest {
     static final long USER = 5;
     static final long EVENT = 1;
 
-    ProductClient productClient = mock(ProductClient.class);
-    InventoryClient inventoryClient = mock(InventoryClient.class);
-    PaymentClient paymentClient = mock(PaymentClient.class);
+    ProductPort productPort = mock(ProductPort.class);
+    InventoryPort inventoryPort = mock(InventoryPort.class);
+    PaymentPort paymentPort = mock(PaymentPort.class);
     OrderWriter orderWriter = mock(OrderWriter.class);
     OrderRepository orderRepository = mock(OrderRepository.class);
     PreOrderFailures preOrderFailures = new PreOrderFailures();
-    OrderService service = new OrderService(productClient, inventoryClient, paymentClient, orderWriter,
+    OrderService service = new OrderService(productPort, inventoryPort, paymentPort, orderWriter,
             orderRepository, preOrderFailures, Clock.fixed(NOW, ZoneOffset.UTC));
 
-    EventInfo event = new EventInfo(EVENT, 7, 10000, Instant.parse("2026-11-01T09:59:00Z"), 100);
+    EventInfo event = new EventInfo(EVENT, 7, "Sneakers", 10000, Instant.parse("2026-11-01T09:59:00Z"), 100);
 
     @BeforeEach
     void stubs() {
-        when(productClient.getEvent(EVENT)).thenReturn(event);
-        Order order = new Order(USER, EVENT, 7, 1, 10000, NOW);
-        ReflectionTestUtils.setField(order, "id", 99L);
-        when(orderWriter.createPending(USER, event)).thenReturn(order);
+        when(productPort.getEvent(EVENT)).thenReturn(event);
+        Order order = Order.restore(99, USER, EVENT, List.of(new OrderLine(7, "Sneakers", 10000, 1)),
+                OrderStatus.PENDING, null, NOW, NOW);
+        when(orderWriter.createPending(any(Order.class))).thenReturn(order);
+    }
+
+    @Test
+    void createsPendingOrderWithOneEventLine() {
+        when(inventoryPort.decrease(7, 1)).thenReturn(StockDecreaseResult.SUCCESS);
+        when(paymentPort.pay(99, USER, 10000)).thenReturn(PaymentOutcome.APPROVED);
+
+        service.placeOrder(USER, EVENT);
+
+        ArgumentCaptor<Order> pending = ArgumentCaptor.forClass(Order.class);
+        verify(orderWriter).createPending(pending.capture());
+        Order o = pending.getValue();
+        assertThat(o.id()).isNull();
+        assertThat(o.userId()).isEqualTo(USER);
+        assertThat(o.eventId()).isEqualTo(EVENT);
+        assertThat(o.status()).isEqualTo(OrderStatus.PENDING);
+        assertThat(o.lines()).containsExactly(new OrderLine(7, "Sneakers", 10000, 1));
+        assertThat(o.createdAt()).isEqualTo(NOW);
     }
 
     @Test
     void paidWhenStockAndPaymentSucceed() {
-        when(inventoryClient.decrease(7, 1)).thenReturn(StockDecreaseResult.SUCCESS);
-        when(paymentClient.pay(99, USER, 10000)).thenReturn(PaymentOutcome.APPROVED);
+        when(inventoryPort.decrease(7, 1)).thenReturn(StockDecreaseResult.SUCCESS);
+        when(paymentPort.pay(99, USER, 10000)).thenReturn(PaymentOutcome.APPROVED);
 
         OrderResult r = service.placeOrder(USER, EVENT);
 
         assertThat(r).isEqualTo(new OrderResult(99, OrderStatus.PAID, null));
         verify(orderWriter).markPaid(99);
-        verify(inventoryClient, never()).increase(anyLong(), org.mockito.ArgumentMatchers.anyInt());
+        verify(inventoryPort, never()).increase(anyLong(), org.mockito.ArgumentMatchers.anyInt());
     }
 
     @Test
     void soldOutSkipsPayment() {
-        when(inventoryClient.decrease(7, 1)).thenReturn(StockDecreaseResult.OUT_OF_STOCK);
+        when(inventoryPort.decrease(7, 1)).thenReturn(StockDecreaseResult.OUT_OF_STOCK);
 
         OrderResult r = service.placeOrder(USER, EVENT);
 
         assertThat(r).isEqualTo(new OrderResult(99, OrderStatus.FAILED, FailReason.SOLD_OUT));
         verify(orderWriter).markFailed(99, FailReason.SOLD_OUT);
-        verifyNoInteractions(paymentClient);
+        verifyNoInteractions(paymentPort);
     }
 
     @Test
     void declinedPaymentRestoresStock() {
-        when(inventoryClient.decrease(7, 1)).thenReturn(StockDecreaseResult.SUCCESS);
-        when(paymentClient.pay(99, USER, 10000)).thenReturn(PaymentOutcome.DECLINED);
+        when(inventoryPort.decrease(7, 1)).thenReturn(StockDecreaseResult.SUCCESS);
+        when(paymentPort.pay(99, USER, 10000)).thenReturn(PaymentOutcome.DECLINED);
 
         OrderResult r = service.placeOrder(USER, EVENT);
 
         assertThat(r).isEqualTo(new OrderResult(99, OrderStatus.FAILED, FailReason.PAYMENT_DECLINED));
-        verify(inventoryClient, times(1)).increase(7, 1);
+        verify(inventoryPort, times(1)).increase(7, 1);
         verify(orderWriter).markFailed(99, FailReason.PAYMENT_DECLINED);
     }
 
     @Test
     void restoreFailureStillReportsDeclined() {
-        when(inventoryClient.decrease(7, 1)).thenReturn(StockDecreaseResult.SUCCESS);
-        when(paymentClient.pay(99, USER, 10000)).thenReturn(PaymentOutcome.DECLINED);
-        doThrow(new DownstreamException("boom")).when(inventoryClient).increase(7, 1);
+        when(inventoryPort.decrease(7, 1)).thenReturn(StockDecreaseResult.SUCCESS);
+        when(paymentPort.pay(99, USER, 10000)).thenReturn(PaymentOutcome.DECLINED);
+        doThrow(new DownstreamException("boom")).when(inventoryPort).increase(7, 1);
 
         OrderResult r = service.placeOrder(USER, EVENT);
 
@@ -108,40 +128,40 @@ class OrderServiceTest {
 
     @Test
     void inventoryErrorDoesNotRestoreOrPay() {
-        when(inventoryClient.decrease(7, 1)).thenThrow(new DownstreamException("down"));
+        when(inventoryPort.decrease(7, 1)).thenThrow(new DownstreamException("down"));
 
         OrderResult r = service.placeOrder(USER, EVENT);
 
         assertThat(r).isEqualTo(new OrderResult(99, OrderStatus.FAILED, FailReason.INVENTORY_ERROR));
-        verify(inventoryClient, never()).increase(anyLong(), org.mockito.ArgumentMatchers.anyInt());
-        verifyNoInteractions(paymentClient);
+        verify(inventoryPort, never()).increase(anyLong(), org.mockito.ArgumentMatchers.anyInt());
+        verifyNoInteractions(paymentPort);
     }
 
     @Test
     void paymentErrorDoesNotRestoreStock() {
-        when(inventoryClient.decrease(7, 1)).thenReturn(StockDecreaseResult.SUCCESS);
-        when(paymentClient.pay(99, USER, 10000)).thenThrow(new DownstreamException("down"));
+        when(inventoryPort.decrease(7, 1)).thenReturn(StockDecreaseResult.SUCCESS);
+        when(paymentPort.pay(99, USER, 10000)).thenThrow(new DownstreamException("down"));
 
         OrderResult r = service.placeOrder(USER, EVENT);
 
         assertThat(r).isEqualTo(new OrderResult(99, OrderStatus.FAILED, FailReason.PAYMENT_ERROR));
-        verify(inventoryClient, never()).increase(anyLong(), org.mockito.ArgumentMatchers.anyInt());
+        verify(inventoryPort, never()).increase(anyLong(), org.mockito.ArgumentMatchers.anyInt());
         verify(orderWriter).markFailed(99, FailReason.PAYMENT_ERROR);
     }
 
     @Test
     void notOpenRejectsWithoutOrder() {
-        when(productClient.getEvent(EVENT))
-                .thenReturn(new EventInfo(EVENT, 7, 10000, Instant.parse("2026-11-01T10:00:01Z"), 100));
+        when(productPort.getEvent(EVENT))
+                .thenReturn(new EventInfo(EVENT, 7, "Sneakers", 10000, Instant.parse("2026-11-01T10:00:01Z"), 100));
 
         assertThatThrownBy(() -> service.placeOrder(USER, EVENT)).isInstanceOf(EventNotOpenException.class);
 
-        org.mockito.Mockito.verifyNoInteractions(orderWriter, inventoryClient);
+        org.mockito.Mockito.verifyNoInteractions(orderWriter, inventoryPort);
     }
 
     @Test
     void eventNotFoundPropagates() {
-        when(productClient.getEvent(EVENT)).thenThrow(new EventNotFoundException(EVENT));
+        when(productPort.getEvent(EVENT)).thenThrow(new EventNotFoundException(EVENT));
 
         assertThatThrownBy(() -> service.placeOrder(USER, EVENT)).isInstanceOf(EventNotFoundException.class);
 
@@ -154,51 +174,51 @@ class OrderServiceTest {
 
     @Test
     void conflictMarksStockConflict() {
-        when(inventoryClient.decrease(7, 1)).thenReturn(StockDecreaseResult.CONFLICT);
+        when(inventoryPort.decrease(7, 1)).thenReturn(StockDecreaseResult.CONFLICT);
 
         OrderResult r = service.placeOrder(USER, EVENT);
 
         assertThat(r).isEqualTo(new OrderResult(99, OrderStatus.FAILED, FailReason.STOCK_CONFLICT));
-        verifyNoInteractions(paymentClient);
+        verifyNoInteractions(paymentPort);
     }
 
     @Test
     void inventoryTimeoutMarksInventoryTimeout() {
-        when(inventoryClient.decrease(7, 1)).thenThrow(timeout());
+        when(inventoryPort.decrease(7, 1)).thenThrow(timeout());
 
         OrderResult r = service.placeOrder(USER, EVENT);
 
         assertThat(r).isEqualTo(new OrderResult(99, OrderStatus.FAILED, FailReason.INVENTORY_TIMEOUT));
-        verify(inventoryClient, never()).increase(anyLong(), org.mockito.ArgumentMatchers.anyInt());
-        verifyNoInteractions(paymentClient);
+        verify(inventoryPort, never()).increase(anyLong(), org.mockito.ArgumentMatchers.anyInt());
+        verifyNoInteractions(paymentPort);
     }
 
     @Test
     void paymentTimeoutMarksPaymentTimeout() {
-        when(inventoryClient.decrease(7, 1)).thenReturn(StockDecreaseResult.SUCCESS);
-        when(paymentClient.pay(99, USER, 10000)).thenThrow(timeout());
+        when(inventoryPort.decrease(7, 1)).thenReturn(StockDecreaseResult.SUCCESS);
+        when(paymentPort.pay(99, USER, 10000)).thenThrow(timeout());
 
         OrderResult r = service.placeOrder(USER, EVENT);
 
         assertThat(r).isEqualTo(new OrderResult(99, OrderStatus.FAILED, FailReason.PAYMENT_TIMEOUT));
-        verify(inventoryClient, never()).increase(anyLong(), org.mockito.ArgumentMatchers.anyInt());
+        verify(inventoryPort, never()).increase(anyLong(), org.mockito.ArgumentMatchers.anyInt());
     }
 
     @Test
     void productTimeoutCountsPreOrderFailureWithoutOrder() {
-        when(productClient.getEvent(EVENT)).thenThrow(timeout());
+        when(productPort.getEvent(EVENT)).thenThrow(timeout());
 
         assertThatThrownBy(() -> service.placeOrder(USER, EVENT))
                 .isInstanceOfSatisfying(PreOrderFailedException.class,
                         e -> assertThat(e.reason()).isEqualTo(FailReason.PRODUCT_TIMEOUT));
 
-        verifyNoInteractions(orderWriter, inventoryClient);
+        verifyNoInteractions(orderWriter, inventoryPort);
         assertThat(preOrderFailures.snapshot(EVENT)).isEqualTo(Map.of(FailReason.PRODUCT_TIMEOUT, 1L));
     }
 
     @Test
     void productErrorCountsAsProductError() {
-        when(productClient.getEvent(EVENT)).thenThrow(new DownstreamException("500"));
+        when(productPort.getEvent(EVENT)).thenThrow(new DownstreamException("500"));
 
         assertThatThrownBy(() -> service.placeOrder(USER, EVENT))
                 .isInstanceOfSatisfying(PreOrderFailedException.class,
@@ -209,20 +229,20 @@ class OrderServiceTest {
 
     @Test
     void orderDbTimeoutCountsPreOrderFailure() {
-        when(orderWriter.createPending(USER, event)).thenThrow(new CannotCreateTransactionException("x",
+        when(orderWriter.createPending(any(Order.class))).thenThrow(new CannotCreateTransactionException("x",
                 new SQLTransientConnectionException("Connection is not available")));
 
         assertThatThrownBy(() -> service.placeOrder(USER, EVENT))
                 .isInstanceOfSatisfying(PreOrderFailedException.class,
                         e -> assertThat(e.reason()).isEqualTo(FailReason.ORDER_DB_TIMEOUT));
 
-        verifyNoInteractions(inventoryClient);
+        verifyNoInteractions(inventoryPort);
         assertThat(preOrderFailures.snapshot(EVENT)).isEqualTo(Map.of(FailReason.ORDER_DB_TIMEOUT, 1L));
     }
 
     @Test
     void otherCreatePendingFailurePropagates() {
-        when(orderWriter.createPending(USER, event)).thenThrow(new IllegalStateException("boom"));
+        when(orderWriter.createPending(any(Order.class))).thenThrow(new IllegalStateException("boom"));
 
         assertThatThrownBy(() -> service.placeOrder(USER, EVENT)).isInstanceOf(IllegalStateException.class);
 

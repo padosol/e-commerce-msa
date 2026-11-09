@@ -1,86 +1,102 @@
 package com.flashsale.order.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import java.time.Instant;
+import java.util.List;
 
-@Entity
-@Table(name = "orders")
-public class Order {
+/** An order with one or more lines. It moves from PENDING to PAID or FAILED exactly once. */
+public final class Order {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "user_id", nullable = false)
-    private long userId;
-
-    @Column(name = "event_id", nullable = false)
-    private long eventId;
-
-    @Column(name = "product_id", nullable = false)
-    private long productId;
-
-    @Column(nullable = false)
-    private int quantity;
-
-    @Column(nullable = false)
-    private long amount;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 16)
+    private final Long id;
+    private final long userId;
+    private final Long eventId;
+    private final List<OrderLine> lines;
     private OrderStatus status;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "fail_reason", length = 32)
     private FailReason failReason;
-
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
-
-    @Column(name = "updated_at", nullable = false)
+    private final Instant createdAt;
     private Instant updatedAt;
 
-    protected Order() {
-    }
-
-    public Order(long userId, long eventId, long productId, int quantity, long amount, Instant now) {
+    private Order(Long id, long userId, Long eventId, List<OrderLine> lines, OrderStatus status,
+                  FailReason failReason, Instant createdAt, Instant updatedAt) {
+        this.id = id;
         this.userId = userId;
         this.eventId = eventId;
-        this.productId = productId;
-        this.quantity = quantity;
-        this.amount = amount;
-        this.status = OrderStatus.PENDING;
-        this.createdAt = now;
-        this.updatedAt = now;
+        this.lines = List.copyOf(lines);
+        this.status = status;
+        this.failReason = failReason;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    /** A new order. eventId is null for an order that is not a flash-sale event order. */
+    public static Order pending(long userId, Long eventId, List<OrderLine> lines, Instant now) {
+        if (lines.isEmpty()) {
+            throw new IllegalArgumentException("an order needs at least one line");
+        }
+        return new Order(null, userId, eventId, lines, OrderStatus.PENDING, null, now, now);
+    }
+
+    public static Order restore(long id, long userId, Long eventId, List<OrderLine> lines, OrderStatus status,
+                                FailReason failReason, Instant createdAt, Instant updatedAt) {
+        return new Order(id, userId, eventId, lines, status, failReason, createdAt, updatedAt);
     }
 
     public void markPaid(Instant now) {
+        requirePending();
         this.status = OrderStatus.PAID;
         this.failReason = null;
         this.updatedAt = now;
     }
 
     public void markFailed(FailReason reason, Instant now) {
+        requirePending();
         this.status = OrderStatus.FAILED;
         this.failReason = reason;
         this.updatedAt = now;
     }
 
-    public Long getId() { return id; }
-    public long getUserId() { return userId; }
-    public long getEventId() { return eventId; }
-    public long getProductId() { return productId; }
-    public int getQuantity() { return quantity; }
-    public long getAmount() { return amount; }
-    public OrderStatus getStatus() { return status; }
-    public FailReason getFailReason() { return failReason; }
-    public Instant getCreatedAt() { return createdAt; }
-    public Instant getUpdatedAt() { return updatedAt; }
+    private void requirePending() {
+        if (status != OrderStatus.PENDING) {
+            throw new IllegalStateException("order " + id + " is " + status + ", not PENDING");
+        }
+    }
+
+    public Long id() {
+        return id;
+    }
+
+    public long userId() {
+        return userId;
+    }
+
+    public Long eventId() {
+        return eventId;
+    }
+
+    public List<OrderLine> lines() {
+        return lines;
+    }
+
+    public long amount() {
+        long sum = 0;
+        for (OrderLine line : lines) {
+            sum += line.subtotal();
+        }
+        return sum;
+    }
+
+    public OrderStatus status() {
+        return status;
+    }
+
+    public FailReason failReason() {
+        return failReason;
+    }
+
+    public Instant createdAt() {
+        return createdAt;
+    }
+
+    public Instant updatedAt() {
+        return updatedAt;
+    }
 }
