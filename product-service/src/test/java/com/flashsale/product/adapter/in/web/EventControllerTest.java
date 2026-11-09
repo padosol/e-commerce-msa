@@ -1,4 +1,4 @@
-package com.flashsale.product.api;
+package com.flashsale.product.adapter.in.web;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;

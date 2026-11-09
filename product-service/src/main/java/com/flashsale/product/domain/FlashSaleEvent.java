@@ -1,56 +1,42 @@
 package com.flashsale.product.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import java.time.Instant;
 
-@Entity
-@Table(name = "flash_sale_events")
 public class FlashSaleEvent {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final Long id;
+    private final Product product;
+    private final Instant openAt;
+    private final int saleQuantity;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
-
-    @Column(name = "open_at", nullable = false)
-    private Instant openAt;
-
-    @Column(name = "sale_quantity", nullable = false)
-    private int saleQuantity;
-
-    protected FlashSaleEvent() {
-    }
-
-    public FlashSaleEvent(Product product, Instant openAt, int saleQuantity) {
+    private FlashSaleEvent(Long id, Product product, Instant openAt, int saleQuantity) {
+        this.id = id;
         this.product = product;
         this.openAt = openAt;
         this.saleQuantity = saleQuantity;
     }
 
-    public Long getId() {
+    public static FlashSaleEvent create(Product product, Instant openAt, int saleQuantity) {
+        return new FlashSaleEvent(null, product, openAt, saleQuantity);
+    }
+
+    public static FlashSaleEvent restore(long id, Product product, Instant openAt, int saleQuantity) {
+        return new FlashSaleEvent(id, product, openAt, saleQuantity);
+    }
+
+    public Long id() {
         return id;
     }
 
-    public Product getProduct() {
+    public Product product() {
         return product;
     }
 
-    public Instant getOpenAt() {
+    public Instant openAt() {
         return openAt;
     }
 
-    public int getSaleQuantity() {
+    public int saleQuantity() {
         return saleQuantity;
     }
 }

@@ -1,4 +1,4 @@
-package com.flashsale.product.api;
+package com.flashsale.product.adapter.in.web;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;

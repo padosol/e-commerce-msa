@@ -1,6 +1,6 @@
-package com.flashsale.product.api;
+package com.flashsale.product.adapter.in.web;
 
-import com.flashsale.product.EventService;
+import com.flashsale.product.application.EventService;
 import com.flashsale.product.domain.FlashSaleEvent;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -25,7 +25,7 @@ public class EventController {
     CreateEventResponse create(@Valid @RequestBody CreateEventRequest request) {
         FlashSaleEvent e = service.create(
             request.productName(), request.price(), request.openAt(), request.saleQuantity());
-        return new CreateEventResponse(e.getId(), e.getProduct().getId());
+        return new CreateEventResponse(e.id(), e.product().id());
     }
 
     @GetMapping("/api/products/events/{eventId}")

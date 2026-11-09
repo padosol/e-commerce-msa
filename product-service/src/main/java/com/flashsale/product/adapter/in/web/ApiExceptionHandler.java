@@ -1,6 +1,6 @@
-package com.flashsale.product.api;
+package com.flashsale.product.adapter.in.web;
 
-import com.flashsale.product.EventNotFoundException;
+import com.flashsale.product.domain.EventNotFoundException;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

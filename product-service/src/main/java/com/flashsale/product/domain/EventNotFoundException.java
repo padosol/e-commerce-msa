@@ -1,4 +1,4 @@
-package com.flashsale.product;
+package com.flashsale.product.domain;
 
 public class EventNotFoundException extends RuntimeException {
 

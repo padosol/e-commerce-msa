@@ -1,43 +1,34 @@
 package com.flashsale.product.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-
-@Entity
-@Table(name = "products")
 public class Product {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final Long id;
+    private final String name;
+    private final long price;
 
-    @Column(nullable = false, length = 200)
-    private String name;
-
-    @Column(nullable = false)
-    private long price;
-
-    protected Product() {
-    }
-
-    public Product(String name, long price) {
+    private Product(Long id, String name, long price) {
+        this.id = id;
         this.name = name;
         this.price = price;
     }
 
-    public Long getId() {
+    public static Product create(String name, long price) {
+        return new Product(null, name, price);
+    }
+
+    public static Product restore(long id, String name, long price) {
+        return new Product(id, name, price);
+    }
+
+    public Long id() {
         return id;
     }
 
-    public String getName() {
+    public String name() {
         return name;
     }
 
-    public long getPrice() {
+    public long price() {
         return price;
     }
 }
