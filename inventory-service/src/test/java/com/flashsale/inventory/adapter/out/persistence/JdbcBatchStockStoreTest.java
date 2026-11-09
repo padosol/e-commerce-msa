@@ -19,6 +19,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.context.annotation.Import;
 
 @SpringBootTest(properties = "inventory.strategy=naive")
@@ -33,6 +34,9 @@ class JdbcBatchStockStoreTest {
 
     @Autowired
     InventoryJpaRepository repository;
+
+    @Autowired
+    JdbcTemplate jdbc;
 
     @BeforeEach
     void clean() {
@@ -137,5 +141,30 @@ class JdbcBatchStockStoreTest {
             .isInstanceOf(InventoryNotFoundException.class);
 
         assertThat(quantity(A)).isEqualTo(3);
+    }
+
+    private long version(long productId) {
+        return jdbc.queryForObject("SELECT version FROM inventory WHERE product_id = ?", Long.class, productId);
+    }
+
+    @Test
+    void batchWritesBumpVersion() {
+        stock(A, 5);
+        stock(B, 5);
+        long a0 = version(A);
+        long b0 = version(B);
+
+        store.decreaseAll(List.of(new StockLine(A, 2), new StockLine(B, 1)));
+        assertThat(version(A)).isEqualTo(a0 + 1);
+        assertThat(version(B)).isEqualTo(b0 + 1);
+
+        store.increaseAll(List.of(new StockLine(A, 2), new StockLine(B, 1)));
+        assertThat(version(A)).isEqualTo(a0 + 2);
+        assertThat(version(B)).isEqualTo(b0 + 2);
+
+        assertThat(store.decreaseAll(List.of(new StockLine(A, 1), new StockLine(B, 99))))
+            .isEqualTo(DecreaseResult.OUT_OF_STOCK);
+        assertThat(version(A)).isEqualTo(a0 + 2);
+        assertThat(version(B)).isEqualTo(b0 + 2);
     }
 }

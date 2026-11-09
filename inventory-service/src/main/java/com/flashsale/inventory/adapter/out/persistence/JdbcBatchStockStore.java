@@ -22,9 +22,9 @@ import org.springframework.transaction.support.TransactionTemplate;
 class JdbcBatchStockStore implements BatchStockStore {
 
     private static final String DECREASE =
-        "UPDATE inventory SET quantity = quantity - ? WHERE product_id = ? AND quantity >= ?";
+        "UPDATE inventory SET quantity = quantity - ?, version = version + 1 WHERE product_id = ? AND quantity >= ?";
     private static final String INCREASE =
-        "UPDATE inventory SET quantity = quantity + ? WHERE product_id = ?";
+        "UPDATE inventory SET quantity = quantity + ?, version = version + 1 WHERE product_id = ?";
 
     private final JdbcTemplate jdbc;
     private final TransactionTemplate tx;
