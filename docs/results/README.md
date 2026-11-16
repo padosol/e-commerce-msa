@@ -175,6 +175,7 @@
 | 20261103-223831-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 20 | 0 | 115 | OK | 232.44 | 252.14 | 494.59 |
 | 20261103-223836-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 7 | 0 | 57 | OK | 238.14 | 259.59 | 495.84 |
 | 20261103-223841-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 7 | 0 | 54 | OK | 241.87 | 257.82 | 498.15 |
+
 ### 2단계 회귀 매트릭스: 1차 (커밋 4161ac4, 500명이 1초 동안 도착, 재고 100)
 
 스택을 새로 띄운 직후 잰 본 기록이다. optimistic-r0 가 UNDERSOLD 2회. 해석은 `stage2-ecommerce-regression.md`.
@@ -209,6 +210,7 @@
 | 20261116-223328-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 16 | 0 | 159 | OK | 233.42 | 257.16 | 497.44 |
 | 20261116-223333-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 45 | 0 | 245 | OK | 249.34 | 268.1 | 495.38 |
 | 20261116-223338-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 13 | 0 | 138 | OK | 242.78 | 262.15 | 497.16 |
+
 ### 2단계 회귀 매트릭스: 진단 재측정 (1차 직후 같은 스택, 앞 4개 구성만)
 
 같은 커밋·같은 설정. 데워진 스택에서 naive·pessimistic·conditional·optimistic-r0 만 다시 잰 것이다. 해석은 `stage2-ecommerce-regression.md`.
