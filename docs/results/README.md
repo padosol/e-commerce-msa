@@ -175,3 +175,59 @@
 | 20261103-223831-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 20 | 0 | 115 | OK | 232.44 | 252.14 | 494.59 |
 | 20261103-223836-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 7 | 0 | 57 | OK | 238.14 | 259.59 | 495.84 |
 | 20261103-223841-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 7 | 0 | 54 | OK | 241.87 | 257.82 | 498.15 |
+### 2단계 회귀 매트릭스: 1차 (커밋 4161ac4, 500명이 1초 동안 도착, 재고 100)
+
+스택을 새로 띄운 직후 잰 본 기록이다. optimistic-r0 가 UNDERSOLD 2회. 해석은 `stage2-ecommerce-regression.md`.
+
+| run | kind | strategy | users | stock | paid | oversold | undersold | finalStock | conflicts | timeouts | retries | verdict | p95(ms) | p99(ms) | rps |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 20261116-223031-naive-warmup | warmup | naive | 500 | 100 | 377 | 277 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 2445.79 | 2588.28 | 151.05 |
+| 20261116-223039-naive | measure | naive | 500 | 100 | 444 | 344 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 1358.51 | 1438.49 | 229 |
+| 20261116-223046-naive | measure | naive | 500 | 100 | 448 | 348 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 939.77 | 1037.19 | 287.77 |
+| 20261116-223052-naive | measure | naive | 500 | 100 | 418 | 318 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 887.84 | 969.79 | 295.07 |
+| 20261116-223103-pessimistic-warmup | warmup | pessimistic | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 821.91 | 932.2 | 341.57 |
+| 20261116-223109-pessimistic | measure | pessimistic | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 706.01 | 834.66 | 353.17 |
+| 20261116-223114-pessimistic | measure | pessimistic | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 589.9 | 619.15 | 377.36 |
+| 20261116-223120-pessimistic | measure | pessimistic | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 757.32 | 883.08 | 333.75 |
+| 20261116-223132-conditional-warmup | warmup | conditional | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 768.86 | 864.34 | 335.15 |
+| 20261116-223138-conditional | measure | conditional | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 864.83 | 983.65 | 313.64 |
+| 20261116-223144-conditional | measure | conditional | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 791.49 | 890.91 | 330.41 |
+| 20261116-223149-conditional | measure | conditional | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 709.56 | 767.03 | 346.97 |
+| 20261116-223201-optimistic-r0-warmup | warmup | optimistic-r0 | 500 | 100 | 100 | 0 | 0 | 0 | 285 | 0 | 0 | OK | 274.67 | 299.91 | 492.23 |
+| 20261116-223206-optimistic-r0 | measure | optimistic-r0 | 500 | 100 | 96 | -4 | 4 | 4 | 404 | 0 | 0 | UNDERSOLD | 710.39 | 842.95 | 288.5 |
+| 20261116-223213-optimistic-r0 | measure | optimistic-r0 | 500 | 100 | 99 | -1 | 1 | 1 | 401 | 0 | 0 | UNDERSOLD | 528.64 | 639.12 | 341.03 |
+| 20261116-223219-optimistic-r0 | measure | optimistic-r0 | 500 | 100 | 100 | 0 | 0 | 0 | 181 | 0 | 0 | OK | 262.48 | 286.12 | 495.52 |
+| 20261116-223230-optimistic-r1-warmup | warmup | optimistic-r1 | 500 | 100 | 100 | 0 | 0 | 0 | 101 | 0 | 166 | OK | 266.94 | 300.2 | 494.6 |
+| 20261116-223235-optimistic-r1 | measure | optimistic-r1 | 500 | 100 | 100 | 0 | 0 | 0 | 67 | 0 | 130 | OK | 242.13 | 263.11 | 496.15 |
+| 20261116-223240-optimistic-r1 | measure | optimistic-r1 | 500 | 100 | 100 | 0 | 0 | 0 | 73 | 0 | 135 | OK | 254.35 | 274.14 | 495.04 |
+| 20261116-223246-optimistic-r1 | measure | optimistic-r1 | 500 | 100 | 100 | 0 | 0 | 0 | 44 | 0 | 90 | OK | 236.85 | 262.97 | 497.35 |
+| 20261116-223257-optimistic-r2-warmup | warmup | optimistic-r2 | 500 | 100 | 100 | 0 | 0 | 0 | 79 | 0 | 260 | OK | 250.8 | 278.65 | 495.87 |
+| 20261116-223302-optimistic-r2 | measure | optimistic-r2 | 500 | 100 | 100 | 0 | 0 | 0 | 12 | 0 | 106 | OK | 237.11 | 255.64 | 496.45 |
+| 20261116-223307-optimistic-r2 | measure | optimistic-r2 | 500 | 100 | 100 | 0 | 0 | 0 | 20 | 0 | 113 | OK | 247.89 | 262.75 | 495.91 |
+| 20261116-223312-optimistic-r2 | measure | optimistic-r2 | 500 | 100 | 100 | 0 | 0 | 0 | 51 | 0 | 181 | OK | 250.29 | 271.81 | 496.39 |
+| 20261116-223323-optimistic-r3-warmup | warmup | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 116 | 0 | 527 | OK | 444.42 | 521.21 | 494.63 |
+| 20261116-223328-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 16 | 0 | 159 | OK | 233.42 | 257.16 | 497.44 |
+| 20261116-223333-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 45 | 0 | 245 | OK | 249.34 | 268.1 | 495.38 |
+| 20261116-223338-optimistic-r3 | measure | optimistic-r3 | 500 | 100 | 100 | 0 | 0 | 0 | 13 | 0 | 138 | OK | 242.78 | 262.15 | 497.16 |
+### 2단계 회귀 매트릭스: 진단 재측정 (1차 직후 같은 스택, 앞 4개 구성만)
+
+같은 커밋·같은 설정. 데워진 스택에서 naive·pessimistic·conditional·optimistic-r0 만 다시 잰 것이다. 해석은 `stage2-ecommerce-regression.md`.
+
+| run | kind | strategy | users | stock | paid | oversold | undersold | finalStock | conflicts | timeouts | retries | verdict | p95(ms) | p99(ms) | rps |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 20261116-224312-naive-warmup | warmup | naive | 500 | 100 | 449 | 349 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 291.91 | 317.53 | 436.11 |
+| 20261116-224317-naive | measure | naive | 500 | 100 | 349 | 249 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 290.84 | 314.48 | 495.53 |
+| 20261116-224322-naive | measure | naive | 500 | 100 | 215 | 115 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 253.61 | 265.21 | 495.37 |
+| 20261116-224327-naive | measure | naive | 500 | 100 | 185 | 85 | 0 | 0 | 0 | 0 | 0 | OVERSOLD | 249.67 | 261.78 | 497.87 |
+| 20261116-224338-pessimistic-warmup | warmup | pessimistic | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 295.27 | 331.43 | 496.49 |
+| 20261116-224343-pessimistic | measure | pessimistic | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 258.51 | 277.97 | 495.65 |
+| 20261116-224348-pessimistic | measure | pessimistic | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 245.85 | 273.76 | 496.15 |
+| 20261116-224353-pessimistic | measure | pessimistic | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 241.41 | 258.16 | 497.42 |
+| 20261116-224404-conditional-warmup | warmup | conditional | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 246.05 | 264.74 | 495.89 |
+| 20261116-224409-conditional | measure | conditional | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 240.74 | 260.09 | 495.1 |
+| 20261116-224414-conditional | measure | conditional | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 242.49 | 260.31 | 498.16 |
+| 20261116-224419-conditional | measure | conditional | 500 | 100 | 100 | 0 | 0 | 0 | 0 | 0 | 0 | OK | 247.81 | 267.41 | 496.42 |
+| 20261116-224430-optimistic-r0-warmup | warmup | optimistic-r0 | 500 | 100 | 100 | 0 | 0 | 0 | 108 | 0 | 0 | OK | 249.9 | 265.58 | 496.11 |
+| 20261116-224435-optimistic-r0 | measure | optimistic-r0 | 500 | 100 | 100 | 0 | 0 | 0 | 93 | 0 | 0 | OK | 237.19 | 258.97 | 497.7 |
+| 20261116-224441-optimistic-r0 | measure | optimistic-r0 | 500 | 100 | 100 | 0 | 0 | 0 | 115 | 0 | 0 | OK | 238.46 | 260.94 | 496.56 |
+| 20261116-224446-optimistic-r0 | measure | optimistic-r0 | 500 | 100 | 100 | 0 | 0 | 0 | 80 | 0 | 0 | OK | 239.59 | 256.17 | 496.16 |

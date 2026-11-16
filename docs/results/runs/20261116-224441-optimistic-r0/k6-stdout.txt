@@ -1,0 +1,48 @@
+
+         /\      Grafana   /‾‾/  
+    /\  /  \     |\  __   /  /   
+   /  \/    \    | |/ /  /   ‾‾\ 
+  /          \   |   (  |  (‾)  |
+ / __________ \  |_|\_\  \_____/ 
+
+
+     execution: local
+        script: /k6/flash-sale.js
+        output: Prometheus remote write (http://prometheus:9090/api/v1/write)
+
+     scenarios: (100.00%) 1 scenario, 500 max VUs, 5m30s max duration (incl. graceful stop):
+              * flash_sale: 1 iterations for each of 500 VUs (maxDuration: 5m0s, gracefulStop: 30s)
+
+
+running (0m01.0s), 027/500 VUs, 473 complete and 0 interrupted iterations
+flash_sale   [  95% ] 500 VUs  0m01.0s/5m0s  473/500 iters, 1 per VU
+
+
+  █ TOTAL RESULTS 
+
+    CUSTOM
+    orders_conflict................: 115    114.208487/s
+    orders_paid....................: 100    99.311728/s
+    orders_sold_out................: 285    283.038425/s
+
+    HTTP
+    http_req_duration..............: avg=50.93ms  med=8.94ms   p(95)=238.45ms p(99)=260.93ms max=271.02ms
+      { expected_response:true }...: avg=50.93ms  med=8.94ms   p(95)=238.45ms p(99)=260.93ms max=271.02ms
+    http_req_failed................: 0.00%  0 out of 500
+    http_reqs......................: 500    496.558641/s
+
+    EXECUTION
+    iteration_duration.............: avg=551.08ms med=546.91ms p(95)=955.05ms p(99)=995.55ms max=1s      
+    iterations.....................: 500    496.558641/s
+    vus............................: 27     min=27       max=27 
+    vus_max........................: 500    min=500      max=500
+
+    NETWORK
+    data_received..................: 90 kB  89 kB/s
+    data_sent......................: 148 kB 147 kB/s
+
+
+
+
+running (0m01.0s), 000/500 VUs, 500 complete and 0 interrupted iterations
+flash_sale ✓ [ 100% ] 500 VUs  0m01.0s/5m0s  500/500 iters, 1 per VU

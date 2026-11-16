@@ -1,0 +1,53 @@
+{
+  "runId": "20261116-224312-naive-warmup",
+  "strategy": "naive",
+  "kind": "warmup",
+  "users": 500,
+  "saleQuantity": 100,
+  "arrivalSeconds": 1,
+  "commit": "4161ac4",
+  "tcpDrainWaitSec": 0,
+  "tcpTimeWaitBefore": 41,
+  "k6Runner": "docker",
+  "k6Image": "grafana/k6:2.2.0",
+  "k6Cpus": "4",
+  "k6Memory": "2g",
+  "jvm": {
+    "gateway": {
+      "cpus": 2,
+      "memoryMiB": 1280,
+      "javaToolOptions": "-Xmx448m -XX:+UseSerialGC",
+      "gc": "Serial"
+    },
+    "user-service": {
+      "cpus": 2,
+      "memoryMiB": 640,
+      "javaToolOptions": "-XX:MaxRAMPercentage=70",
+      "gc": "Serial"
+    },
+    "product-service": {
+      "cpus": 2,
+      "memoryMiB": 640,
+      "javaToolOptions": "-XX:MaxRAMPercentage=70",
+      "gc": "Serial"
+    },
+    "inventory-service": {
+      "cpus": 2,
+      "memoryMiB": 640,
+      "javaToolOptions": "-XX:MaxRAMPercentage=70",
+      "gc": "Serial"
+    },
+    "order-service": {
+      "cpus": 2,
+      "memoryMiB": 640,
+      "javaToolOptions": "-XX:MaxRAMPercentage=70",
+      "gc": "Serial"
+    },
+    "payment-service": {
+      "cpus": 2,
+      "memoryMiB": 640,
+      "javaToolOptions": "-XX:MaxRAMPercentage=70",
+      "gc": "Serial"
+    }
+  }
+}

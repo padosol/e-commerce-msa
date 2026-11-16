@@ -83,6 +83,8 @@ RUNS=1 USERS=200 SALE_QUANTITY=20 scripts/run-matrix.sh conditional optimistic-r
 | 2단계 GC 실험 | `USERS=5000 ARRIVAL_SECONDS=0 FROM=20261103-1718 TO=20261103-1800 scripts/summarize.sh` |
 | 1단계 5차 | `FROM=20261103-2210 TO=20261103-2235 scripts/summarize.sh` |
 | 2단계 게이트웨이 메모리 | `FROM=20261103-2235 TO=20261103-2300 scripts/summarize.sh` |
+| 2단계 회귀 매트릭스 1차 | `FROM=20261116-2230 TO=20261116-2243 scripts/summarize.sh` |
+| 2단계 회귀 매트릭스 진단 재측정 | `FROM=20261116-2243 TO=20261116-2300 scripts/summarize.sh` |
  1단계 결과 해석은 `docs/results/stage1-summary.md`(4차, 5000명 동시 요청)와 `docs/results/stage1-attempt5-summary.md`(5차, 1초 동안 500명)에 있다.
 
 ### 2단계: 게이트웨이 메모리
